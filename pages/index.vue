@@ -15,9 +15,9 @@ const { data: stats } = await useFetch('/api/stats')
 const { data: sightings } = await useFetch('/api/map/sightings')
 
 const steps = [
-  { icon: 'mdi-map-marker-radius', title: 'Find a duck', text: 'Spot a Dash Duck in the wild and scan its Quacker Tracker code.' },
-  { icon: 'mdi-camera', title: 'Post a photo', text: 'Snap a photo and log where you found it to add to its journey.' },
-  { icon: 'mdi-transfer', title: 'Pass it on', text: 'Leave the duck for the next person to discover and keep it travelling.' },
+  { img: '/images/step1.jpg', title: 'Find a duck', text: 'Spot a Dash Duck in the wild and scan its Quacker Tracker code.' },
+  { img: '/images/step2.jpg', title: 'Post a photo', text: 'Snap a photo and log where you found it to add to its journey.' },
+  { img: '/images/step3.jpg', title: 'Pass it on', text: 'Leave the duck for the next person to discover and keep it travelling.' },
 ]
 
 // Newsletter
@@ -45,17 +45,21 @@ async function subscribe() {
 <template>
   <div>
     <!-- Hero -->
-    <v-sheet color="primary" class="py-16 text-center text-white">
-      <v-container>
+    <v-img
+      src="/hero-banner.png"
+      cover
+      eager
+      height="460"
+      gradient="to bottom, rgba(0,0,0,0.55), rgba(0,0,0,0.65)"
+    >
+      <v-container class="d-flex flex-column justify-center align-center text-center text-white" style="height: 100%">
         <h1 class="text-h3 text-md-h2 font-weight-bold mb-4">Track your duck's journey 🦆</h1>
-        <p class="text-h6 font-weight-regular mb-8" style="opacity: 0.9">
+        <p class="text-h6 font-weight-regular mb-8" style="max-width: 640px; opacity: 0.95">
           Rubber ducks are travelling the world. Scan one, log your sighting, and watch where it goes next.
         </p>
-        <v-btn size="x-large" color="white" class="text-primary" to="/quackertracker">
-          Scan a duck
-        </v-btn>
+        <v-btn size="x-large" color="primary" to="/quackertracker">Scan a duck</v-btn>
       </v-container>
-    </v-sheet>
+    </v-img>
 
     <!-- Live map -->
     <v-container class="py-12">
@@ -93,8 +97,8 @@ async function subscribe() {
       <h2 class="text-h4 font-weight-bold text-center mb-8">How it works</h2>
       <v-row>
         <v-col v-for="s in steps" :key="s.title" cols="12" md="4">
-          <v-card variant="tonal" height="100%" class="text-center pa-4">
-            <v-icon :icon="s.icon" size="48" color="primary" class="mb-3" />
+          <v-card height="100%" class="text-center">
+            <v-img :src="s.img" height="180" cover eager />
             <v-card-title>{{ s.title }}</v-card-title>
             <v-card-text>{{ s.text }}</v-card-text>
           </v-card>

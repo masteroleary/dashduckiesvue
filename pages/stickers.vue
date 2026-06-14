@@ -20,6 +20,7 @@ useHead({
           Quacker Tracker stickers are QR codes you attach to your own ducks, instantly joining them to
           the global Dash Duckies network. Anyone who finds your duck can scan it and add a sighting.
         </p>
+        <v-img src="/images/stickers.jpg" height="280" cover eager class="rounded-lg mb-6" />
         <v-card variant="tonal" color="primary" class="pa-6 mb-6">
           <div class="d-flex align-center">
             <v-icon icon="mdi-qrcode" size="64" class="mr-6" />

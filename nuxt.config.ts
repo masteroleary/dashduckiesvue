@@ -21,13 +21,35 @@ export default defineNuxtConfig({
     },
   },
 
+  app: {
+    head: {
+      link: [{ rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' }],
+    },
+  },
+
   vuetify: {
     moduleOptions: {
       // styles handled by sass-embedded; keep defaults
     },
     vuetifyOptions: {
+      // Brand palette ported from the old MudBlazor CustomTheme.
       theme: {
         defaultTheme: 'light',
+        themes: {
+          light: {
+            dark: false,
+            colors: {
+              primary: '#1b6ec2',
+              secondary: '#6c757d',
+              success: '#198754',
+              info: '#0dcaf0',
+              warning: '#ffc107',
+              error: '#dc3545',
+              background: '#f8f9fa',
+              surface: '#ffffff',
+            },
+          },
+        },
       },
     },
   },

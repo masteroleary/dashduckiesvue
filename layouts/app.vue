@@ -5,11 +5,18 @@ const { user, fetchMe, logout } = useAuth()
 const ready = ref(false)
 const drawer = ref(true)
 
-const nav = [
+const nav = computed(() => [
   { title: 'Dashboard', to: '/app', icon: 'mdi-view-dashboard', exact: true },
   { title: 'My Ducks', to: '/app/ducks', icon: 'mdi-duck', exact: false },
   { title: 'Account', to: '/app/account', icon: 'mdi-account', exact: false },
-]
+  ...(user.value?.isAdmin
+    ? [
+        { title: 'Admin · Stats', to: '/app/admin', icon: 'mdi-shield-crown', exact: true },
+        { title: 'Admin · Members', to: '/app/admin/members', icon: 'mdi-account-group', exact: false },
+        { title: 'Admin · Ducks', to: '/app/admin/ducks', icon: 'mdi-format-list-bulleted', exact: false },
+      ]
+    : []),
+])
 
 onMounted(async () => {
   try {
@@ -44,11 +51,11 @@ async function onLogout() {
     </template>
 
     <template v-else>
-      <v-app-bar color="primary" flat>
+      <v-app-bar color="black" flat>
         <v-app-bar-nav-icon @click="drawer = !drawer" />
         <v-app-bar-title>
-          <NuxtLink to="/" class="text-white text-decoration-none font-weight-bold">
-            Dash Duckies 🦆
+          <NuxtLink to="/" class="d-inline-flex align-center text-decoration-none">
+            <img src="/logo.png" alt="Dash Duckies" height="36" />
           </NuxtLink>
         </v-app-bar-title>
         <template #append>

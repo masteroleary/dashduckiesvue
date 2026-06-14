@@ -11,11 +11,11 @@ const year = new Date().getFullYear()
 
 <template>
   <v-app>
-    <v-app-bar color="primary" flat>
+    <v-app-bar color="black" flat>
       <v-app-bar-nav-icon class="d-sm-none" @click="drawer = !drawer" />
       <v-app-bar-title>
-        <NuxtLink to="/" class="text-white text-decoration-none font-weight-bold">
-          Dash Duckies 🦆
+        <NuxtLink to="/" class="d-inline-flex align-center text-decoration-none">
+          <img src="/logo.png" alt="Dash Duckies" height="38" />
         </NuxtLink>
       </v-app-bar-title>
       <template #append>
