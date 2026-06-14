@@ -1,3 +1,4 @@
+import { randomInt } from 'node:crypto'
 import { and, desc, eq, gt } from 'drizzle-orm'
 import sgMail from '@sendgrid/mail'
 import twilio from 'twilio'
@@ -32,7 +33,8 @@ export function isDevBypass(identifier: string): boolean {
 }
 
 function sixDigitCode(): string {
-  return String(Math.floor(100000 + Math.random() * 900000))
+  // CSPRNG so codes aren't predictable.
+  return String(randomInt(100000, 1000000))
 }
 
 let twilioClient: ReturnType<typeof twilio> | null = null
@@ -60,6 +62,11 @@ async function sendEmailCode(email: string, code: string) {
 // Store a code (dev + email paths) so we can verify it ourselves.
 async function storeCode(identifier: string, code: string) {
   const db = useDb()
+  // Invalidate earlier unused codes for this identifier (shrinks brute-force surface).
+  await db
+    .update(verificationCodes)
+    .set({ isUsed: true })
+    .where(and(eq(verificationCodes.emailOrPhone, identifier), eq(verificationCodes.isUsed, false)))
   await db.insert(verificationCodes).values({
     emailOrPhone: identifier,
     code,

@@ -3,18 +3,15 @@ import { requireAdmin } from '../../../utils/session'
 import { useDb } from '../../../db'
 import { ducks } from '../../../db/schema'
 import { processAndUpload } from '../../../utils/images'
+import { readMultipart, validateImage } from '../../../utils/upload'
 
 export default defineEventHandler(async (event) => {
   requireAdmin(event)
   const duckId = getRouterParam(event, 'duckId') as string
 
-  const parts = (await readMultipartFormData(event)) || []
-  const fields: Record<string, string> = {}
-  let imageBuf: Buffer | null = null
-  for (const p of parts) {
-    if (p.filename) imageBuf = p.data as Buffer
-    else if (p.name) fields[p.name] = p.data.toString('utf-8')
-  }
+  const { fields, file } = await readMultipart(event)
+  validateImage(file)
+  const imageBuf = file?.data ?? null
 
   const db = useDb()
   const [duck] = await db.select().from(ducks).where(eq(ducks.id, duckId)).limit(1)

@@ -1,4 +1,4 @@
-import { and, asc, desc, eq, isNull, isNotNull, ne } from 'drizzle-orm'
+import { and, asc, count, desc, eq, isNull, isNotNull, ne } from 'drizzle-orm'
 import { useDb } from '../db'
 import { duckLikes, duckSightings, ducks, users } from '../db/schema'
 
@@ -73,17 +73,20 @@ export async function getSightingHistory(duckId: string, fallbackImageUrl: strin
 
 export async function getLikeCount(duckId: string): Promise<number> {
   const db = useDb()
-  const rows = await db.select({ id: duckLikes.id }).from(duckLikes).where(eq(duckLikes.duckId, duckId))
-  return rows.length
+  const [row] = await db
+    .select({ value: count() })
+    .from(duckLikes)
+    .where(eq(duckLikes.duckId, duckId))
+  return row.value
 }
 
 export async function getSightingCount(duckId: string): Promise<number> {
   const db = useDb()
-  const rows = await db
-    .select({ id: duckSightings.id })
+  const [row] = await db
+    .select({ value: count() })
     .from(duckSightings)
     .where(eq(duckSightings.duckId, duckId))
-  return rows.length
+  return row.value
 }
 
 // Public projection of a duck.

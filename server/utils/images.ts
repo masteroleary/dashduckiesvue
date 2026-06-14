@@ -17,6 +17,9 @@ function getBlobService() {
   return blobService
 }
 
+// Avoid a createIfNotExists round-trip on every upload once a container is known.
+const ensuredContainers = new Set<string>()
+
 // Read GPS from the original image's EXIF. Null if absent. (exifr is pure JS.)
 export async function extractGps(buffer: Buffer): Promise<{ lat: number; lng: number } | null> {
   try {
@@ -49,7 +52,10 @@ export async function uploadImage(
   entityId?: string,
 ): Promise<string> {
   const containerClient = getBlobService().getContainerClient(container)
-  await containerClient.createIfNotExists({ access: 'blob' })
+  if (!ensuredContainers.has(container)) {
+    await containerClient.createIfNotExists({ access: 'blob' })
+    ensuredContainers.add(container)
+  }
   const id = globalThis.crypto.randomUUID()
   const blobName = entityId ? `${entityId}/${id}/image.jpg` : `${id}/image.jpg`
   const blob = containerClient.getBlockBlobClient(blobName)

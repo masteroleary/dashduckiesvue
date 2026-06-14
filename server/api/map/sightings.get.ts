@@ -1,8 +1,8 @@
-import { and, eq, isNull, isNotNull, ne, asc } from 'drizzle-orm'
+import { and, eq, isNull, isNotNull, ne, desc } from 'drizzle-orm'
 import { useDb } from '../../db'
 import { duckSightings, ducks } from '../../db/schema'
 
-// All sightings with real coordinates, for the homepage live map.
+// Recent sightings with real coordinates, for the homepage live map (capped).
 export default defineEventHandler(async () => {
   const db = useDb()
   return await db
@@ -26,5 +26,6 @@ export default defineEventHandler(async () => {
         ne(duckSightings.longitude, 0),
       ),
     )
-    .orderBy(asc(duckSightings.sightingDate))
+    .orderBy(desc(duckSightings.sightingDate))
+    .limit(2000)
 })

@@ -7,7 +7,7 @@
 //                               old "UTCDeletedOn = DateTime.MinValue means active" sentinel
 //   - TS fields are camelCase; DB columns are snake_case.
 
-import { relations } from 'drizzle-orm'
+import { relations, sql } from 'drizzle-orm'
 import {
   pgTable,
   pgEnum,
@@ -54,8 +54,10 @@ export const users = pgTable(
     deletedAt: timestamp('deleted_at', { withTimezone: true }),
   },
   (t) => [
-    uniqueIndex('users_email_idx').on(t.email),
-    uniqueIndex('users_phone_number_idx').on(t.phoneNumber),
+    // Partial unique: only active (non-deleted) users contend for an email/phone,
+    // so a soft-deleted account doesn't block re-use of its email/phone.
+    uniqueIndex('users_email_idx').on(t.email).where(sql`${t.deletedAt} is null`),
+    uniqueIndex('users_phone_number_idx').on(t.phoneNumber).where(sql`${t.deletedAt} is null`),
   ],
 )
 

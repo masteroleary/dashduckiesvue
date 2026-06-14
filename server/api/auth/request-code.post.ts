@@ -1,4 +1,5 @@
-import { requestCode } from '../../utils/verification'
+import { requestCode, normalizeIdentifier } from '../../utils/verification'
+import { enforceRequestCodeLimit } from '../../utils/rateLimit'
 
 export default defineEventHandler(async (event) => {
   const body = await readBody(event)
@@ -6,6 +7,7 @@ export default defineEventHandler(async (event) => {
   if (!identifier) {
     throw createError({ statusCode: 400, statusMessage: 'identifier (email or phone) is required' })
   }
+  enforceRequestCodeLimit(event, normalizeIdentifier(identifier))
 
   try {
     const { dev } = await requestCode(identifier)

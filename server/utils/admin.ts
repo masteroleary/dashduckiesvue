@@ -1,21 +1,21 @@
-import { and, desc, eq, inArray, isNull, sql } from 'drizzle-orm'
+import { and, count, desc, eq, inArray, isNull, sql } from 'drizzle-orm'
 import { useDb } from '../db'
 import { duckSightings, ducks, users } from '../db/schema'
 
 export async function getStatistics() {
   const db = useDb()
-  const u = await db.select({ id: users.id }).from(users).where(isNull(users.deletedAt))
-  const d = await db.select({ id: ducks.id }).from(ducks).where(isNull(ducks.deletedAt))
-  const s = await db.select({ id: duckSightings.id }).from(duckSightings)
-  const m = await db
-    .select({ id: users.id })
+  const [u] = await db.select({ value: count() }).from(users).where(isNull(users.deletedAt))
+  const [d] = await db.select({ value: count() }).from(ducks).where(isNull(ducks.deletedAt))
+  const [s] = await db.select({ value: count() }).from(duckSightings)
+  const [m] = await db
+    .select({ value: count() })
     .from(users)
     .where(and(isNull(users.deletedAt), eq(users.isMember, true)))
   return {
-    totalUsers: u.length,
-    totalDucks: d.length,
-    totalSightings: s.length,
-    totalMembers: m.length,
+    totalUsers: u.value,
+    totalDucks: d.value,
+    totalSightings: s.value,
+    totalMembers: m.value,
   }
 }
 

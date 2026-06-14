@@ -4,9 +4,12 @@ import { useDb } from '../../../db'
 import { users } from '../../../db/schema'
 
 export default defineEventHandler(async (event) => {
-  requireAdmin(event)
+  const admin = requireAdmin(event)
   const userId = getRouterParam(event, 'userId') as string
   const body = await readBody(event)
+  if (userId === admin.id && body?.isAdmin === false) {
+    throw createError({ statusCode: 400, statusMessage: 'You cannot remove your own admin role' })
+  }
   const db = useDb()
 
   const set: Record<string, unknown> = {}

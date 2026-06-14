@@ -1,5 +1,6 @@
 import { AUTH_COOKIE } from '../../utils/jwt'
 import { checkCode, normalizeIdentifier } from '../../utils/verification'
+import { enforceVerifyLimit } from '../../utils/rateLimit'
 import {
   claimAnonymousSubmissions,
   findOrCreateUser,
@@ -16,6 +17,7 @@ export default defineEventHandler(async (event) => {
   if (!identifier || !code) {
     throw createError({ statusCode: 400, statusMessage: 'identifier and code are required' })
   }
+  enforceVerifyLimit(event, normalizeIdentifier(identifier))
 
   const valid = await checkCode(identifier, code)
   if (!valid) {

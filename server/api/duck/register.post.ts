@@ -4,6 +4,7 @@ import { duckSightings, ducks } from '../../db/schema'
 import { processAndUpload } from '../../utils/images'
 import { geocodeAddress } from '../../utils/geocode'
 import { enforceDuckSubmissionLimit } from '../../utils/rateLimit'
+import { readMultipart, validateImage } from '../../utils/upload'
 
 const CLAIM_GRACE_MS = 7 * 24 * 60 * 60 * 1000
 
@@ -11,13 +12,9 @@ const CLAIM_GRACE_MS = 7 * 24 * 60 * 60 * 1000
 export default defineEventHandler(async (event) => {
   enforceDuckSubmissionLimit(event)
 
-  const parts = (await readMultipartFormData(event)) || []
-  const fields: Record<string, string> = {}
-  let imageBuf: Buffer | null = null
-  for (const p of parts) {
-    if (p.filename) imageBuf = p.data as Buffer
-    else if (p.name) fields[p.name] = p.data.toString('utf-8')
-  }
+  const { fields, file } = await readMultipart(event)
+  validateImage(file)
+  const imageBuf = file?.data ?? null
 
   const qtCode = Number.parseInt(fields.qtCode || '', 10)
   const name = (fields.name || '').trim()
