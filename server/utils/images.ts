@@ -1,4 +1,4 @@
-import sharp from 'sharp'
+import { Jimp } from 'jimp'
 import exifr from 'exifr'
 import { BlobServiceClient } from '@azure/storage-blob'
 
@@ -17,7 +17,7 @@ function getBlobService() {
   return blobService
 }
 
-// Read GPS from the ORIGINAL image's EXIF (before we strip it). Null if absent.
+// Read GPS from the original image's EXIF. Null if absent. (exifr is pure JS.)
 export async function extractGps(buffer: Buffer): Promise<{ lat: number; lng: number } | null> {
   try {
     const gps = await exifr.gps(buffer)
@@ -30,13 +30,15 @@ export async function extractGps(buffer: Buffer): Promise<{ lat: number; lng: nu
   return null
 }
 
-// Auto-orient, strip all metadata, resize to fit 1920x1920, output JPEG q85.
+// Resize to fit 1920x1920 (no upscaling) and re-encode to JPEG q85.
+// jimp is pure JS, so this works on any host with no native binaries.
+// Re-encoding also drops the original EXIF (incl. GPS) from the stored file.
 export async function processImage(buffer: Buffer): Promise<Buffer> {
-  return await sharp(buffer)
-    .rotate() // auto-orient from EXIF, then metadata is dropped by default
-    .resize({ width: MAX_DIM, height: MAX_DIM, fit: 'inside', withoutEnlargement: true })
-    .jpeg({ quality: JPEG_QUALITY })
-    .toBuffer()
+  const img = await Jimp.read(buffer)
+  if (img.width > MAX_DIM || img.height > MAX_DIM) {
+    img.scaleToFit({ w: MAX_DIM, h: MAX_DIM })
+  }
+  return await img.getBuffer('image/jpeg', { quality: JPEG_QUALITY })
 }
 
 export async function uploadImage(

@@ -5,15 +5,6 @@ export default defineNuxtConfig({
 
   modules: ['vuetify-nuxt-module'],
 
-  nitro: {
-    // sharp ships a native libvips binary that Nitro's tracer can't bundle into
-    // .output. Keep it external so it resolves from the deployed node_modules
-    // (which has the full @img/sharp-libvips-linux-x64) at runtime.
-    externals: {
-      external: ['sharp'],
-    },
-  },
-
   // SSR on by default (for SEO). The authenticated app is a client-only SPA.
   ssr: true,
   routeRules: {
