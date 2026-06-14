@@ -28,5 +28,13 @@
   "devDependencies": {
     "drizzle-kit": "latest",
     "sass-embedded": "latest"
+  },
+  "overrides": {
+    "svgo": {
+      "commander": "^13.1.0"
+    },
+    "@bomb.sh/tab": {
+      "commander": "^13.1.0"
+    }
   }
 }
