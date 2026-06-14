@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm install *)",
+      "Bash(npm run *)",
+      "Read(//tmp/**)",
+      "Bash(pkill -f vite)",
+      "Bash(PORT=3000 node .output/server/index.mjs)",
+      "Bash(pkill -f \"index.mjs\")"
+    ]
+  }
+}

@@ -1,44 +1,37 @@
----
-title: Vue 3 + TypeScript + Vite + Caddy
-description: The default Vue + Vite TS starter, utilizing `Caddy` to serve the built single page app
-tags:
-  - Node
-  - Vue 3
-  - Vite
-  - TypeScript
-  - Caddy
----
+# Dash Duckies
 
-# Vue 3 + TypeScript + Vite + Caddy
+Global rubber-duck tracking platform. A ground-up rewrite of the legacy Blazor .NET app,
+built on **Nuxt 3** and deployed on **Railway**.
 
-This template should help get you started developing with Vue and TypeScript in Vite. The template uses Vue 3 With TypeScript.
+## Stack
 
-[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/template/Qh0OAU?referralCode=ySCnWl)
+- **Nuxt 3** — single app:
+  - **SSR** public pages (`/`, `/quackertracker/[id]`, `/stickers`, `/contact`, `/terms`, ...) for SEO
+  - **client-only SPA** at `/app/**` (`ssr: false`) for the member + admin areas
+  - **Nitro** server routes (`server/api/**`) for the REST API
+- **Vuetify** (via `vuetify-nuxt-module`) for UI
+- **Drizzle ORM** + **Postgres** (Railway)
+- **Azure Blob Storage** for images
+- Auth: email/SMS verification → JWT in an **HTTP-only cookie** (shared across SSR + SPA)
 
-## ✨ Features
+## Local development
 
-- Vue 3 + TypeScript + Vite + Caddy
-- Caddy v2
+```bash
+npm install
+cp .env.example .env   # then fill in DATABASE_URL etc.
+npm run dev            # http://localhost:3000
+```
 
-## 💁‍♀️ Local Development
+## Database (Drizzle)
 
-- Install required dependencies with `npm install`
-- Start the server for local development `npm run dev`
-- Navigate to `http://localhost:5173/. The application will automatically reload if you change any of the source files.
+```bash
+npm run db:generate    # generate SQL migration from server/db/schema.ts
+npm run db:migrate     # apply migrations to $DATABASE_URL
+npm run db:studio      # browse data
+```
 
-## ❓ Why use `Caddy` when deploying to Railway?
+## Deploy
 
-Caddy is a powerful, enterprise-ready, open source web server, and therefore Caddy is far better suited to serve websites than Vite is, using Caddy will result in much less memory and cpu usage compared to serving with Vite (much lower running costs too)
-
-To see how this is achieved with nixpacks, check out the fully documented nixpacks.toml file in this repository
-
-The configuration for Caddy is called a Caddyfile, and you can edit that file to further suite your needs, by default it comes configured to serve a single page app for Vue 3, and to also gzip the responses
-
-**Relevant Caddy documentation:**
-
-- [The Caddyfile](https://caddyserver.com/docs/caddyfile)
-- [Caddyfile Directives](https://caddyserver.com/docs/caddyfile/directives)
-- [root](https://caddyserver.com/docs/caddyfile/directives/root)
-- [encode](https://caddyserver.com/docs/caddyfile/directives/encode)
-- [file_server](https://caddyserver.com/docs/caddyfile/directives/file_server)
-- [try_files](https://caddyserver.com/docs/caddyfile/directives/try_files)
+Push to `main` → Railway builds (`npm run build`) and starts (`npm run start`,
+i.e. `node .output/server/index.mjs`) → live at `dashduckies.up.railway.app`.
+Set environment variables (see `.env.example`) in Railway → service → Variables.
