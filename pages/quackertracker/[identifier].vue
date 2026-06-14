@@ -21,6 +21,26 @@ useHead(() => ({
 function fmtDate(d: string | Date) {
   return new Date(d).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' })
 }
+
+// Likes
+const liked = ref(false)
+const likeCount = ref(0)
+watchEffect(() => {
+  if (data.value && 'likeCount' in data.value) likeCount.value = data.value.likeCount
+})
+async function toggleLike() {
+  if (!duck.value) return
+  try {
+    const res = await $fetch<{ isLiked: boolean; likeCount: number }>(
+      `/api/duck/${duck.value.id}/like`,
+      { method: 'POST' },
+    )
+    liked.value = res.isLiked
+    likeCount.value = res.likeCount
+  } catch (e: any) {
+    if (e?.statusCode === 401) navigateTo('/app')
+  }
+}
 </script>
 
 <template>
@@ -49,8 +69,7 @@ function fmtDate(d: string | Date) {
         <p class="text-medium-emphasis mb-6">
           This duck hasn't been registered yet. Be the first to give it a name and start its journey!
         </p>
-        <!-- Register requires sign-in; full register flow lands in a later phase. -->
-        <v-btn color="primary" :to="`/app`">Sign in to register</v-btn>
+        <v-btn color="primary" :to="`/duck/register/${data.duck.id}`">Register this duck</v-btn>
       </v-col>
     </v-row>
 
@@ -79,10 +98,20 @@ function fmtDate(d: string | Date) {
                       {{ data.sightingCount }} sightings
                     </v-chip>
                     <v-chip color="pink" variant="tonal" prepend-icon="mdi-heart">
-                      {{ data.likeCount }} likes
+                      {{ likeCount }} likes
                     </v-chip>
                   </div>
-                  <v-btn color="primary" to="/app">Sign in to post a sighting</v-btn>
+                  <div class="d-flex ga-2">
+                    <v-btn color="primary" :to="`/duck/${data.duck.id}/sighting`">Post a sighting</v-btn>
+                    <v-btn
+                      :color="liked ? 'pink' : undefined"
+                      variant="outlined"
+                      :prepend-icon="liked ? 'mdi-heart' : 'mdi-heart-outline'"
+                      @click="toggleLike"
+                    >
+                      Like
+                    </v-btn>
+                  </div>
                 </div>
               </v-col>
             </v-row>

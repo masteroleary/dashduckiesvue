@@ -1,13 +1,17 @@
 import { AUTH_COOKIE } from '../../utils/jwt'
 import { checkCode, normalizeIdentifier } from '../../utils/verification'
-import { findOrCreateUser, issueToken, publicUser } from '../../utils/userAuth'
+import {
+  claimAnonymousSubmissions,
+  findOrCreateUser,
+  issueToken,
+  publicUser,
+} from '../../utils/userAuth'
 
 export default defineEventHandler(async (event) => {
   const body = await readBody(event)
   const identifier = String(body?.identifier || '').trim()
   const code = String(body?.code || '').trim()
-  // claimToken (anonymous duck/sighting claim) is accepted now; wired in Phase 6.
-  // const claimToken = body?.claimToken ? String(body.claimToken) : undefined
+  const claimToken = body?.claimToken ? String(body.claimToken) : undefined
 
   if (!identifier || !code) {
     throw createError({ statusCode: 400, statusMessage: 'identifier and code are required' })
@@ -19,6 +23,9 @@ export default defineEventHandler(async (event) => {
   }
 
   const user = await findOrCreateUser(normalizeIdentifier(identifier))
+  if (claimToken) {
+    await claimAnonymousSubmissions(claimToken, user.id)
+  }
   const token = await issueToken(user)
 
   const hours = Number.parseInt(process.env.JWT_EXPIRATION_HOURS || '720', 10)

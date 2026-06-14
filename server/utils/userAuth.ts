@@ -1,6 +1,6 @@
 import { and, eq, isNull } from 'drizzle-orm'
 import { useDb } from '../db'
-import { authTokens, users } from '../db/schema'
+import { authTokens, duckSightings, ducks, users } from '../db/schema'
 import { signAuthToken } from './jwt'
 import { isEmail } from './verification'
 
@@ -78,4 +78,17 @@ export async function isTokenActive(token: string): Promise<boolean> {
 export async function revokeToken(token: string): Promise<void> {
   const db = useDb()
   await db.delete(authTokens).where(eq(authTokens.token, token))
+}
+
+// Attribute anonymous submissions (made with this claimToken) to the user on login.
+export async function claimAnonymousSubmissions(claimToken: string, userId: string): Promise<void> {
+  const db = useDb()
+  await db
+    .update(ducks)
+    .set({ registeredByUserId: userId, claimToken: null, claimTokenIssuedAt: null })
+    .where(and(eq(ducks.claimToken, claimToken), isNull(ducks.registeredByUserId)))
+  await db
+    .update(duckSightings)
+    .set({ userId, claimToken: null })
+    .where(and(eq(duckSightings.claimToken, claimToken), isNull(duckSightings.userId)))
 }

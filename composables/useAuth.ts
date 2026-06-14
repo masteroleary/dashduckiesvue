@@ -25,10 +25,15 @@ export function useAuth() {
   }
 
   async function verifyCode(identifier: string, code: string) {
+    // Carry any anonymous submission claim token so it's attributed on login.
+    const claimToken = import.meta.client
+      ? localStorage.getItem('dd_claim_token') || undefined
+      : undefined
     const res = await $fetch<{ ok: boolean; user: AuthUser }>('/api/auth/verify-code', {
       method: 'POST',
-      body: { identifier, code },
+      body: { identifier, code, claimToken },
     })
+    if (claimToken && import.meta.client) localStorage.removeItem('dd_claim_token')
     user.value = res.user
     return res
   }

@@ -30,6 +30,27 @@ const saving = ref(false)
 const saved = ref(false)
 const error = ref('')
 
+const avatarFile = ref<File | null>(null)
+const uploadingAvatar = ref(false)
+async function uploadAvatar() {
+  if (!avatarFile.value) return
+  uploadingAvatar.value = true
+  try {
+    const fd = new FormData()
+    fd.append('image', avatarFile.value)
+    const res = await $fetch<{ profileImageUrl: string }>('/api/member/account/profile-image', {
+      method: 'POST',
+      body: fd,
+    })
+    form.profileImageUrl = res.profileImageUrl
+    avatarFile.value = null
+  } catch (e: any) {
+    error.value = e?.data?.statusMessage || 'Could not upload image.'
+  } finally {
+    uploadingAvatar.value = false
+  }
+}
+
 async function save() {
   saving.value = true
   saved.value = false
@@ -60,6 +81,25 @@ async function save() {
         </v-alert>
 
         <v-card class="pa-4">
+          <div class="d-flex align-center mb-4 ga-4">
+            <v-avatar size="72" color="grey-lighten-2">
+              <v-img v-if="form.profileImageUrl" :src="form.profileImageUrl" />
+              <v-icon v-else icon="mdi-account" size="40" />
+            </v-avatar>
+            <div class="flex-grow-1">
+              <v-file-input
+                v-model="avatarFile"
+                label="Profile photo"
+                accept="image/*"
+                variant="outlined"
+                density="compact"
+                hide-details
+                prepend-icon="mdi-camera"
+              />
+            </div>
+            <v-btn :loading="uploadingAvatar" :disabled="!avatarFile" @click="uploadAvatar">Upload</v-btn>
+          </div>
+          <v-divider class="mb-4" />
           <v-row>
             <v-col cols="12" sm="6"><v-text-field v-model="form.nameFirst" label="First name" variant="outlined" /></v-col>
             <v-col cols="12" sm="6"><v-text-field v-model="form.nameLast" label="Last name" variant="outlined" /></v-col>
