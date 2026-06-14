@@ -18,12 +18,15 @@
     "db:studio": "drizzle-kit studio"
   },
   "dependencies": {
+    "@sendgrid/mail": "^8.1.6",
+    "drizzle-orm": "latest",
+    "jose": "^6.2.3",
     "nuxt": "latest",
+    "postgres": "latest",
+    "twilio": "^6.0.2",
     "vue": "latest",
     "vue-router": "latest",
-    "vuetify-nuxt-module": "latest",
-    "drizzle-orm": "latest",
-    "postgres": "latest"
+    "vuetify-nuxt-module": "latest"
   },
   "devDependencies": {
     "drizzle-kit": "latest",
