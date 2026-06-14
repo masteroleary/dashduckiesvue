@@ -31,8 +31,10 @@ export async function extractGps(buffer: Buffer): Promise<{ lat: number; lng: nu
 }
 
 // Resize to fit 1920x1920 (no upscaling) and re-encode to JPEG q85.
-// jimp is pure JS, so this works on any host with no native binaries.
-// Re-encoding also drops the original EXIF (incl. GPS) from the stored file.
+// jimp auto-orients from EXIF on read (verified: an orientation-6 100x50 image
+// reads back as an upright 50x100), so no manual rotation is needed. jimp is
+// pure JS, so this works on any host with no native binaries. Re-encoding also
+// drops the original EXIF (incl. GPS + the now-applied orientation).
 export async function processImage(buffer: Buffer): Promise<Buffer> {
   const img = await Jimp.read(buffer)
   if (img.width > MAX_DIM || img.height > MAX_DIM) {
@@ -55,7 +57,7 @@ export async function uploadImage(
   return blob.url
 }
 
-// Full pipeline: pull GPS, process, upload. Returns the public URL + any GPS.
+// Full pipeline: pull GPS, auto-orient + process, upload. Returns URL + any GPS.
 export async function processAndUpload(
   buffer: Buffer,
   container: ContainerType,
