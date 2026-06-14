@@ -114,6 +114,31 @@ Schema lives in `server/db/schema.ts` (7 tables: `users`, `ducks`, `duck_sightin
 `duck_likes`, `verification_codes`, `auth_tokens`, `email_subscriptions`). Conventions: UUID PKs,
 `timestamptz`, **soft delete via nullable `deleted_at`** (NULL = active).
 
+### Migrating data from the legacy SQL Server
+
+`scripts/migrate-from-sqlserver.mjs` (`npm run db:migrate-legacy`) is a one-time ETL from the old
+**SQL Server** DB to Postgres. Set the source connection in `.env` (one of):
+
+```bash
+OLD_SQLSERVER_URL=Server=host;Database=db;User Id=user;Password=pass;Encrypt=false   # preferred
+# or OLD_SQLSERVER_HOST / OLD_SQLSERVER_DB / OLD_SQLSERVER_USER / OLD_SQLSERVER_PASSWORD
+```
+
+```bash
+npm run db:migrate-legacy                      # DRY RUN — reads source, reports counts, writes nothing
+npm run db:migrate-legacy -- --commit          # import (idempotent: on-conflict-do-nothing)
+npm run db:migrate-legacy -- --commit --wipe   # clear target tables first (removes demo seed), then import
+```
+
+What it does: auto-discovers source table/column names; transforms PascalCase→snake_case,
+`UTCDeletedOn=MinValue`→`deleted_at NULL`, `RegistrationType` enum int→text, lowercases emails;
+inserts in FK order preserving GUID/int ids (resets serial sequences after). **Skips** `auth_tokens`
+(old JWTs are invalid under the new `JWT_SECRET`) and `verification_codes` (ephemeral).
+
+> The old `db32347.databaseasp.net` host is IP-restricted and not reachable from every network —
+> run this from a machine/network that can reach it, or provide a reachable connection string.
+> Always do a **dry run first**, and use `--wipe` only when you intend to replace the demo seed.
+
 ---
 
 ## Project structure
