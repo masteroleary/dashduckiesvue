@@ -5,6 +5,7 @@ import { processAndUpload } from '../../utils/images'
 import { geocodeAddress } from '../../utils/geocode'
 import { enforceDuckSubmissionLimit } from '../../utils/rateLimit'
 import { readMultipart, validateImage } from '../../utils/upload'
+import { notifyNewSighting } from '../../utils/notify'
 
 // Post a sighting for an existing duck. Anonymous allowed.
 export default defineEventHandler(async (event) => {
@@ -28,7 +29,7 @@ export default defineEventHandler(async (event) => {
     .limit(1)
   if (!duck) throw createError({ statusCode: 404, statusMessage: 'Duck not found' })
 
-  const user = event.context.user as { id: string } | undefined
+  const user = event.context.user as { id: string; email?: string | null; phone?: string | null } | undefined
   const claimToken = user ? null : globalThis.crypto.randomUUID()
 
   // Insert first so we have the sighting id for the image path.
@@ -62,6 +63,12 @@ export default defineEventHandler(async (event) => {
   if (!duck.imageUrl && imageUrl) {
     await db.update(ducks).set({ imageUrl }).where(eq(ducks.id, duck.id))
   }
+
+  notifyNewSighting(
+    { name: duck.name, qtCode: duck.qtCode },
+    { address },
+    user ? { email: user.email ?? null, phone: user.phone ?? null } : null,
+  )
 
   return { sightingId: sighting.id, claimToken }
 })

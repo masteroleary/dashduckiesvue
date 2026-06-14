@@ -5,6 +5,7 @@ import { processAndUpload } from '../../utils/images'
 import { geocodeAddress } from '../../utils/geocode'
 import { enforceDuckSubmissionLimit } from '../../utils/rateLimit'
 import { readMultipart, validateImage } from '../../utils/upload'
+import { notifyNewSighting } from '../../utils/notify'
 
 const CLAIM_GRACE_MS = 7 * 24 * 60 * 60 * 1000
 
@@ -46,7 +47,7 @@ export default defineEventHandler(async (event) => {
     }
   }
 
-  const user = event.context.user as { id: string } | undefined
+  const user = event.context.user as { id: string; email?: string | null; phone?: string | null } | undefined
   const claimToken = user ? null : globalThis.crypto.randomUUID()
 
   let imageUrl: string | null = null
@@ -79,6 +80,12 @@ export default defineEventHandler(async (event) => {
     longitude: coords.lng,
     imageUrl,
   })
+
+  notifyNewSighting(
+    { name, qtCode },
+    { address },
+    user ? { email: user.email ?? null, phone: user.phone ?? null } : null,
+  )
 
   return { duckId: duck.id, claimToken }
 })

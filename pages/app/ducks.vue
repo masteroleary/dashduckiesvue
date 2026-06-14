@@ -15,6 +15,7 @@ const { data: ducks, pending, refresh } = useFetch<MyDuck[]>('/api/my-ducks')
 // Edit dialog
 const editing = ref<MyDuck | null>(null)
 const form = reactive({ name: '', description: '', address: '' })
+const editFile = ref<File | null>(null)
 const saving = ref(false)
 const errorMsg = ref('')
 
@@ -23,6 +24,7 @@ function openEdit(d: MyDuck) {
   form.name = d.name || ''
   form.description = d.description || ''
   form.address = d.sightings?.[0]?.address || ''
+  editFile.value = null
   errorMsg.value = ''
 }
 
@@ -31,7 +33,12 @@ async function save() {
   saving.value = true
   errorMsg.value = ''
   try {
-    await $fetch(`/api/my-ducks/${editing.value.id}`, { method: 'PUT', body: { ...form } })
+    const fd = new FormData()
+    fd.append('name', form.name)
+    fd.append('description', form.description)
+    fd.append('address', form.address)
+    if (editFile.value) fd.append('image', editFile.value)
+    await $fetch(`/api/my-ducks/${editing.value.id}`, { method: 'PUT', body: fd })
     editing.value = null
     await refresh()
   } catch (e: any) {
@@ -103,6 +110,13 @@ function fmtDate(d: string) {
           <v-text-field v-model="form.name" label="Name" variant="outlined" />
           <v-textarea v-model="form.description" label="Description" variant="outlined" rows="2" />
           <v-text-field v-model="form.address" label="Current location" variant="outlined" />
+          <v-file-input
+            v-model="editFile"
+            label="Replace photo (optional)"
+            accept="image/*"
+            variant="outlined"
+            prepend-icon="mdi-camera"
+          />
         </v-card-text>
         <v-card-actions>
           <v-spacer />

@@ -47,7 +47,7 @@ try {
       const [row] = await tx`
         insert into users (email, name_first, name_last, is_member)
         values (${u.email}, ${u.first}, ${u.last}, true)
-        on conflict (email) do update set name_first = excluded.name_first
+        on conflict (email) where deleted_at is null do update set name_first = excluded.name_first
         returning id`
       userIds.push(row.id)
     }

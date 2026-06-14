@@ -172,5 +172,7 @@ async function subscribe() {
         </v-col>
       </v-row>
     </v-container>
+
+    <NewsletterDialog />
   </div>
 </template>

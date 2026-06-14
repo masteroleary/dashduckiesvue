@@ -2,16 +2,18 @@ import { and, desc, eq, isNull } from 'drizzle-orm'
 import { requireUser } from '../../utils/session'
 import { userHasSighting } from '../../utils/member'
 import { geocodeAddress } from '../../utils/geocode'
+import { processAndUpload } from '../../utils/images'
+import { readMultipart, validateImage } from '../../utils/upload'
 import { useDb } from '../../db'
 import { duckSightings, ducks } from '../../db/schema'
 
-// Update a duck you've sighted: name/description, and (if the location changed)
-// log a new sighting at the new address with geocoded coordinates.
-// NOTE: image replacement is handled in Phase 6 (upload pipeline).
+// Update a duck you've sighted: name/description, optional new photo, and (if the
+// location changed) a new geocoded sighting.
 export default defineEventHandler(async (event) => {
   const user = requireUser(event)
   const id = getRouterParam(event, 'id') as string
-  const body = await readBody(event)
+  const { fields, file } = await readMultipart(event)
+  validateImage(file)
   const db = useDb()
 
   const [duck] = await db
@@ -23,11 +25,17 @@ export default defineEventHandler(async (event) => {
     throw createError({ statusCode: 404, statusMessage: 'Duck not found' })
   }
 
-  const name = String(body?.name ?? duck.name ?? '').trim()
-  const description = body?.description != null ? String(body.description).trim() : duck.description
-  await db.update(ducks).set({ name, description }).where(eq(ducks.id, id))
+  const set: Record<string, unknown> = {
+    name: (fields.name ?? duck.name ?? '').trim(),
+    description: fields.description != null ? fields.description.trim() || null : duck.description,
+  }
+  if (file) {
+    const r = await processAndUpload(file.data as Buffer, 'duck-images', String(duck.qtCode))
+    set.imageUrl = r.url
+  }
+  await db.update(ducks).set(set).where(eq(ducks.id, id))
 
-  const address = body?.address != null ? String(body.address).trim() : null
+  const address = fields.address != null ? fields.address.trim() : null
   if (address) {
     const [latest] = await db
       .select({ address: duckSightings.address })

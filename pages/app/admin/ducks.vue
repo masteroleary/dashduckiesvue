@@ -80,6 +80,53 @@ async function del() {
     removing.value = false
   }
 }
+
+// Sightings viewer + editor
+interface AdminSighting {
+  id: number
+  sightingDate: string
+  address: string | null
+  latitude: number
+  longitude: number
+}
+const sightingsDuck = ref<AdminDuck | null>(null)
+const detail = ref<{ sightings: AdminSighting[] } | null>(null)
+const loadingDetail = ref(false)
+async function openSightings(d: AdminDuck) {
+  sightingsDuck.value = d
+  detail.value = null
+  loadingDetail.value = true
+  try {
+    detail.value = await $fetch(`/api/admin/ducks/${d.id}`)
+  } finally {
+    loadingDetail.value = false
+  }
+}
+
+const editingSighting = ref<AdminSighting | null>(null)
+const sForm = reactive({ address: '', latitude: 0, longitude: 0, sightingDate: '' })
+const savingSighting = ref(false)
+function openSightingEdit(s: AdminSighting) {
+  editingSighting.value = s
+  sForm.address = s.address || ''
+  sForm.latitude = s.latitude || 0
+  sForm.longitude = s.longitude || 0
+  sForm.sightingDate = s.sightingDate ? new Date(s.sightingDate).toISOString().slice(0, 10) : ''
+}
+async function saveSighting() {
+  if (!editingSighting.value) return
+  savingSighting.value = true
+  try {
+    await $fetch(`/api/admin/sightings/${editingSighting.value.id}`, { method: 'PUT', body: { ...sForm } })
+    editingSighting.value = null
+    if (sightingsDuck.value) await openSightings(sightingsDuck.value)
+  } finally {
+    savingSighting.value = false
+  }
+}
+function fmtDate(d: string) {
+  return new Date(d).toLocaleDateString()
+}
 </script>
 
 <template>
@@ -116,6 +163,7 @@ async function del() {
             <td class="text-center">{{ d.qtCode }}</td>
             <td class="text-center">{{ d.sightingsCount }}</td>
             <td class="text-no-wrap">
+              <v-btn icon="mdi-map-marker" size="small" variant="text" @click="openSightings(d)" />
               <v-btn icon="mdi-pencil" size="small" variant="text" @click="openEdit(d)" />
               <v-btn icon="mdi-delete" size="small" variant="text" color="error" @click="deleting = d" />
             </td>
@@ -172,6 +220,55 @@ async function del() {
           <v-spacer />
           <v-btn variant="text" @click="deleting = null">Cancel</v-btn>
           <v-btn color="error" :loading="removing" @click="del">Delete</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
+    <!-- Sightings list -->
+    <v-dialog :model-value="!!sightingsDuck" max-width="680" @update:model-value="sightingsDuck = null">
+      <v-card>
+        <v-card-title>Sightings — {{ sightingsDuck?.name || sightingsDuck?.qtCode }}</v-card-title>
+        <v-card-text>
+          <div v-if="loadingDetail" class="text-center py-6"><v-progress-circular indeterminate /></div>
+          <v-table v-else-if="detail && detail.sightings.length">
+            <thead>
+              <tr><th>Date</th><th>Address</th><th class="text-right">Lat</th><th class="text-right">Lng</th><th></th></tr>
+            </thead>
+            <tbody>
+              <tr v-for="s in detail.sightings" :key="s.id">
+                <td>{{ fmtDate(s.sightingDate) }}</td>
+                <td>{{ s.address || '—' }}</td>
+                <td class="text-right">{{ s.latitude?.toFixed?.(3) }}</td>
+                <td class="text-right">{{ s.longitude?.toFixed?.(3) }}</td>
+                <td><v-btn icon="mdi-pencil" size="x-small" variant="text" @click="openSightingEdit(s)" /></td>
+              </tr>
+            </tbody>
+          </v-table>
+          <div v-else class="text-medium-emphasis py-4">No sightings yet.</div>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer />
+          <v-btn variant="text" @click="sightingsDuck = null">Close</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
+    <!-- Sighting edit -->
+    <v-dialog :model-value="!!editingSighting" max-width="460" @update:model-value="editingSighting = null">
+      <v-card>
+        <v-card-title>Edit sighting</v-card-title>
+        <v-card-text>
+          <v-text-field v-model="sForm.address" label="Address" variant="outlined" />
+          <v-row>
+            <v-col cols="6"><v-text-field v-model.number="sForm.latitude" label="Latitude" type="number" variant="outlined" /></v-col>
+            <v-col cols="6"><v-text-field v-model.number="sForm.longitude" label="Longitude" type="number" variant="outlined" /></v-col>
+          </v-row>
+          <v-text-field v-model="sForm.sightingDate" label="Date" type="date" variant="outlined" />
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer />
+          <v-btn variant="text" @click="editingSighting = null">Cancel</v-btn>
+          <v-btn color="primary" :loading="savingSighting" @click="saveSighting">Save</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>

@@ -127,6 +127,35 @@ export async function getAdminDucks() {
   }))
 }
 
+export async function getAdminDuckDetail(duckId: string) {
+  const db = useDb()
+  const [duck] = await db.select().from(ducks).where(eq(ducks.id, duckId)).limit(1)
+  if (!duck) return null
+  const sightings = await db
+    .select({
+      id: duckSightings.id,
+      sightingDate: duckSightings.sightingDate,
+      address: duckSightings.address,
+      latitude: duckSightings.latitude,
+      longitude: duckSightings.longitude,
+      imageUrl: duckSightings.imageUrl,
+      userId: duckSightings.userId,
+    })
+    .from(duckSightings)
+    .where(eq(duckSightings.duckId, duckId))
+    .orderBy(desc(duckSightings.sightingDate))
+  return {
+    id: duck.id,
+    name: duck.name,
+    description: duck.description,
+    imageUrl: duck.imageUrl,
+    qtCode: duck.qtCode,
+    registrationType: duck.registrationType,
+    createdAt: duck.createdAt,
+    sightings,
+  }
+}
+
 export async function bulkCreateDucks(
   items: Array<{ qtCode: number; name?: string; description?: string; imageUrl?: string }>,
 ) {

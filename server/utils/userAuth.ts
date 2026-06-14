@@ -3,6 +3,7 @@ import { useDb } from '../db'
 import { authTokens, duckSightings, ducks, users } from '../db/schema'
 import { signAuthToken } from './jwt'
 import { isEmail } from './verification'
+import { notifyNewMember } from './notify'
 
 type UserRow = typeof users.$inferSelect
 
@@ -40,6 +41,7 @@ export async function findOrCreateUser(identifier: string): Promise<UserRow> {
     .insert(users)
     .values({ email, phoneNumber: phone, isMember: true, lastLoginAt: new Date() })
     .returning()
+  notifyNewMember(created)
   return created
 }
 
