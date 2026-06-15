@@ -743,3 +743,22 @@
     gap: 16px;
   }
 }
+
+/* ============================================
+   PUBLIC FORM PAGES (register / sighting) + post-success
+   ============================================ */
+.dd-form-page { max-width: 640px; margin: 0 auto; padding: 48px 24px 80px; font-family: var(--font-body); color: var(--dd-black); }
+.dd-form-heading { font-family: var(--font-display); font-weight: 700; font-size: 34px; margin: 0 0 8px; }
+.dd-form-sub { color: var(--dd-gray); margin: 0 0 24px; }
+.dd-form-note { background: var(--dd-yellow-light); border-radius: 10px; padding: 12px 16px; margin-bottom: 16px; }
+.dd-form-error { color: var(--dd-accent); font-weight: 600; }
+.dd-form-card { background: #fff; border-radius: 16px; padding: 24px; box-shadow: 0 2px 12px rgba(0,0,0,0.08); }
+.dd-label { display: block; font-weight: 600; margin: 14px 0 6px; }
+.dd-field { width: 100%; padding: 12px 14px; border: 1px solid #d8d6cf; border-radius: 10px; font-size: 15px; font-family: var(--font-body); box-sizing: border-box; }
+textarea.dd-field { resize: vertical; }
+.dd-form-actions { display: flex; justify-content: flex-end; margin-top: 20px; }
+.dd-btn-primary[disabled] { opacity: 0.6; cursor: default; }
+
+.post-success { text-align: center; }
+.post-success-anim { font-size: 44px; animation: dd-rove 1.6s ease-in-out infinite; }
+@keyframes dd-rove { 0%,100% { transform: translateX(-8px); } 50% { transform: translateX(8px); } }
