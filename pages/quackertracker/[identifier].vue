@@ -1,19 +1,17 @@
 <script setup lang="ts">
 const route = useRoute()
 const identifier = route.params.identifier as string
-
 const { data, pending } = await useFetch(`/api/scan/${identifier}`)
-
 const duck = computed(() => (data.value && 'duck' in data.value ? data.value.duck : null))
 
 useHead(() => ({
-  title: duck.value?.name ? `${duck.value.name} — Dash Duckies` : 'Scan — Dash Duckies',
+  title: duck.value?.name ? `${duck.value.name} — DashDuckies` : 'Scan — DashDuckies',
   meta: [
     {
       name: 'description',
       content: duck.value?.name
-        ? `Follow ${duck.value.name}'s journey across the Dash Duckies map.`
-        : 'Dash Duckies scan result.',
+        ? `Follow ${duck.value.name}'s journey across the DashDuckies map.`
+        : 'DashDuckies scan result.',
     },
   ],
 }))
@@ -21,8 +19,12 @@ useHead(() => ({
 function fmtDate(d: string | Date) {
   return new Date(d).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' })
 }
+function ordinal(n: number) {
+  const s = ['th', 'st', 'nd', 'rd']
+  const v = n % 100
+  return n + (s[(v - 20) % 10] || s[v] || s[0])
+}
 
-// Likes
 const liked = ref(false)
 const likeCount = ref(0)
 watchEffect(() => {
@@ -31,122 +33,173 @@ watchEffect(() => {
 async function toggleLike() {
   if (!duck.value) return
   try {
-    const res = await $fetch<{ isLiked: boolean; likeCount: number }>(
-      `/api/duck/${duck.value.id}/like`,
-      { method: 'POST' },
-    )
+    const res = await $fetch<{ isLiked: boolean; likeCount: number }>(`/api/duck/${duck.value.id}/like`, {
+      method: 'POST',
+    })
     liked.value = res.isLiked
     likeCount.value = res.likeCount
   } catch (e: any) {
-    if (e?.statusCode === 401) navigateTo('/app')
+    if (e?.statusCode === 401) navigateTo('/login')
   }
 }
 </script>
 
 <template>
-  <v-container class="py-12">
-    <div v-if="pending" class="text-center py-16">
-      <v-progress-circular indeterminate color="primary" size="48" />
+  <div class="qt-wrap">
+    <div v-if="pending" class="qt-center">
+      <div class="qt-spinner" />
+      <p>Looking up duck…</p>
     </div>
 
     <!-- Not found -->
-    <v-row v-else-if="data?.state === 'notFound'" justify="center">
-      <v-col cols="12" md="6" class="text-center">
-        <div style="font-size: 64px">🛸🦆</div>
-        <h1 class="text-h4 font-weight-bold mt-4 mb-2">Invalid code</h1>
-        <p class="text-medium-emphasis mb-6">
-          We couldn't find a duck for <strong>{{ identifier }}</strong>. Double-check the code on the sticker.
-        </p>
-        <v-btn color="primary" to="/quackertracker">Try another code</v-btn>
-      </v-col>
-    </v-row>
+    <div v-else-if="data?.state === 'notFound'" class="qt-center">
+      <div class="qt-card-dark">
+        <div style="font-size: 56px">🛸🦆</div>
+        <h2>Invalid QT Code</h2>
+        <p>We couldn't find a duck for <strong>{{ identifier }}</strong>. Double-check the code on the sticker.</p>
+        <NuxtLink to="/quackertracker" class="dd-btn-primary">Try another code</NuxtLink>
+      </div>
+    </div>
 
-    <!-- Not registered yet -->
-    <v-row v-else-if="data?.state === 'notRegistered'" justify="center">
-      <v-col cols="12" md="6" class="text-center">
-        <div style="font-size: 64px">🦆</div>
-        <h1 class="text-h4 font-weight-bold mt-4 mb-2">Register this duck</h1>
-        <p class="text-medium-emphasis mb-6">
-          This duck hasn't been registered yet. Be the first to give it a name and start its journey!
-        </p>
-        <v-btn color="primary" :to="`/duck/register/${data.duck.id}`">Register this duck</v-btn>
-      </v-col>
-    </v-row>
+    <!-- Not registered -->
+    <div v-else-if="data?.state === 'notRegistered'" class="qt-center">
+      <div class="qt-card-dark">
+        <div style="font-size: 56px">🦆</div>
+        <h2>Register This Duck</h2>
+        <p>This duck hasn't been registered yet. Be the first to give it a name and start its journey!</p>
+        <NuxtLink :to="`/duck/register/${data.duck.id}`" class="dd-btn-primary">Upload Photo</NuxtLink>
+      </div>
+    </div>
 
-    <!-- Registered duck profile -->
+    <!-- Registered profile -->
     <template v-else-if="data?.state === 'registered' && duck">
-      <v-row justify="center">
-        <v-col cols="12" md="9">
-          <v-card class="mb-8">
-            <v-row no-gutters>
-              <v-col cols="12" sm="5">
-                <v-img
-                  :src="duck.imageUrl || '/sampleducks/viking-duck.png'"
-                  height="260"
-                  cover
-                />
-              </v-col>
-              <v-col cols="12" sm="7">
-                <div class="pa-6">
-                  <h1 class="text-h4 font-weight-bold mb-2">{{ duck.name }}</h1>
-                  <p v-if="duck.description" class="text-medium-emphasis mb-4">{{ duck.description }}</p>
-                  <div class="d-flex ga-2 flex-wrap mb-4">
-                    <v-chip color="primary" variant="tonal" prepend-icon="mdi-qrcode">
-                      QT {{ duck.qtCode }}
-                    </v-chip>
-                    <v-chip color="primary" variant="tonal" prepend-icon="mdi-map-marker">
-                      {{ data.sightingCount }} sightings
-                    </v-chip>
-                    <v-chip color="pink" variant="tonal" prepend-icon="mdi-heart">
-                      {{ likeCount }} likes
-                    </v-chip>
-                  </div>
-                  <div class="d-flex ga-2">
-                    <v-btn color="primary" :to="`/duck/${data.duck.id}/sighting`">Post a sighting</v-btn>
-                    <v-btn
-                      :color="liked ? 'pink' : undefined"
-                      variant="outlined"
-                      :prepend-icon="liked ? 'mdi-heart' : 'mdi-heart-outline'"
-                      @click="toggleLike"
-                    >
-                      Like
-                    </v-btn>
-                  </div>
-                </div>
-              </v-col>
-            </v-row>
-          </v-card>
+      <h2 class="qt-finder">
+        You are the {{ ordinal(data.sightingCount + 1) }} person to find {{ duck.name }}!
+      </h2>
 
-          <!-- Journey map -->
+      <div class="qt-cta">
+        <NuxtLink :to="`/duck/${duck.id}/sighting`" class="dd-btn-primary qt-pulse">📷 Upload your Duck Photo</NuxtLink>
+      </div>
+
+      <div class="qt-grid2">
+        <div class="qt-card">
+          <img v-if="duck.imageUrl" :src="duck.imageUrl" :alt="duck.name || 'Duck'" class="qt-duck-img" />
+          <h3>{{ duck.name }}</h3>
+          <p v-if="duck.description" class="qt-desc">{{ duck.description }}</p>
+          <div class="qt-badges">
+            <span class="qt-badge">#{{ duck.qtCode }}</span>
+            <span class="qt-badge qt-badge-info">{{ data.sightingCount }} sightings</span>
+            <span class="qt-badge qt-badge-like" @click="toggleLike">
+              {{ liked ? '❤️' : '🤍' }} {{ likeCount }}
+            </span>
+          </div>
+        </div>
+
+        <div class="qt-card qt-map-card">
           <template v-if="data.sightings && data.sightings.length">
-            <h2 class="text-h5 font-weight-bold mb-4">Journey</h2>
-            <ClientOnly>
-              <LiveMap :sightings="data.sightings" height="380px" />
-              <template #fallback>
-                <v-skeleton-loader type="image" height="380" />
-              </template>
-            </ClientOnly>
+            <h4>Journey Map</h4>
+            <ClientOnly><LiveMap :sightings="data.sightings" height="320px" /></ClientOnly>
           </template>
+          <div v-else class="qt-center" style="min-height: 320px">
+            <p style="color: var(--dd-gray)">Journey map will appear once sightings have location data.</p>
+          </div>
+        </div>
+      </div>
 
-          <!-- Sighting history -->
-          <template v-if="data.history && data.history.length">
-            <h2 class="text-h5 font-weight-bold mt-8 mb-4">Sightings</h2>
-            <v-row>
-              <v-col v-for="(s, i) in data.history" :key="i" cols="12" sm="6" md="4">
-                <v-card height="100%">
-                  <v-img v-if="s.imageUrl" :src="s.imageUrl" height="160" cover />
-                  <v-card-text>
-                    <div class="font-weight-bold">{{ s.address || 'Unknown location' }}</div>
-                    <div class="text-caption text-medium-emphasis">
-                      {{ s.userName }} · {{ fmtDate(s.sightingDate) }}
-                    </div>
-                  </v-card-text>
-                </v-card>
-              </v-col>
-            </v-row>
-          </template>
-        </v-col>
-      </v-row>
+      <template v-if="data.history && data.history.length">
+        <h4 class="qt-section-h">Sightings</h4>
+        <div class="qt-sightings">
+          <div v-for="(s, i) in data.history" :key="i" class="qt-tile">
+            <img v-if="s.imageUrl" :src="s.imageUrl" alt="Sighting" class="qt-tile-img" />
+            <div v-else class="qt-tile-img qt-tile-placeholder">📷</div>
+            <div class="qt-tile-body">
+              <div class="qt-tile-loc">📍 {{ s.address || 'Unknown' }}</div>
+              <small>{{ s.userName }} · {{ fmtDate(s.sightingDate) }}</small>
+            </div>
+          </div>
+        </div>
+      </template>
     </template>
-  </v-container>
+  </div>
 </template>
+
+<style scoped>
+.qt-wrap {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 40px 24px 80px;
+  font-family: var(--font-body);
+  color: var(--dd-black);
+}
+.qt-center {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+.qt-spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid var(--dd-gray-light);
+  border-top-color: var(--dd-yellow);
+  border-radius: 50%;
+  animation: qt-spin 0.8s linear infinite;
+}
+@keyframes qt-spin { to { transform: rotate(360deg); } }
+.qt-card-dark {
+  background: var(--dd-black);
+  color: var(--dd-yellow);
+  border-radius: 20px;
+  padding: 40px;
+  max-width: 480px;
+}
+.qt-card-dark p { color: #f5e9b0; }
+.qt-finder {
+  font-family: var(--font-display);
+  text-align: center;
+  margin: 0 0 24px;
+}
+.qt-cta { text-align: center; margin: 24px 0 40px; }
+.qt-pulse { animation: qt-pulse 1.6s ease-in-out infinite; }
+@keyframes qt-pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.04); } }
+.qt-grid2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+@media (max-width: 760px) { .qt-grid2 { grid-template-columns: 1fr; } }
+.qt-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  text-align: center;
+}
+.qt-duck-img { max-width: 220px; width: 100%; border-radius: 12px; margin-bottom: 12px; }
+.qt-desc { color: var(--dd-gray); }
+.qt-badges { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-top: 12px; }
+.qt-badge {
+  background: var(--dd-gray-light);
+  border-radius: 100px;
+  padding: 6px 14px;
+  font-size: 14px;
+  font-weight: 600;
+}
+.qt-badge-info { background: #d7efff; }
+.qt-badge-like { background: #ffe0ea; cursor: pointer; }
+.qt-map-card { padding: 16px; text-align: left; }
+.qt-section-h { font-family: var(--font-display); margin: 40px 0 16px; }
+.qt-sightings {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 16px;
+}
+.qt-tile { background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+.qt-tile-img { width: 100%; height: 160px; object-fit: cover; display: block; }
+.qt-tile-placeholder { display: flex; align-items: center; justify-content: center; background: var(--dd-gray-light); font-size: 28px; }
+.qt-tile-body { padding: 10px 12px; }
+.qt-tile-loc { font-weight: 600; font-size: 14px; }
+.qt-tile-body small { color: var(--dd-gray); }
+</style>

@@ -1,0 +1,68 @@
+.terms-section {
+    padding: 6rem 1.5rem 3rem;
+    display: flex;
+    justify-content: center;
+}
+
+.terms-container {
+    max-width: 800px;
+    width: 100%;
+}
+
+.terms-heading {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #222;
+    margin: 0 0 0.25rem;
+}
+
+.terms-updated {
+    color: #888;
+    font-size: 0.9rem;
+    margin-bottom: 2rem;
+}
+
+.terms-content h2 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #333;
+    margin-top: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+.terms-content p {
+    color: #555;
+    line-height: 1.7;
+    margin-bottom: 1rem;
+}
+
+.terms-content ul {
+    color: #555;
+    line-height: 1.7;
+    padding-left: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.terms-content ul li {
+    margin-bottom: 0.4rem;
+}
+
+.terms-content a {
+    color: var(--dd-yellow, #FFD700);
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.terms-content a:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 600px) {
+    .terms-heading {
+        font-size: 1.75rem;
+    }
+
+    .terms-section {
+        padding: 5rem 1rem 2rem;
+    }
+}

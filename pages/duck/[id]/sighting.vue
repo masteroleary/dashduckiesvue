@@ -16,6 +16,10 @@ onMounted(() => {
   fetchMe().catch(() => {})
 })
 
+function onFile(e: Event) {
+  file.value = (e.target as HTMLInputElement).files?.[0] || null
+}
+
 async function submit() {
   error.value = ''
   if (!form.address.trim()) {
@@ -32,9 +36,7 @@ async function submit() {
       method: 'POST',
       body: fd,
     })
-    if (res.claimToken && import.meta.client) {
-      localStorage.setItem('dd_claim_token', res.claimToken)
-    }
+    if (res.claimToken && import.meta.client) localStorage.setItem('dd_claim_token', res.claimToken)
     await navigateTo(`/quackertracker/${duck.value!.qtCode}`)
   } catch (e: any) {
     error.value = e?.data?.statusMessage || 'Could not post your sighting.'
@@ -45,36 +47,25 @@ async function submit() {
 </script>
 
 <template>
-  <v-container class="py-12">
-    <v-row justify="center">
-      <v-col cols="12" md="7">
-        <h1 class="text-h4 font-weight-bold mb-2">
-          Post a sighting<span v-if="duck?.name"> of {{ duck.name }}</span>
-        </h1>
-        <p class="text-medium-emphasis mb-6">Snap a photo and tell us where you spotted this duck.</p>
+  <div class="dd-form-page">
+    <h1 class="dd-form-heading">Post a sighting<span v-if="duck?.name"> of {{ duck.name }}</span></h1>
+    <p class="dd-form-sub">Snap a photo and tell us where you spotted this duck.</p>
 
-        <v-alert v-if="!user" type="info" variant="tonal" density="compact" class="mb-4">
-          You can post as a guest — <NuxtLink to="/app">sign in</NuxtLink> afterwards to save it to your
-          account.
-        </v-alert>
-        <v-alert v-if="error" type="error" variant="tonal" density="compact" class="mb-4">
-          {{ error }}
-        </v-alert>
+    <p v-if="!user" class="dd-form-note">
+      You can post as a guest — <NuxtLink to="/login">sign in</NuxtLink> afterwards to save it to your account.
+    </p>
+    <p v-if="error" class="dd-form-error">{{ error }}</p>
 
-        <v-card class="pa-4">
-          <v-text-field v-model="form.address" label="Where did you spot it?" variant="outlined" />
-          <v-file-input
-            v-model="file"
-            label="Photo (optional)"
-            accept="image/*"
-            variant="outlined"
-            prepend-icon="mdi-camera"
-          />
-          <div class="d-flex justify-end">
-            <v-btn color="primary" :loading="submitting" @click="submit">Post sighting</v-btn>
-          </div>
-        </v-card>
-      </v-col>
-    </v-row>
-  </v-container>
+    <div class="dd-form-card">
+      <label class="dd-label">Where did you spot it?</label>
+      <input v-model="form.address" class="dd-field" type="text" />
+      <label class="dd-label">Photo (optional)</label>
+      <input class="dd-field" type="file" accept="image/*" @change="onFile" />
+      <div class="dd-form-actions">
+        <button class="dd-btn-primary" :disabled="submitting" @click="submit">
+          {{ submitting ? 'Posting…' : 'Post sighting' }}
+        </button>
+      </div>
+    </div>
+  </div>
 </template>

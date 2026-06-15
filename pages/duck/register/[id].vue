@@ -17,6 +17,10 @@ onMounted(() => {
   if (duck.value?.name) form.name = duck.value.name
 })
 
+function onFile(e: Event) {
+  file.value = (e.target as HTMLInputElement).files?.[0] || null
+}
+
 async function submit() {
   error.value = ''
   if (!form.name.trim() || !form.address.trim()) {
@@ -35,9 +39,7 @@ async function submit() {
       method: 'POST',
       body: fd,
     })
-    if (res.claimToken && import.meta.client) {
-      localStorage.setItem('dd_claim_token', res.claimToken)
-    }
+    if (res.claimToken && import.meta.client) localStorage.setItem('dd_claim_token', res.claimToken)
     await navigateTo(`/quackertracker/${duck.value!.qtCode}`)
   } catch (e: any) {
     error.value = e?.data?.statusMessage || 'Could not register the duck.'
@@ -48,38 +50,62 @@ async function submit() {
 </script>
 
 <template>
-  <v-container class="py-12">
-    <v-row justify="center">
-      <v-col cols="12" md="7">
-        <h1 class="text-h4 font-weight-bold mb-2">Register this duck</h1>
-        <p class="text-medium-emphasis mb-6">
-          Give your found duck a name and tell us where you found it to start its journey.
-        </p>
+  <div class="dd-form-page">
+    <h1 class="dd-form-heading">Register this duck</h1>
+    <p class="dd-form-sub">Give your found duck a name and tell us where you found it to start its journey.</p>
 
-        <v-alert v-if="!user" type="info" variant="tonal" density="compact" class="mb-4">
-          You can register as a guest — <NuxtLink to="/app">sign in</NuxtLink> afterwards to save it to
-          your account.
-        </v-alert>
-        <v-alert v-if="error" type="error" variant="tonal" density="compact" class="mb-4">
-          {{ error }}
-        </v-alert>
+    <p v-if="!user" class="dd-form-note">
+      You can register as a guest — <NuxtLink to="/login">sign in</NuxtLink> afterwards to save it to your account.
+    </p>
+    <p v-if="error" class="dd-form-error">{{ error }}</p>
 
-        <v-card class="pa-4">
-          <v-text-field v-model="form.name" label="Duck name" variant="outlined" />
-          <v-textarea v-model="form.description" label="Description (optional)" variant="outlined" rows="2" />
-          <v-text-field v-model="form.address" label="Where did you find it?" variant="outlined" />
-          <v-file-input
-            v-model="file"
-            label="Photo (optional)"
-            accept="image/*"
-            variant="outlined"
-            prepend-icon="mdi-camera"
-          />
-          <div class="d-flex justify-end">
-            <v-btn color="primary" :loading="submitting" @click="submit">Register duck</v-btn>
-          </div>
-        </v-card>
-      </v-col>
-    </v-row>
-  </v-container>
+    <div class="dd-form-card">
+      <label class="dd-label">Duck name</label>
+      <input v-model="form.name" class="dd-field" type="text" />
+      <label class="dd-label">Description (optional)</label>
+      <textarea v-model="form.description" class="dd-field" rows="2" />
+      <label class="dd-label">Where did you find it?</label>
+      <input v-model="form.address" class="dd-field" type="text" />
+      <label class="dd-label">Photo (optional)</label>
+      <input class="dd-field" type="file" accept="image/*" @change="onFile" />
+      <div class="dd-form-actions">
+        <button class="dd-btn-primary" :disabled="submitting" @click="submit">
+          {{ submitting ? 'Registering…' : 'Register duck' }}
+        </button>
+      </div>
+    </div>
+  </div>
 </template>
+
+<style>
+.dd-form-page {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 48px 24px 80px;
+  font-family: var(--font-body);
+  color: var(--dd-black);
+}
+.dd-form-heading { font-family: var(--font-display); font-weight: 700; font-size: 34px; margin: 0 0 8px; }
+.dd-form-sub { color: var(--dd-gray); margin: 0 0 24px; }
+.dd-form-note {
+  background: var(--dd-yellow-light);
+  border-radius: 10px;
+  padding: 12px 16px;
+  margin-bottom: 16px;
+}
+.dd-form-error { color: var(--dd-accent); font-weight: 600; }
+.dd-form-card { background: #fff; border-radius: 16px; padding: 24px; box-shadow: 0 2px 12px rgba(0,0,0,0.08); }
+.dd-label { display: block; font-weight: 600; margin: 14px 0 6px; }
+.dd-field {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid #d8d6cf;
+  border-radius: 10px;
+  font-size: 15px;
+  font-family: var(--font-body);
+  box-sizing: border-box;
+}
+textarea.dd-field { resize: vertical; }
+.dd-form-actions { display: flex; justify-content: flex-end; margin-top: 20px; }
+.dd-btn-primary[disabled] { opacity: 0.6; cursor: default; }
+</style>

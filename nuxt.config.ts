@@ -5,11 +5,23 @@ export default defineNuxtConfig({
 
   modules: ['vuetify-nuxt-module'],
 
+  // Old public design system + page styles (ported from the Blazor app).
+  css: [
+    '~/assets/css/dd-design.css',
+    '~/assets/css/pages/quackertracker.css',
+    '~/assets/css/pages/duck-profile.css',
+    '~/assets/css/pages/stickers.css',
+    '~/assets/css/pages/contact.css',
+    '~/assets/css/pages/terms.css',
+  ],
+
   // SSR on by default (for SEO). The authenticated app is a client-only SPA.
   ssr: true,
   routeRules: {
     // /app/** renders client-side only (non-SSR SPA), per project requirements.
     '/app/**': { ssr: false },
+    // Old site linked sign-in as /login; keep that URL working.
+    '/login': { redirect: '/app' },
   },
 
   // Server-side only secrets are under the top level; `public` is exposed to the client.
@@ -23,7 +35,15 @@ export default defineNuxtConfig({
 
   app: {
     head: {
-      link: [{ rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' }],
+      link: [
+        { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' },
+        { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
+        { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' },
+        {
+          rel: 'stylesheet',
+          href: 'https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,700;0,9..144,900;1,9..144,700&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap',
+        },
+      ],
     },
   },
 

@@ -1,0 +1,124 @@
+.contact-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 70vh;
+    padding: 3rem 1.5rem;
+}
+
+.contact-card {
+    display: flex;
+    align-items: center;
+    gap: 3rem;
+    background: white;
+    border-radius: 1.5rem;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+    padding: 3rem;
+    max-width: 700px;
+    width: 100%;
+}
+
+.contact-image-side {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.contact-avatar {
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid var(--dd-yellow, #FFD700);
+    box-shadow: 0 2px 12px rgba(255, 215, 0, 0.3);
+}
+
+.contact-avatar-placeholder {
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    background: var(--dd-yellow, #FFD700);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 4px solid var(--dd-yellow, #FFD700);
+    box-shadow: 0 2px 12px rgba(255, 215, 0, 0.3);
+}
+
+.contact-admin-name {
+    margin-top: 0.75rem;
+    font-weight: 600;
+    font-size: 1rem;
+    color: #333;
+    text-align: center;
+}
+
+.contact-info-side {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.contact-heading {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #222;
+    margin: 0;
+}
+
+.contact-subtext {
+    color: #666;
+    font-size: 1rem;
+    margin: 0;
+    line-height: 1.5;
+}
+
+.contact-email-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+}
+
+.contact-email {
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: var(--dd-yellow, #FFD700);
+    text-decoration: none;
+}
+
+.contact-email:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 600px) {
+    .contact-section {
+        min-height: auto;
+        padding: 2rem 1rem;
+    }
+
+    .contact-card {
+        flex-direction: column;
+        text-align: center;
+        padding: 2rem 1.5rem;
+        gap: 1.5rem;
+    }
+
+    .contact-avatar, .contact-avatar-placeholder {
+        width: 120px;
+        height: 120px;
+    }
+
+    .contact-info-side {
+        align-items: center;
+    }
+
+    .contact-email-row {
+        justify-content: center;
+    }
+
+    .contact-heading {
+        font-size: 1.5rem;
+    }
+}

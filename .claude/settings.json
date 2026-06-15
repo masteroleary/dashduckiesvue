@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node --env-file=.env scripts/migrate-from-sqlserver.mjs --commit --wipe)",
+      "Bash(node --env-file=.env --input-type=module -e ' *)",
+      "Bash(cp __TRACKED_VAR__/pages/Home.css assets/css/dd-design.css)",
+      "Bash(cp __TRACKED_VAR__/pages/Contact.css assets/css/pages/contact.css)",
+      "Bash(cp __TRACKED_VAR__/pages/DuckProfile.css assets/css/pages/duck-profile.css)",
+      "Bash(cp __TRACKED_VAR__/pages/QuackerTracker.css assets/css/pages/quackertracker.css)",
+      "Bash(cp __TRACKED_VAR__/pages/Stickers.css assets/css/pages/stickers.css)"
+    ]
+  }
+}
