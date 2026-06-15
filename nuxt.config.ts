@@ -5,6 +5,12 @@ export default defineNuxtConfig({
 
   modules: ['vuetify-nuxt-module'],
 
+  nitro: {
+    // Pre-compress static assets (JS/CSS/etc.) at build time; the server then
+    // serves .br/.gz with Content-Encoding when the client accepts it.
+    compressPublicAssets: { gzip: true, brotli: true },
+  },
+
   // Old public design system + page styles (ported from the Blazor app).
   css: [
     '~/assets/css/dd-design.css',
@@ -22,6 +28,14 @@ export default defineNuxtConfig({
     '/app/**': { ssr: false },
     // Old site linked sign-in as /login; keep that URL working.
     '/login': { redirect: '/app' },
+    // Cache static brand/demo images (not content-hashed, so a 30-day max-age).
+    '/images/**': { headers: { 'cache-control': 'public, max-age=2592000' } },
+    '/sampleducks/**': { headers: { 'cache-control': 'public, max-age=2592000' } },
+    '/logo.png': { headers: { 'cache-control': 'public, max-age=2592000' } },
+    '/hero-banner.png': { headers: { 'cache-control': 'public, max-age=2592000' } },
+    '/ducks-on-board.png': { headers: { 'cache-control': 'public, max-age=2592000' } },
+    '/duck-map.png': { headers: { 'cache-control': 'public, max-age=2592000' } },
+    '/favicon.svg': { headers: { 'cache-control': 'public, max-age=2592000' } },
   },
 
   // Server-side only secrets are under the top level; `public` is exposed to the client.
