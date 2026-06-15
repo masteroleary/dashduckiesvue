@@ -5,9 +5,13 @@ people scan a duck, register or report sightings (photo + location), and follow 
 journey on a live map. This is a ground-up rewrite of the legacy Blazor .NET app, built on
 **Nuxt** and deployed on **Railway**.
 
-- **Live:** https://dashduckies.up.railway.app
+- **Production:** https://dashduckies.up.railway.app (deploys from `main`)
+- **Staging:** https://dashduckies-staging.up.railway.app (deploys from the `staging` branch)
 - **Repo:** `masteroleary/dashduckiesvue`
-- Push to `main` → Railway auto-builds and deploys.
+
+> 🧪 **There are two environments. Develop new features on the `staging` branch → test on the
+> staging server → promote to `main` for production.** See [Environments](#environments) below
+> before deploying.
 
 ---
 
@@ -57,8 +61,10 @@ Seed demo data (10 ducks across US cities, 3 users, 30 sightings):
 npm run db:seed
 ```
 
-> ⚠️ Local dev and production share the **same** Railway Postgres database. Be mindful that
-> seeding/editing locally affects prod data.
+> ⚠️ **Point your local `DATABASE_URL` at the STAGING Postgres, not production.** Whatever DB your
+> `.env` points at is the DB your local dev + `db:seed`/`db:migrate` will modify. Use staging's
+> **public** proxy URL (Railway → Postgres service → *staging* env → Variables → `DATABASE_PUBLIC_URL`)
+> so local work never touches prod data. See [Environments](#environments).
 
 ---
 
@@ -197,13 +203,51 @@ Blob containers `profile-images` / `duck-images` / `sighting-images` (public blo
 
 ---
 
-## Deployment (Railway)
+## Environments
 
-- Push to `main` → Railway (railpack) runs `npm ci` → `npm run build` → `npm run start`
-  (`node .output/server/index.mjs`).
-- The web service ("Vue 3") and a Postgres service live in the `dashduckies` Railway project.
-- Env vars are set on the **web service** (Railway → service → Variables). `DATABASE_URL` is a
-  reference to `${{Postgres.DATABASE_URL}}` (internal URL).
+There are **two Railway environments** in the `dashduckies` project, each with its **own web
+service deploy and its own isolated Postgres database**. New features go to **staging first**.
+
+| | Production | Staging |
+|---|---|---|
+| URL | https://dashduckies.up.railway.app | https://dashduckies-staging.up.railway.app |
+| Git branch | **`main`** | **`staging`** |
+| Database | prod Postgres | **separate** staging Postgres (own data) |
+| Dev login bypass (`000000`) | **off** — real SendGrid/Twilio codes | **on** — `DEVELOPER_*` set, so you can log in without real email/SMS |
+| Image storage | prod Azure account | dev Azure account |
+| JWT secret | prod | separate |
+
+### Branch workflow — develop on `staging`, promote to `main`
+
+```bash
+# 1) build a feature on the staging branch
+git checkout staging
+# ...code, commit...
+git push origin staging      # → auto-deploys to dashduckies-staging.up.railway.app
+
+# 2) test on the staging server (log in with code 000000 — no real email/SMS needed)
+
+# 3) promote to production
+git checkout main
+git merge staging
+git push origin main         # → auto-deploys to dashduckies.up.railway.app
+```
+
+> ⚠️ **Do not push experimental work straight to `main`** — `main` is production. Use `staging`.
+> Pushing to either branch triggers an automatic Railway deploy of that environment.
+
+### Deploy mechanics & per-environment config
+
+- Railway (railpack) runs `npm ci` → `npm run build` → `npm run start` (`node .output/server/index.mjs`).
+- The web service (**"Web App"**) and a Postgres service live in the `dashduckies` Railway project;
+  each environment has its own instance of both.
+- Env vars are set **per environment** on the web service (Railway → service → Variables, with the
+  environment selector). `DATABASE_URL` is a reference to `${{Postgres.DATABASE_URL}}` so each
+  environment automatically points at its own Postgres.
+- The per-environment branch is a Railway **deployment trigger** (prod→`main`, staging→`staging`).
+- **Schema changes:** after editing `server/db/schema.ts`, run `npm run db:generate`, then apply to
+  **each** database (`db:migrate` against staging's `DATABASE_URL`, then prod's). Staging and prod
+  DBs are separate, so a migration must be run against both.
 
 ---
 
