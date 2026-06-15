@@ -1,4 +1,9 @@
 <script setup lang="ts">
+// Vuetify's full styles load ONLY here (the /app layout), not on public pages
+// (moduleOptions.styles: 'none' in nuxt.config). Keeps the public bundle lean;
+// /app is client-only + behind login, so the one-time CSS load is fine.
+import 'vuetify/dist/vuetify.min.css'
+
 // Member app shell (client-only routes). Gates on auth: shows the login card
 // until signed in, then renders the member nav + page.
 const { user, fetchMe, logout } = useAuth()
@@ -55,7 +60,7 @@ async function onLogout() {
         <v-app-bar-nav-icon @click="drawer = !drawer" />
         <v-app-bar-title>
           <NuxtLink to="/" class="d-inline-flex align-center text-decoration-none">
-            <img src="/logo.png" alt="Dash Duckies" height="36" />
+            <img src="/logo.webp" alt="Dash Duckies" height="36" />
           </NuxtLink>
         </v-app-bar-title>
         <template #append>
