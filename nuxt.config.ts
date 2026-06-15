@@ -36,6 +36,9 @@ export default defineNuxtConfig({
     '/ducks-on-board.png': { headers: { 'cache-control': 'public, max-age=2592000' } },
     '/duck-map.png': { headers: { 'cache-control': 'public, max-age=2592000' } },
     '/favicon.svg': { headers: { 'cache-control': 'public, max-age=2592000' } },
+    // Fully-static content pages -> prerender to static HTML (cached + compressed).
+    '/terms': { prerender: true },
+    '/stickers': { prerender: true },
   },
 
   // Server-side only secrets are under the top level; `public` is exposed to the client.
@@ -63,7 +66,9 @@ export default defineNuxtConfig({
 
   vuetify: {
     moduleOptions: {
-      // styles handled by sass-embedded; keep defaults
+      // Don't inject Vuetify's global styles app-wide; they're imported only in
+      // the /app layout (layouts/app.vue) so public pages stay Vuetify-free.
+      styles: 'none',
     },
     vuetifyOptions: {
       // Brand palette ported from the old MudBlazor CustomTheme.

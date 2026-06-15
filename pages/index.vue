@@ -136,7 +136,10 @@ const steps = [
           </div>
         </div>
         <div class="dd-shop-visual">
-          <img src="/ducks-on-board.png" alt="DashDuckies on board" class="dd-shop-hero-img" />
+          <picture>
+            <source srcset="/ducks-on-board.webp" type="image/webp" />
+            <img src="/ducks-on-board.png" alt="DashDuckies on board" class="dd-shop-hero-img" loading="lazy" />
+          </picture>
         </div>
       </div>
     </div>
