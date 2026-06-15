@@ -36,7 +36,7 @@ function sqlServerConfig() {
     database: process.env.OLD_SQLSERVER_DB,
     user: process.env.OLD_SQLSERVER_USER,
     password: process.env.OLD_SQLSERVER_PASSWORD,
-    options: { encrypt: false, trustServerCertificate: true },
+    options: { encrypt: true, trustServerCertificate: true },
     connectionTimeout: 20000,
     requestTimeout: 120000,
   }
