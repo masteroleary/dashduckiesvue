@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Hanken+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing:border-box; }
+  html, body { margin:0; padding:0; background:#0c0b0a; }
+  body { font-family:'Hanken Grotesk', system-ui, sans-serif; color:#f5efdf; -webkit-font-smoothing:antialiased; }
+  ::selection { background:#a87d2c; color:#0c0b0a; }
+</style>
+</helmet>
+
+<div style="max-width:1180px; margin:0 auto; padding:0 40px 120px;">
+
+  <!-- TOP BAR -->
+  <div style="display:flex; align-items:center; justify-content:space-between; padding:26px 0; border-bottom:1px solid rgba(168,125,44,0.2);">
+    <div style="display:flex; align-items:center; gap:11px;">
+      <svg width="28" height="28" viewBox="0 0 64 64" style="display:block; color:#a87d2c;">
+        <g transform="translate(64,0) scale(-1,1)"><path d="M17.406,25.591c0,0 2.059,0.83 1.986,2.891c-0.072,2.062 -6.66,2.957 -6.66,11.094c0,8.137 9.096,14.532 19.217,14.532c10.12,0 23.872,-5.932 23.872,-17.83c0,-19.976 -1.513,-6.134 -17.276,-6.134c-5.235,0 -6.169,-1.787 -5.342,-2.806c3.91,-4.811 5.342,-17.446 -7.42,-17.446c-8.327,0.173 -10.338,6.946 -10.325,8.587c0.008,1.153 -1.204,1.543 -7.308,1.308c-1.536,5.619 9.256,5.804 9.256,5.804Zm3.77,-10.366c1.104,0 2,0.897 2,2c0,1.104 -0.896,2 -2,2c-1.103,0 -2,-0.896 -2,-2c0,-1.103 0.897,-2 2,-2Z" fill="currentColor" fill-rule="evenodd"></path></g>
+      </svg>
+      <span style="font-family:'Fredoka'; font-weight:600; font-size:18px; color:#f5efdf;">DashDuckies</span>
+    </div>
+    <div style="font-family:ui-monospace,Menlo,monospace; font-size:11px; letter-spacing:0.18em; color:#a87d2c; text-transform:uppercase;">Logo System · v1.0</div>
+  </div>
+
+  <!-- HERO / PRIMARY -->
+  <div style="padding:70px 0 64px;">
+    <div style="font-family:ui-monospace,Menlo,monospace; font-size:12px; letter-spacing:0.24em; color:#a87d2c; text-transform:uppercase; margin-bottom:18px;">The official lockup</div>
+    <h1 style="font-family:'Fredoka'; font-weight:600; font-size:54px; line-height:1; margin:0 0 8px; letter-spacing:-0.02em; color:#f5efdf;">Logo system</h1>
+    <p style="font-size:18px; color:#cfc7b2; max-width:560px; margin:0;">The mark &amp; wordmark direction, formalized. Use these lockups, spacing and colors anywhere DashDuckies appears.</p>
+
+    <div style="margin-top:46px; background:radial-gradient(circle at 50% 45%, #181510, #0e0c08); border:1px solid rgba(168,125,44,0.2); border-radius:20px; padding:72px; display:flex; align-items:center; justify-content:center; gap:26px;">
+      <svg width="108" height="108" viewBox="0 0 64 64" style="display:block; color:#a87d2c;">
+        <g transform="translate(64,0) scale(-1,1)"><path d="M17.406,25.591c0,0 2.059,0.83 1.986,2.891c-0.072,2.062 -6.66,2.957 -6.66,11.094c0,8.137 9.096,14.532 19.217,14.532c10.12,0 23.872,-5.932 23.872,-17.83c0,-19.976 -1.513,-6.134 -17.276,-6.134c-5.235,0 -6.169,-1.787 -5.342,-2.806c3.91,-4.811 5.342,-17.446 -7.42,-17.446c-8.327,0.173 -10.338,6.946 -10.325,8.587c0.008,1.153 -1.204,1.543 -7.308,1.308c-1.536,5.619 9.256,5.804 9.256,5.804Zm3.77,-10.366c1.104,0 2,0.897 2,2c0,1.104 -0.896,2 -2,2c-1.103,0 -2,-0.896 -2,-2c0,-1.103 0.897,-2 2,-2Z" fill="currentColor" fill-rule="evenodd"></path></g>
+      </svg>
+      <div style="font-family:'Fredoka'; font-weight:600; font-size:54px; color:#f5efdf; letter-spacing:-0.015em; line-height:1;">Dash<span style="color:#a87d2c;">Duckies</span></div>
+    </div>
+  </div>
+
+  <!-- LOCKUP VARIANTS -->
+  <div style="padding-top:34px;">
+    <div style="font-family:ui-monospace,Menlo,monospace; font-size:12px; letter-spacing:0.22em; color:#a87d2c; text-transform:uppercase; margin-bottom:10px;">01 / Lockups</div>
+    <h2 style="font-family:'Fredoka'; font-weight:600; font-size:34px; margin:0 0 28px; color:#f5efdf; letter-spacing:-0.01em;">Three approved arrangements</h2>
+    <div style="display:grid; grid-template-columns:1.3fr 1fr 0.9fr; gap:20px;">
+
+      <!-- horizontal -->
+      <div style="background:#13110c; border:1px solid rgba(168,125,44,0.18); border-radius:16px; overflow:hidden;">
+        <div style="height:200px; display:flex; align-items:center; justify-content:center; gap:16px; background:radial-gradient(circle at 50% 45%, #181510, #0e0c08);">
+          <svg width="52" height="52" viewBox="0 0 64 64" style="display:block; color:#a87d2c;"><g transform="translate(64,0) scale(-1,1)"><path d="M17.406,25.591c0,0 2.059,0.83 1.986,2.891c-0.072,2.062 -6.66,2.957 -6.66,11.094c0,8.137 9.096,14.532 19.217,14.532c10.12,0 23.872,-5.932 23.872,-17.83c0,-19.976 -1.513,-6.134 -17.276,-6.134c-5.235,0 -6.169,-1.787 -5.342,-2.806c3.91,-4.811 5.342,-17.446 -7.42,-17.446c-8.327,0.173 -10.338,6.946 -10.325,8.587c0.008,1.153 -1.204,1.543 -7.308,1.308c-1.536,5.619 9.256,5.804 9.256,5.804Zm3.77,-10.366c1.104,0 2,0.897 2,2c0,1.104 -0.896,2 -2,2c-1.103,0 -2,-0.896 -2,-2c0,-1.103 0.897,-2 2,-2Z" fill="currentColor" fill-rule="evenodd"></path></g></svg>
+          <div style="font-family:'Fredoka'; font-weight:600; font-size:26px; color:#f5efdf; letter-spacing:-0.01em;">Dash<span style="color:#a87d2c;">Duckies</span></div>
+        </div>
+        <div style="padding:16px 20px; border-top:1px solid rgba(168,125,44,0.14);">
+          <div style="font-family:'Fredoka'; font-weight:600; font-size:15px;">Horizontal — primary</div>
+          <div style="font-size:12.5px; color:#9c947f; margin-top:4px;">Default for headers, nav and wide spaces.</div>
+        </div>
+      </div>
+
+      <!-- stacked -->
+      <div style="background:#13110c; border:1px solid rgba(168,125,44,0.18); border-radius:16px; overflow:hidden;">
+        <div style="height:200px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:12px; background:radial-gradient(circle at 50% 45%, #181510, #0e0c08);">
+          <svg width="50" height="50" viewBox="0 0 64 64" style="display:block; color:#a87d2c;"><g transform="translate(64,0) scale(-1,1)"><path d="M17.406,25.591c0,0 2.059,0.83 1.986,2.891c-0.072,2.062 -6.66,2.957 -6.66,11.094c0,8.137 9.096,14.532 19.217,14.532c10.12,0 23.872,-5.932 23.872,-17.83c0,-19.976 -1.513,-6.134 -17.276,-6.134c-5.235,0 -6.169,-1.787 -5.342,-2.806c3.91,-4.811 5.342,-17.446 -7.42,-17.446c-8.327,0.173 -10.338,6.946 -10.325,8.587c0.008,1.153 -1.204,1.543 -7.308,1.308c-1.536,5.619 9.256,5.804 9.256,5.804Zm3.77,-10.366c1.104,0 2,0.897 2,2c0,1.104 -0.896,2 -2,2c-1.103,0 -2,-0.896 -2,-2c0,-1.103 0.897,-2 2,-2Z" fill="currentColor" fill-rule="evenodd"></path></g></svg>
+          <div style="font-family:'Fredoka'; font-weight:600; font-size:22px; color:#f5efdf; letter-spacing:-0.01em;">Dash<span style="color:#a87d2c;">Duckies</span></div>
+        </div>
+        <div style="padding:16px 20px; border-top:1px solid rgba(168,125,44,0.14);">
+          <div style="font-family:'Fredoka'; font-weight:600; font-size:15px;">Stacked</div>
+          <div style="font-size:12.5px; color:#9c947f; margin-top:4px;">For square or centered placements.</div>
+        </div>
+      </div>
+
+      <!-- icon only -->
+      <div style="background:#13110c; border:1px solid rgba(168,125,44,0.18); border-radius:16px; overflow:hidden;">
+        <div style="height:200px; display:flex; align-items:center; justify-content:center; background:radial-gradient(circle at 50% 45%, #181510, #0e0c08);">
+          <svg width="64" height="64" viewBox="0 0 64 64" style="display:block; color:#a87d2c;"><g transform="translate(64,0) scale(-1,1)"><path d="M17.406,25.591c0,0 2.059,0.83 1.986,2.891c-0.072,2.062 -6.66,2.957 -6.66,11.094c0,8.137 9.096,14.532 19.217,14.532c10.12,0 23.872,-5.932 23.872,-17.83c0,-19.976 -1.513,-6.134 -17.276,-6.134c-5.235,0 -6.169,-1.787 -5.342,-2.806c3.91,-4.811 5.342,-17.446 -7.42,-17.446c-8.327,0.173 -10.338,6.946 -10.325,8.587c0.008,1.153 -1.204,1.543 -7.308,1.308c-1.536,5.619 9.256,5.804 9.256,5.804Zm3.77,-10.366c1.104,0 2,0.897 2,2c0,1.104 -0.896,2 -2,2c-1.103,0 -2,-0.896 -2,-2c0,-1.103 0.897,-2 2,-2Z" fill="currentColor" fill-rule="evenodd"></path></g></svg>
+        </div>
+        <div style="padding:16px 20px; border-top:1px solid rgba(168,125,44,0.14);">
+          <div style="font-family:'Fredoka'; font-weight:600; font-size:15px;">Mark only</div>
+          <div style="font-size:12.5px; color:#9c947f; margin-top:4px;">Avatars, app icons, favicons, pins.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- CLEAR SPACE -->
+  <div style="padding-top:74px;">
+    <div style="font-family:ui-monospace,Menlo,monospace; font-size:12px; letter-spacing:0.22em; color:#a87d2c; text-transform:uppercase; margin-bottom:10px;">02 / Clear space &amp; construction</div>
+    <h2 style="font-family:'Fredoka'; font-weight:600; font-size:34px; margin:0 0 12px; color:#f5efdf; letter-spacing:-0.01em;">Give the duck room</h2>
+    <p style="font-size:15px; color:#9c947f; margin:0 0 26px; max-width:560px;">Keep clear space of at least <span style="color:#cfc7b2;">X</span> on every side, where <span style="color:#cfc7b2;">X</span> equals the height of the duck mark. Nothing — text, edges, other logos — enters this zone.</p>
+    <div style="background:#13110c; border:1px solid rgba(168,125,44,0.18); border-radius:16px; padding:54px; display:flex; justify-content:center;">
+      <div style="position:relative; padding:64px; border:1px dashed rgba(168,125,44,0.45);">
+        <div style="position:absolute; top:8px; left:64px; font-family:ui-monospace,Menlo,monospace; font-size:11px; color:#a87d2c;">X</div>
+        <div style="position:absolute; left:8px; top:64px; font-family:ui-monospace,Menlo,monospace; font-size:11px; color:#a87d2c;">X</div>
+        <div style="position:absolute; top:18px; left:64px; right:64px; border-top:1px dashed rgba(168,125,44,0.25);"></div>
+        <div style="position:absolute; left:18px; top:64px; bottom:64px; border-left:1px dashed rgba(168,125,44,0.25);"></div>
+        <div style="display:flex; align-items:center; gap:18px;">
+          <svg width="60" height="60" viewBox="0 0 64 64" style="display:block; color:#a87d2c;"><g transform="translate(64,0) scale(-1,1)"><path d="M17.406,25.591c0,0 2.059,0.83 1.986,2.891c-0.072,2.062 -6.66,2.957 -6.66,11.094c0,8.137 9.096,14.532 19.217,14.532c10.12,0 23.872,-5.932 23.872,-17.83c0,-19.976 -1.513,-6.134 -17.276,-6.134c-5.235,0 -6.169,-1.787 -5.342,-2.806c3.91,-4.811 5.342,-17.446 -7.42,-17.446c-8.327,0.173 -10.338,6.946 -10.325,8.587c0.008,1.153 -1.204,1.543 -7.308,1.308c-1.536,5.619 9.256,5.804 9.256,5.804Zm3.77,-10.366c1.104,0 2,0.897 2,2c0,1.104 -0.896,2 -2,2c-1.103,0 -2,-0.896 -2,-2c0,-1.103 0.897,-2 2,-2Z" fill="currentColor" fill-rule="evenodd"></path></g></svg>
+          <div style="font-family:'Fredoka'; font-weight:600; font-size:30px; color:#f5efdf; letter-spacing:-0.01em;">Dash<span style="color:#a87d2c;">Duckies</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MINIMUM SIZE -->
+  <div style="padding-top:74px;">
+    <div style="font-family:ui-monospace,Menlo,monospace; font-size:12px; letter-spacing:0.22em; color:#a87d2c; text-transform:uppercase; margin-bottom:10px;">03 / Minimum sizes</div>
+    <h2 style="font-family:'Fredoka'; font-weight:600; font-size:34px; margin:0 0 26px; color:#f5efdf; letter-spacing:-0.01em;">Don't shrink past these</h2>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px;">
+      <div style="background:#13110c; border:1px solid rgba(168,125,44,0.18); border-radius:16px; padding:38px 40px;">
+        <div style="display:flex; align-items:center; gap:11px; margin-bottom:24px;">
+          <svg width="26" height="26" viewBox="0 0 64 64" style="display:block; color:#a87d2c;"><g transform="translate(64,0) scale(-1,1)"><path d="M17.406,25.591c0,0 2.059,0.83 1.986,2.891c-0.072,2.062 -6.66,2.957 -6.66,11.094c0,8.137 9.096,14.532 19.217,14.532c10.12,0 23.872,-5.932 23.872,-17.83c0,-19.976 -1.513,-6.134 -17.276,-6.134c-5.235,0 -6.169,-1.787 -5.342,-2.806c3.91,-4.811 5.342,-17.446 -7.42,-17.446c-8.327,0.173 -10.338,6.946 -10.325,8.587c0.008,1.153 -1.204,1.543 -7.308,1.308c-1.536,5.619 9.256,5.804 9.256,5.804Zm3.77,-10.366c1.104,0 2,0.897 2,2c0,1.104 -0.896,2 -2,2c-1.103,0 -2,-0.896 -2,-2c0,-1.103 0.897,-2 2,-2Z" fill="currentColor" fill-rule="evenodd"></path></g></svg>
+          <div style="font-family:'Fredoka'; font-weight:600; font-size:13px; color:#f5efdf;">Dash<span style="color:#a87d2c;">Duckies</span></div>
+        </div>
+        <div style="font-family:ui-monospace,Menlo,monospace; font-size:11px; color:#a87d2c; letter-spacing:0.06em;">FULL LOCKUP · MIN 120px WIDE</div>
+        <div style="font-size:13px; color:#9c947f; margin-top:8px; line-height:1.5;">Below this the wordmark loses legibility — switch to the mark only.</div>
+      </div>
+      <div style="background:#13110c; border:1px solid rgba(168,125,44,0.18); border-radius:16px; padding:38px 40px;">
+        <div style="display:flex; align-items:center; gap:20px; margin-bottom:24px;">
+          <svg width="32" height="32" viewBox="0 0 64 64" style="display:block; color:#a87d2c;"><g transform="translate(64,0) scale(-1,1)"><path d="M17.406,25.591c0,0 2.059,0.83 1.986,2.891c-0.072,2.062 -6.66,2.957 -6.66,11.094c0,8.137 9.096,14.532 19.217,14.532c10.12,0 23.872,-5.932 23.872,-17.83c0,-19.976 -1.513,-6.134 -17.276,-6.134c-5.235,0 -6.169,-1.787 -5.342,-2.806c3.91,-4.811 5.342,-17.446 -7.42,-17.446c-8.327,0.173 -10.338,6.946 -10.325,8.587c0.008,1.153 -1.204,1.543 -7.308,1.308c-1.536,5.619 9.256,5.804 9.256,5.804Zm3.77,-10.366c1.104,0 2,0.897 2,2c0,1.104 -0.896,2 -2,2c-1.103,0 -2,-0.896 -2,-2c0,-1.103 0.897,-2 2,-2Z" fill="currentColor" fill-rule="evenodd"></path></g></svg>
+          <svg width="16" height="16" viewBox="0 0 64 64" style="display:block; color:#a87d2c;"><g transform="translate(64,0) scale(-1,1)"><path d="M17.406,25.591c0,0 2.059,0.83 1.986,2.891c-0.072,2.062 -6.66,2.957 -6.66,11.094c0,8.137 9.096,14.532 19.217,14.532c10.12,0 23.872,-5.932 23.872,-17.83c0,-19.976 -1.513,-6.134 -17.276,-6.134c-5.235,0 -6.169,-1.787 -5.342,-2.806c3.91,-4.811 5.342,-17.446 -7.42,-17.446c-8.327,0.173 -10.338,6.946 -10.325,8.587c0.008,1.153 -1.204,1.543 -7.308,1.308c-1.536,5.619 9.256,5.804 9.256,5.804Zm3.77,-10.366c1.104,0 2,0.897 2,2c0,1.104 -0.896,2 -2,2c-1.103,0 -2,-0.896 -2,-2c0,-1.103 0.897,-2 2,-2Z" fill="currentColor" fill-rule="evenodd"></path></g></svg>
+        </div>
+        <div style="font-family:ui-monospace,Menlo,monospace; font-size:11px; color:#a87d2c; letter-spacing:0.06em;">MARK ONLY · MIN 16px</div>
+        <div style="font-size:13px; color:#9c947f; margin-top:8px; line-height:1.5;">The duck stays clear down to favicon scale.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- COLOR VARIANTS -->
+  <div style="padding-top:74px;">
+    <div style="font-family:ui-monospace,Menlo,monospace; font-size:12px; letter-spacing:0.22em; color:#a87d2c; text-transform:uppercase; margin-bottom:10px;">04 / Color usage</div>
+    <h2 style="font-family:'Fredoka'; font-weight:600; font-size:34px; margin:0 0 26px; color:#f5efdf; letter-spacing:-0.01em;">Four approved finishes</h2>
+    <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:18px;">
+
+      <div style="border-radius:16px; overflow:hidden; border:1px solid rgba(168,125,44,0.18);">
+        <div style="height:150px; display:flex; align-items:center; justify-content:center; gap:9px; background:#0c0b0a;">
+          <svg width="34" height="34" viewBox="0 0 64 64" style="display:block; color:#a87d2c;"><g transform="translate(64,0) scale(-1,1)"><path d="M17.406,25.591c0,0 2.059,0.83 1.986,2.891c-0.072,2.062 -6.66,2.957 -6.66,11.094c0,8.137 9.096,14.532 19.217,14.532c10.12,0 23.872,-5.932 23.872,-17.83c0,-19.976 -1.513,-6.134 -17.276,-6.134c-5.235,0 -6.169,-1.787 -5.342,-2.806c3.91,-4.811 5.342,-17.446 -7.42,-17.446c-8.327,0.173 -10.338,6.946 -10.325,8.587c0.008,1.153 -1.204,1.543 -7.308,1.308c-1.536,5.619 9.256,5.804 9.256,5.804Zm3.77,-10.366c1.104,0 2,0.897 2,2c0,1.104 -0.896,2 -2,2c-1.103,0 -2,-0.896 -2,-2c0,-1.103 0.897,-2 2,-2Z" fill="currentColor" fill-rule="evenodd"></path></g></svg>
+          <div style="font-family:'Fredoka'; font-weight:600; font-size:16px; color:#f5efdf;">Dash<span style="color:#a87d2c;">Duckies</span></div>
+        </div>
+        <div style="padding:12px 14px; background:#13110c; font-family:ui-monospace,Menlo,monospace; font-size:10.5px; color:#9c947f; letter-spacing:0.05em;">PRIMARY · ON INK</div>
+      </div>
+
+      <div style="border-radius:16px; overflow:hidden; border:1px solid rgba(168,125,44,0.18);">
+        <div style="height:150px; display:flex; align-items:center; justify-content:center; gap:9px; background:#0c0b0a; color:#f5efdf;">
+          <svg width="34" height="34" viewBox="0 0 64 64" style="display:block;"><g transform="translate(64,0) scale(-1,1)"><path d="M17.406,25.591c0,0 2.059,0.83 1.986,2.891c-0.072,2.062 -6.66,2.957 -6.66,11.094c0,8.137 9.096,14.532 19.217,14.532c10.12,0 23.872,-5.932 23.872,-17.83c0,-19.976 -1.513,-6.134 -17.276,-6.134c-5.235,0 -6.169,-1.787 -5.342,-2.806c3.91,-4.811 5.342,-17.446 -7.42,-17.446c-8.327,0.173 -10.338,6.946 -10.325,8.587c0.008,1.153 -1.204,1.543 -7.308,1.308c-1.536,5.619 9.256,5.804 9.256,5.804Zm3.77,-10.366c1.104,0 2,0.897 2,2c0,1.104 -0.896,2 -2,2c-1.103,0 -2,-0.896 -2,-2c0,-1.103 0.897,-2 2,-2Z" fill="currentColor" fill-rule="evenodd"></path></g></svg>
+          <div style="font-family:'Fredoka'; font-weight:600; font-size:16px;">DashDuckies</div>
+        </div>
+        <div style="padding:12px 14px; background:#13110c; font-family:ui-monospace,Menlo,monospace; font-size:10.5px; color:#9c947f; letter-spacing:0.05em;">REVERSED · CREAM</div>
+      </div>
+
+      <div style="border-radius:16px; overflow:hidden; border:1px solid rgba(168,125,44,0.18);">
+        <div style="height:150px; display:flex; align-items:center; justify-content:center; gap:9px; background:#f5efdf; color:#0c0b0a;">
+          <svg width="34" height="34" viewBox="0 0 64 64" style="display:block;"><g transform="translate(64,0) scale(-1,1)"><path d="M17.406,25.591c0,0 2.059,0.83 1.986,2.891c-0.072,2.062 -6.66,2.957 -6.66,11.094c0,8.137 9.096,14.532 19.217,14.532c10.12,0 23.872,-5.932 23.872,-17.83c0,-19.976 -1.513,-6.134 -17.276,-6.134c-5.235,0 -6.169,-1.787 -5.342,-2.806c3.91,-4.811 5.342,-17.446 -7.42,-17.446c-8.327,0.173 -10.338,6.946 -10.325,8.587c0.008,1.153 -1.204,1.543 -7.308,1.308c-1.536,5.619 9.256,5.804 9.256,5.804Zm3.77,-10.366c1.104,0 2,0.897 2,2c0,1.104 -0.896,2 -2,2c-1.103,0 -2,-0.896 -2,-2c0,-1.103 0.897,-2 2,-2Z" fill="currentColor" fill-rule="evenodd"></path></g></svg>
+          <div style="font-family:'Fredoka'; font-weight:600; font-size:16px;">DashDuckies</div>
+        </div>
+        <div style="padding:12px 14px; background:#13110c; font-family:ui-monospace,Menlo,monospace; font-size:10.5px; color:#9c947f; letter-spacing:0.05em;">MONO BLACK · ON LIGHT</div>
+      </div>
+
+      <div style="border-radius:16px; overflow:hidden; border:1px solid rgba(168,125,44,0.18);">
+        <div style="height:150px; display:flex; align-items:center; justify-content:center; gap:9px; background:#f5efdf; color:#a87d2c;">
+          <svg width="34" height="34" viewBox="0 0 64 64" style="display:block;"><g transform="translate(64,0) scale(-1,1)"><path d="M17.406,25.591c0,0 2.059,0.83 1.986,2.891c-0.072,2.062 -6.66,2.957 -6.66,11.094c0,8.137 9.096,14.532 19.217,14.532c10.12,0 23.872,-5.932 23.872,-17.83c0,-19.976 -1.513,-6.134 -17.276,-6.134c-5.235,0 -6.169,-1.787 -5.342,-2.806c3.91,-4.811 5.342,-17.446 -7.42,-17.446c-8.327,0.173 -10.338,6.946 -10.325,8.587c0.008,1.153 -1.204,1.543 -7.308,1.308c-1.536,5.619 9.256,5.804 9.256,5.804Zm3.77,-10.366c1.104,0 2,0.897 2,2c0,1.104 -0.896,2 -2,2c-1.103,0 -2,-0.896 -2,-2c0,-1.103 0.897,-2 2,-2Z" fill="currentColor" fill-rule="evenodd"></path></g></svg>
+          <div style="font-family:'Fredoka'; font-weight:600; font-size:16px;">DashDuckies</div>
+        </div>
+        <div style="padding:12px 14px; background:#13110c; font-family:ui-monospace,Menlo,monospace; font-size:10.5px; color:#9c947f; letter-spacing:0.05em;">MONO BRONZE · ON LIGHT</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- APP ICON -->
+  <div style="padding-top:74px;">
+    <div style="font-family:ui-monospace,Menlo,monospace; font-size:12px; letter-spacing:0.22em; color:#a87d2c; text-transform:uppercase; margin-bottom:10px;">05 / App icon &amp; favicon</div>
+    <h2 style="font-family:'Fredoka'; font-weight:600; font-size:34px; margin:0 0 26px; color:#f5efdf; letter-spacing:-0.01em;">The duck, badged</h2>
+    <div style="background:#13110c; border:1px solid rgba(168,125,44,0.18); border-radius:16px; padding:48px; display:flex; align-items:flex-end; justify-content:center; gap:48px;">
+      <div style="display:flex; flex-direction:column; align-items:center; gap:14px;">
+        <div style="width:128px; height:128px; clip-path:polygon(29% 0%, 71% 0%, 100% 29%, 100% 71%, 71% 100%, 29% 100%, 0% 71%, 0% 29%); background:linear-gradient(150deg,#ecd286,#a87d2c); padding:5px; filter:drop-shadow(0 14px 24px rgba(0,0,0,0.5));">
+          <div style="width:100%; height:100%; clip-path:polygon(29% 0%, 71% 0%, 100% 29%, 100% 71%, 71% 100%, 29% 100%, 0% 71%, 0% 29%); background:radial-gradient(circle at 50% 38%, #1d1a12, #100e0a); display:flex; align-items:center; justify-content:center;">
+            <svg width="74" height="74" viewBox="0 0 64 64" style="display:block; color:#d4af37;"><g transform="translate(64,0) scale(-1,1)"><path d="M17.406,25.591c0,0 2.059,0.83 1.986,2.891c-0.072,2.062 -6.66,2.957 -6.66,11.094c0,8.137 9.096,14.532 19.217,14.532c10.12,0 23.872,-5.932 23.872,-17.83c0,-19.976 -1.513,-6.134 -17.276,-6.134c-5.235,0 -6.169,-1.787 -5.342,-2.806c3.91,-4.811 5.342,-17.446 -7.42,-17.446c-8.327,0.173 -10.338,6.946 -10.325,8.587c0.008,1.153 -1.204,1.543 -7.308,1.308c-1.536,5.619 9.256,5.804 9.256,5.804Zm3.77,-10.366c1.104,0 2,0.897 2,2c0,1.104 -0.896,2 -2,2c-1.103,0 -2,-0.896 -2,-2c0,-1.103 0.897,-2 2,-2Z" fill="currentColor" fill-rule="evenodd"></path></g></svg>
+          </div>
+        </div>
+        <div style="font-family:ui-monospace,Menlo,monospace; font-size:10.5px; color:#9c947f;">128px</div>
+      </div>
+      <div style="display:flex; flex-direction:column; align-items:center; gap:14px;">
+        <div style="width:72px; height:72px; clip-path:polygon(29% 0%, 71% 0%, 100% 29%, 100% 71%, 71% 100%, 29% 100%, 0% 71%, 0% 29%); background:linear-gradient(150deg,#ecd286,#a87d2c); padding:3px;">
+          <div style="width:100%; height:100%; clip-path:polygon(29% 0%, 71% 0%, 100% 29%, 100% 71%, 71% 100%, 29% 100%, 0% 71%, 0% 29%); background:#100e0a; display:flex; align-items:center; justify-content:center;">
+            <svg width="42" height="42" viewBox="0 0 64 64" style="display:block; color:#d4af37;"><g transform="translate(64,0) scale(-1,1)"><path d="M17.406,25.591c0,0 2.059,0.83 1.986,2.891c-0.072,2.062 -6.66,2.957 -6.66,11.094c0,8.137 9.096,14.532 19.217,14.532c10.12,0 23.872,-5.932 23.872,-17.83c0,-19.976 -1.513,-6.134 -17.276,-6.134c-5.235,0 -6.169,-1.787 -5.342,-2.806c3.91,-4.811 5.342,-17.446 -7.42,-17.446c-8.327,0.173 -10.338,6.946 -10.325,8.587c0.008,1.153 -1.204,1.543 -7.308,1.308c-1.536,5.619 9.256,5.804 9.256,5.804Zm3.77,-10.366c1.104,0 2,0.897 2,2c0,1.104 -0.896,2 -2,2c-1.103,0 -2,-0.896 -2,-2c0,-1.103 0.897,-2 2,-2Z" fill="currentColor" fill-rule="evenodd"></path></g></svg>
+          </div>
+        </div>
+        <div style="font-family:ui-monospace,Menlo,monospace; font-size:10.5px; color:#9c947f;">64px</div>
+      </div>
+      <div style="display:flex; flex-direction:column; align-items:center; gap:14px;">
+        <div style="width:36px; height:36px; clip-path:polygon(29% 0%, 71% 0%, 100% 29%, 100% 71%, 71% 100%, 29% 100%, 0% 71%, 0% 29%); background:linear-gradient(150deg,#ecd286,#a87d2c); padding:2px;">
+          <div style="width:100%; height:100%; clip-path:polygon(29% 0%, 71% 0%, 100% 29%, 100% 71%, 71% 100%, 29% 100%, 0% 71%, 0% 29%); background:#100e0a; display:flex; align-items:center; justify-content:center;">
+            <svg width="22" height="22" viewBox="0 0 64 64" style="display:block; color:#d4af37;"><g transform="translate(64,0) scale(-1,1)"><path d="M17.406,25.591c0,0 2.059,0.83 1.986,2.891c-0.072,2.062 -6.66,2.957 -6.66,11.094c0,8.137 9.096,14.532 19.217,14.532c10.12,0 23.872,-5.932 23.872,-17.83c0,-19.976 -1.513,-6.134 -17.276,-6.134c-5.235,0 -6.169,-1.787 -5.342,-2.806c3.91,-4.811 5.342,-17.446 -7.42,-17.446c-8.327,0.173 -10.338,6.946 -10.325,8.587c0.008,1.153 -1.204,1.543 -7.308,1.308c-1.536,5.619 9.256,5.804 9.256,5.804Zm3.77,-10.366c1.104,0 2,0.897 2,2c0,1.104 -0.896,2 -2,2c-1.103,0 -2,-0.896 -2,-2c0,-1.103 0.897,-2 2,-2Z" fill="currentColor" fill-rule="evenodd"></path></g></svg>
+          </div>
+        </div>
+        <div style="font-family:ui-monospace,Menlo,monospace; font-size:10.5px; color:#9c947f;">32px</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DON'TS -->
+  <div style="padding-top:74px;">
+    <div style="font-family:ui-monospace,Menlo,monospace; font-size:12px; letter-spacing:0.22em; color:#a87d2c; text-transform:uppercase; margin-bottom:10px;">06 / Misuse</div>
+    <h2 style="font-family:'Fredoka'; font-weight:600; font-size:34px; margin:0 0 26px; color:#f5efdf; letter-spacing:-0.01em;">Please don't</h2>
+    <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:18px;">
+
+      <div style="background:#13110c; border:1px solid rgba(168,125,44,0.18); border-radius:16px; overflow:hidden;">
+        <div style="height:130px; display:flex; align-items:center; justify-content:center; gap:8px; background:#0e0c08; position:relative;">
+          <svg width="40" height="40" viewBox="0 0 64 64" style="display:block; color:#a87d2c; transform:scaleX(1.9);"><g transform="translate(64,0) scale(-1,1)"><path d="M17.406,25.591c0,0 2.059,0.83 1.986,2.891c-0.072,2.062 -6.66,2.957 -6.66,11.094c0,8.137 9.096,14.532 19.217,14.532c10.12,0 23.872,-5.932 23.872,-17.83c0,-19.976 -1.513,-6.134 -17.276,-6.134c-5.235,0 -6.169,-1.787 -5.342,-2.806c3.91,-4.811 5.342,-17.446 -7.42,-17.446c-8.327,0.173 -10.338,6.946 -10.325,8.587c0.008,1.153 -1.204,1.543 -7.308,1.308c-1.536,5.619 9.256,5.804 9.256,5.804Zm3.77,-10.366c1.104,0 2,0.897 2,2c0,1.104 -0.896,2 -2,2c-1.103,0 -2,-0.896 -2,-2c0,-1.103 0.897,-2 2,-2Z" fill="currentColor" fill-rule="evenodd"></path></g></svg>
+          <div style="position:absolute; top:10px; right:10px; width:20px; height:20px; border-radius:50%; background:#c0524a; color:#fff; font-size:12px; font-weight:700; display:flex; align-items:center; justify-content:center;">✕</div>
+        </div>
+        <div style="padding:13px 16px; font-size:12.5px; color:#9c947f;">Don't stretch or distort</div>
+      </div>
+
+      <div style="background:#13110c; border:1px solid rgba(168,125,44,0.18); border-radius:16px; overflow:hidden;">
+        <div style="height:130px; display:flex; align-items:center; justify-content:center; background:#0e0c08; position:relative;">
+          <svg width="42" height="42" viewBox="0 0 64 64" style="display:block; color:#a87d2c; transform:rotate(22deg);"><g transform="translate(64,0) scale(-1,1)"><path d="M17.406,25.591c0,0 2.059,0.83 1.986,2.891c-0.072,2.062 -6.66,2.957 -6.66,11.094c0,8.137 9.096,14.532 19.217,14.532c10.12,0 23.872,-5.932 23.872,-17.83c0,-19.976 -1.513,-6.134 -17.276,-6.134c-5.235,0 -6.169,-1.787 -5.342,-2.806c3.91,-4.811 5.342,-17.446 -7.42,-17.446c-8.327,0.173 -10.338,6.946 -10.325,8.587c0.008,1.153 -1.204,1.543 -7.308,1.308c-1.536,5.619 9.256,5.804 9.256,5.804Zm3.77,-10.366c1.104,0 2,0.897 2,2c0,1.104 -0.896,2 -2,2c-1.103,0 -2,-0.896 -2,-2c0,-1.103 0.897,-2 2,-2Z" fill="currentColor" fill-rule="evenodd"></path></g></svg>
+          <div style="position:absolute; top:10px; right:10px; width:20px; height:20px; border-radius:50%; background:#c0524a; color:#fff; font-size:12px; font-weight:700; display:flex; align-items:center; justify-content:center;">✕</div>
+        </div>
+        <div style="padding:13px 16px; font-size:12.5px; color:#9c947f;">Don't rotate the mark</div>
+      </div>
+
+      <div style="background:#13110c; border:1px solid rgba(168,125,44,0.18); border-radius:16px; overflow:hidden;">
+        <div style="height:130px; display:flex; align-items:center; justify-content:center; background:#0e0c08; position:relative;">
+          <svg width="42" height="42" viewBox="0 0 64 64" style="display:block; color:#5aa0e0;"><g transform="translate(64,0) scale(-1,1)"><path d="M17.406,25.591c0,0 2.059,0.83 1.986,2.891c-0.072,2.062 -6.66,2.957 -6.66,11.094c0,8.137 9.096,14.532 19.217,14.532c10.12,0 23.872,-5.932 23.872,-17.83c0,-19.976 -1.513,-6.134 -17.276,-6.134c-5.235,0 -6.169,-1.787 -5.342,-2.806c3.91,-4.811 5.342,-17.446 -7.42,-17.446c-8.327,0.173 -10.338,6.946 -10.325,8.587c0.008,1.153 -1.204,1.543 -7.308,1.308c-1.536,5.619 9.256,5.804 9.256,5.804Zm3.77,-10.366c1.104,0 2,0.897 2,2c0,1.104 -0.896,2 -2,2c-1.103,0 -2,-0.896 -2,-2c0,-1.103 0.897,-2 2,-2Z" fill="currentColor" fill-rule="evenodd"></path></g></svg>
+          <div style="position:absolute; top:10px; right:10px; width:20px; height:20px; border-radius:50%; background:#c0524a; color:#fff; font-size:12px; font-weight:700; display:flex; align-items:center; justify-content:center;">✕</div>
+        </div>
+        <div style="padding:13px 16px; font-size:12.5px; color:#9c947f;">Don't recolor off-brand</div>
+      </div>
+
+      <div style="background:#13110c; border:1px solid rgba(168,125,44,0.18); border-radius:16px; overflow:hidden;">
+        <div style="height:130px; display:flex; align-items:center; justify-content:center; background:#0e0c08; position:relative;">
+          <svg width="42" height="42" viewBox="0 0 64 64" style="display:block; color:#a87d2c; filter:drop-shadow(2px 4px 3px rgba(0,0,0,0.9));"><g transform="translate(64,0) scale(-1,1)"><path d="M17.406,25.591c0,0 2.059,0.83 1.986,2.891c-0.072,2.062 -6.66,2.957 -6.66,11.094c0,8.137 9.096,14.532 19.217,14.532c10.12,0 23.872,-5.932 23.872,-17.83c0,-19.976 -1.513,-6.134 -17.276,-6.134c-5.235,0 -6.169,-1.787 -5.342,-2.806c3.91,-4.811 5.342,-17.446 -7.42,-17.446c-8.327,0.173 -10.338,6.946 -10.325,8.587c0.008,1.153 -1.204,1.543 -7.308,1.308c-1.536,5.619 9.256,5.804 9.256,5.804Zm3.77,-10.366c1.104,0 2,0.897 2,2c0,1.104 -0.896,2 -2,2c-1.103,0 -2,-0.896 -2,-2c0,-1.103 0.897,-2 2,-2Z" fill="currentColor" fill-rule="evenodd"></path></g></svg>
+          <div style="position:absolute; top:10px; right:10px; width:20px; height:20px; border-radius:50%; background:#c0524a; color:#fff; font-size:12px; font-weight:700; display:flex; align-items:center; justify-content:center;">✕</div>
+        </div>
+        <div style="padding:13px 16px; font-size:12.5px; color:#9c947f;">Don't add shadows or effects</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div style="margin-top:80px; padding-top:30px; border-top:1px solid rgba(168,125,44,0.2); display:flex; justify-content:space-between; align-items:center;">
+    <span style="font-family:'Fredoka'; font-weight:600; font-size:16px; color:#cfc7b2;">DashDuckies</span>
+    <span style="font-family:ui-monospace,Menlo,monospace; font-size:11px; color:#7d765f; letter-spacing:0.14em; text-transform:uppercase;">Logo System · v1.0</span>
+  </div>
+
+</div>
+</x-dc>
+</body>
+</html>

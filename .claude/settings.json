@@ -7,7 +7,11 @@
       "Bash(cp __TRACKED_VAR__/pages/Contact.css assets/css/pages/contact.css)",
       "Bash(cp __TRACKED_VAR__/pages/DuckProfile.css assets/css/pages/duck-profile.css)",
       "Bash(cp __TRACKED_VAR__/pages/QuackerTracker.css assets/css/pages/quackertracker.css)",
-      "Bash(cp __TRACKED_VAR__/pages/Stickers.css assets/css/pages/stickers.css)"
+      "Bash(cp __TRACKED_VAR__/pages/Stickers.css assets/css/pages/stickers.css)",
+      "Bash(node --input-type=module -e ' *)",
+      "PowerShell(git checkout staging)",
+      "PowerShell(git add -A)",
+      "PowerShell(git push origin staging)"
     ]
   }
 }

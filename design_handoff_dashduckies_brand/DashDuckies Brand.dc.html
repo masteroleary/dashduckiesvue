@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Hanken+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="./image-slot.js"></script>
+<style>
+  *, *::before, *::after { box-sizing:border-box; }
+  html, body { margin:0; padding:0; background:#0c0b0a; }
+  body { font-family:'Hanken Grotesk', system-ui, sans-serif; color:#f5efdf; -webkit-font-smoothing:antialiased; }
+  ::selection { background:#a87d2c; color:#0c0b0a; }
+  image-slot { --is-bg:#16140f; }
+</style>
+</helmet>
+
+<div style="max-width:1180px; margin:0 auto; padding:0 40px 120px;">
+
+  <svg width="0" height="0" style="position:absolute;" aria-hidden="true">
+    <defs>
+      <clipPath id="octR" clipPathUnits="objectBoundingBox">
+        <path d="M 0.185 0 L 0.815 0 Q 0.855 0 0.88 0.05 L 0.975 0.24 Q 1 0.29 1 0.34 L 1 0.66 Q 1 0.71 0.975 0.76 L 0.88 0.95 Q 0.855 1 0.815 1 L 0.185 1 Q 0.145 1 0.12 0.95 L 0.025 0.76 Q 0 0.71 0 0.66 L 0 0.34 Q 0 0.29 0.025 0.24 L 0.12 0.05 Q 0.145 0 0.185 0 Z"></path>
+      </clipPath>
+    </defs>
+  </svg>
+
+  <!-- TOP BAR -->
+  <div style="display:flex; align-items:center; justify-content:space-between; padding:26px 0; border-bottom:1px solid rgba(212,175,55,0.14); position:sticky; top:0; background:#0c0b0a; z-index:20;">
+    <div style="display:flex; align-items:center; gap:11px;">
+      <svg width="30" height="30" viewBox="0 0 64 64" style="display:block;">
+        <g transform="translate(64,0) scale(-1,1)"><path d="M17.406,25.591c0,0 2.059,0.83 1.986,2.891c-0.072,2.062 -6.66,2.957 -6.66,11.094c0,8.137 9.096,14.532 19.217,14.532c10.12,0 23.872,-5.932 23.872,-17.83c0,-19.976 -1.513,-6.134 -17.276,-6.134c-5.235,0 -6.169,-1.787 -5.342,-2.806c3.91,-4.811 5.342,-17.446 -7.42,-17.446c-8.327,0.173 -10.338,6.946 -10.325,8.587c0.008,1.153 -1.204,1.543 -7.308,1.308c-1.536,5.619 9.256,5.804 9.256,5.804Zm3.77,-10.366c1.104,0 2,0.897 2,2c0,1.104 -0.896,2 -2,2c-1.103,0 -2,-0.896 -2,-2c0,-1.103 0.897,-2 2,-2Z" fill="#a87d2c" fill-rule="evenodd"></path></g>
+      </svg>
+      <span style="font-family:'Fredoka'; font-weight:600; font-size:20px; color:#f5efdf; letter-spacing:-0.01em;">DashDuckies</span>
+    </div>
+    <div style="display:flex; gap:28px; font-size:13.5px; font-weight:500; color:#b8b09a;">
+      <span>Logo</span><span>Color</span><span>Type</span><span>Badge</span><span>Dashboard</span>
+    </div>
+    <div style="font-family:ui-monospace,Menlo,monospace; font-size:11px; letter-spacing:0.18em; color:#a87d2c; text-transform:uppercase;">Brand v1.0</div>
+  </div>
+
+  <!-- HERO -->
+  <div style="display:grid; grid-template-columns:1.2fr 0.8fr; gap:40px; align-items:center; padding:80px 0 70px;">
+    <div>
+      <div style="font-family:ui-monospace,Menlo,monospace; font-size:12px; letter-spacing:0.24em; color:#a87d2c; text-transform:uppercase; margin-bottom:24px;">Brand Identity &nbsp;·&nbsp; dashduckies.com</div>
+      <h1 style="font-family:'Fredoka'; font-weight:600; font-size:88px; line-height:0.96; margin:0 0 22px; letter-spacing:-0.02em; color:#f5efdf;">Dash<span style="color:#a87d2c;">Duckies</span></h1>
+      <p style="font-size:21px; line-height:1.5; color:#cfc7b2; max-width:440px; margin:0 0 30px; font-weight:400;">Find 'em. Badge 'em. Keep 'em. The collector's home for every rubber duck you've ever tracked down.</p>
+      <div style="display:flex; gap:12px; flex-wrap:wrap;">
+        <span style="display:inline-flex; flex-shrink:0; white-space:nowrap; align-items:center; gap:8px; background:linear-gradient(115deg, transparent 38%, rgba(255,255,255,0.5) 50%, transparent 62%), #a87d2c; background-size:200% 100%, 100% 100%; background-position:200% 0, 0 0; background-repeat:no-repeat; transition:background-position 0.6s ease; color:#0c0b0a; font-weight:700; font-size:14px; padding:11px 22px; clip-path:polygon(7px 0, calc(100% - 14px) 0, 100% 7px, 100% calc(100% - 7px), calc(100% - 7px) 100%, 14px 100%, 0 calc(100% - 7px), 0 7px);" style-hover="background-position:-100% 0, 0 0;">Log a duck</span>
+        <span style="display:inline-flex; flex-shrink:0; clip-path:polygon(7px 0, calc(100% - 14px) 0, 100% 7px, 100% calc(100% - 7px), calc(100% - 7px) 100%, 14px 100%, 0 calc(100% - 7px), 0 7px); background:rgba(168,125,44,0.55); padding:1.5px;"><span style="display:inline-flex; align-items:center; gap:8px; white-space:nowrap; clip-path:polygon(7px 0, calc(100% - 14px) 0, 100% 7px, 100% calc(100% - 7px), calc(100% - 7px) 100%, 14px 100%, 0 calc(100% - 7px), 0 7px); background:linear-gradient(115deg, transparent 38%, rgba(212,175,55,0.4) 50%, transparent 62%), #0c0b0a; background-size:200% 100%, 100% 100%; background-position:200% 0, 0 0; background-repeat:no-repeat; transition:background-position 0.6s ease; color:#a87d2c; font-weight:600; font-size:14px; padding:9.5px 20px;" style-hover="background-position:-100% 0, 0 0;">Browse the flock</span></span>
+      </div>
+    </div>
+    <div style="display:flex; justify-content:center;">
+      <div style="position:relative; width:280px; height:280px;">
+        <div style="width:100%; height:100%; clip-path:polygon(29% 0%, 71% 0%, 100% 29%, 100% 71%, 71% 100%, 29% 100%, 0% 71%, 0% 29%); background:linear-gradient(150deg,#ecd286,#a87d2c); padding:8px; filter:drop-shadow(0 24px 40px rgba(0,0,0,0.6));">
+          <div style="width:100%; height:100%; clip-path:polygon(29% 0%, 71% 0%, 100% 29%, 100% 71%, 71% 100%, 29% 100%, 0% 71%, 0% 29%); background:#0c0b0a; padding:5px;">
+            <div style="width:100%; height:100%; clip-path:polygon(29% 0%, 71% 0%, 100% 29%, 100% 71%, 71% 100%, 29% 100%, 0% 71%, 0% 29%); background:radial-gradient(circle at 50% 38%, #1d1a12, #100e0a); display:flex; align-items:center; justify-content:center;">
+              <svg width="150" height="150" viewBox="0 0 64 64" style="display:block;">
+                <g transform="translate(64,0) scale(-1,1)"><path d="M17.406,25.591c0,0 2.059,0.83 1.986,2.891c-0.072,2.062 -6.66,2.957 -6.66,11.094c0,8.137 9.096,14.532 19.217,14.532c10.12,0 23.872,-5.932 23.872,-17.83c0,-19.976 -1.513,-6.134 -17.276,-6.134c-5.235,0 -6.169,-1.787 -5.342,-2.806c3.91,-4.811 5.342,-17.446 -7.42,-17.446c-8.327,0.173 -10.338,6.946 -10.325,8.587c0.008,1.153 -1.204,1.543 -7.308,1.308c-1.536,5.619 9.256,5.804 9.256,5.804Zm3.77,-10.366c1.104,0 2,0.897 2,2c0,1.104 -0.896,2 -2,2c-1.103,0 -2,-0.896 -2,-2c0,-1.103 0.897,-2 2,-2Z" fill="#a87d2c" fill-rule="evenodd"></path></g>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LOGO EXPLORATIONS -->
+  <div style="padding-top:30px;">
+    <div style="font-family:ui-monospace,Menlo,monospace; font-size:12px; letter-spacing:0.22em; color:#a87d2c; text-transform:uppercase; margin-bottom:10px;">01 / Logo — three directions</div>
+    <h2 style="font-family:'Fredoka'; font-weight:600; font-size:38px; margin:0 0 32px; color:#f5efdf; letter-spacing:-0.01em;">Pick your duck</h2>
+    <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:22px;">
+
+      <!-- Dir 1: stacked wordmark -->
+      <div style="background:#13110c; border:1px solid rgba(212,175,55,0.16); border-radius:18px; overflow:hidden;">
+        <div style="height:230px; display:flex; align-items:center; justify-content:center; background:radial-gradient(circle at 50% 40%, #181510, #0e0c08);">
+          <div style="text-align:center; line-height:0.86;">
+            <div style="font-family:'Fredoka'; font-weight:700; font-size:46px; color:#f5efdf; letter-spacing:-0.01em;">DASH</div>
+            <div style="font-family:'Fredoka'; font-weight:700; font-size:46px; color:#a87d2c; letter-spacing:-0.01em;">DUCKIES</div>
+            <div style="font-family:ui-monospace,Menlo,monospace; font-size:9.5px; letter-spacing:0.42em; color:#a87d2c; margin-top:10px; padding-left:0.42em;">DUCK TRACKER</div>
+          </div>
+        </div>
+        <div style="padding:18px 20px 20px; border-top:1px solid rgba(212,175,55,0.12);">
+          <div style="font-family:'Fredoka'; font-weight:600; font-size:17px; color:#f5efdf;">Stacked Wordmark</div>
+          <div style="font-size:13px; color:#9c947f; margin-top:5px; line-height:1.5;">Type-only and bold. Reads like a stamped crate label — works tiny in a favicon.</div>
+        </div>
+      </div>
+
+      <!-- Dir 2: mark + wordmark (SELECTED) -->
+      <div style="background:#161009; border:2px solid #a87d2c; border-radius:18px; overflow:hidden; position:relative;">
+        <div style="position:absolute; top:12px; right:12px; z-index:2; background:#a87d2c; color:#0c0b0a; font-family:'Hanken Grotesk'; font-weight:700; font-size:10.5px; letter-spacing:0.08em; text-transform:uppercase; padding:5px 10px; border-radius:20px;">✓ Selected</div>
+        <div style="height:230px; display:flex; align-items:center; justify-content:center; background:radial-gradient(circle at 50% 40%, #181510, #0e0c08);">
+          <div style="display:flex; align-items:center; gap:14px;">
+            <svg width="58" height="58" viewBox="0 0 64 64" style="display:block;">
+              <g transform="translate(64,0) scale(-1,1)"><path d="M17.406,25.591c0,0 2.059,0.83 1.986,2.891c-0.072,2.062 -6.66,2.957 -6.66,11.094c0,8.137 9.096,14.532 19.217,14.532c10.12,0 23.872,-5.932 23.872,-17.83c0,-19.976 -1.513,-6.134 -17.276,-6.134c-5.235,0 -6.169,-1.787 -5.342,-2.806c3.91,-4.811 5.342,-17.446 -7.42,-17.446c-8.327,0.173 -10.338,6.946 -10.325,8.587c0.008,1.153 -1.204,1.543 -7.308,1.308c-1.536,5.619 9.256,5.804 9.256,5.804Zm3.77,-10.366c1.104,0 2,0.897 2,2c0,1.104 -0.896,2 -2,2c-1.103,0 -2,-0.896 -2,-2c0,-1.103 0.897,-2 2,-2Z" fill="#a87d2c" fill-rule="evenodd"></path></g>
+            </svg>
+            <div style="font-family:'Fredoka'; font-weight:600; font-size:27px; color:#f5efdf; letter-spacing:-0.01em; line-height:1;">Dash<span style="color:#a87d2c;">Duckies</span></div>
+          </div>
+        </div>
+        <div style="padding:18px 20px 20px; border-top:1px solid rgba(212,175,55,0.12);">
+          <div style="font-family:'Fredoka'; font-weight:600; font-size:17px; color:#f5efdf;">Mark + Wordmark</div>
+          <div style="font-size:13px; color:#9c947f; margin-top:5px; line-height:1.5;">The friendly face. Duck mark detaches as a standalone app icon and avatar.</div>
+        </div>
+      </div>
+
+      <!-- Dir 3: octagon emblem -->
+      <div style="background:#13110c; border:1px solid rgba(212,175,55,0.16); border-radius:18px; overflow:hidden;">
+        <div style="height:230px; display:flex; align-items:center; justify-content:center; background:radial-gradient(circle at 50% 40%, #181510, #0e0c08);">
+          <div style="display:flex; flex-direction:column; align-items:center; gap:14px;">
+            <div style="width:96px; height:96px; clip-path:polygon(29% 0%, 71% 0%, 100% 29%, 100% 71%, 71% 100%, 29% 100%, 0% 71%, 0% 29%); background:linear-gradient(150deg,#ecd286,#a87d2c); padding:4px;">
+              <div style="width:100%; height:100%; clip-path:polygon(29% 0%, 71% 0%, 100% 29%, 100% 71%, 71% 100%, 29% 100%, 0% 71%, 0% 29%); background:#0e0c08; display:flex; align-items:center; justify-content:center;">
+                <svg width="54" height="54" viewBox="0 0 64 64" style="display:block;">
+                  <g transform="translate(64,0) scale(-1,1)"><path d="M17.406,25.591c0,0 2.059,0.83 1.986,2.891c-0.072,2.062 -6.66,2.957 -6.66,11.094c0,8.137 9.096,14.532 19.217,14.532c10.12,0 23.872,-5.932 23.872,-17.83c0,-19.976 -1.513,-6.134 -17.276,-6.134c-5.235,0 -6.169,-1.787 -5.342,-2.806c3.91,-4.811 5.342,-17.446 -7.42,-17.446c-8.327,0.173 -10.338,6.946 -10.325,8.587c0.008,1.153 -1.204,1.543 -7.308,1.308c-1.536,5.619 9.256,5.804 9.256,5.804Zm3.77,-10.366c1.104,0 2,0.897 2,2c0,1.104 -0.896,2 -2,2c-1.103,0 -2,-0.896 -2,-2c0,-1.103 0.897,-2 2,-2Z" fill="#a87d2c" fill-rule="evenodd"></path></g>
+                </svg>
+              </div>
+            </div>
+            <div style="font-family:'Fredoka'; font-weight:600; font-size:19px; color:#f5efdf; letter-spacing:-0.01em;">DashDuckies</div>
+          </div>
+        </div>
+        <div style="padding:18px 20px 20px; border-top:1px solid rgba(212,175,55,0.12);">
+          <div style="font-family:'Fredoka'; font-weight:600; font-size:17px; color:#f5efdf;">Octagon Emblem</div>
+          <div style="font-size:13px; color:#9c947f; margin-top:5px; line-height:1.5;">Ties the logo to the badge system. The hero crest for merch, stickers and pins.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- COLOR -->
+  <div style="padding-top:90px;">
+    <div style="font-family:ui-monospace,Menlo,monospace; font-size:12px; letter-spacing:0.22em; color:#a87d2c; text-transform:uppercase; margin-bottom:10px;">02 / Color</div>
+    <h2 style="font-family:'Fredoka'; font-weight:600; font-size:38px; margin:0 0 8px; color:#f5efdf; letter-spacing:-0.01em;">Gold on a dark garage</h2>
+    <p style="font-size:16px; color:#9c947f; margin:0 0 30px; max-width:560px;">Warm bronze-to-lamplight golds against near-black panels. High contrast, collectible, a little bit treasure-chest.</p>
+    <div style="display:grid; grid-template-columns:repeat(6,1fr); gap:14px;">
+      <sc-for list="{{ swatches }}" as="sw" hint-placeholder-count="6">
+        <div style="border-radius:14px; overflow:hidden; border:1px solid rgba(212,175,55,0.16);">
+          <div style="height:120px; background:{{ sw.hex }};"></div>
+          <div style="padding:13px 14px; background:#13110c;">
+            <div style="font-family:'Fredoka'; font-weight:600; font-size:15px; color:#f5efdf;">{{ sw.name }}</div>
+            <div style="font-family:ui-monospace,Menlo,monospace; font-size:11px; color:#9c947f; margin-top:3px; letter-spacing:0.04em;">{{ sw.hex }}</div>
+            <div style="font-size:11.5px; color:#7d765f; margin-top:6px;">{{ sw.role }}</div>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+
+  <!-- TYPE -->
+  <div style="padding-top:90px;">
+    <div style="font-family:ui-monospace,Menlo,monospace; font-size:12px; letter-spacing:0.22em; color:#a87d2c; text-transform:uppercase; margin-bottom:10px;">03 / Typography</div>
+    <h2 style="font-family:'Fredoka'; font-weight:600; font-size:38px; margin:0 0 32px; color:#f5efdf; letter-spacing:-0.01em;">Rounded &amp; readable</h2>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:22px;">
+      <div style="background:#13110c; border:1px solid rgba(212,175,55,0.16); border-radius:18px; padding:32px 34px;">
+        <div style="display:flex; justify-content:space-between; align-items:baseline; margin-bottom:18px;">
+          <span style="font-family:'Fredoka'; font-weight:600; font-size:22px; color:#a87d2c;">Fredoka</span>
+          <span style="font-family:ui-monospace,Menlo,monospace; font-size:11px; color:#9c947f; letter-spacing:0.1em;">DISPLAY · HEADINGS</span>
+        </div>
+        <div style="font-family:'Fredoka'; font-weight:600; font-size:60px; line-height:1; color:#f5efdf; letter-spacing:-0.01em;">Quack</div>
+        <div style="font-family:'Fredoka'; font-weight:500; font-size:18px; color:#cfc7b2; margin-top:18px; letter-spacing:0.02em;">AaBbCcDd 0123456789 &amp; ? !</div>
+        <div style="font-size:13px; color:#7d765f; margin-top:14px;">Friendly, rounded, confident. Weights 500 / 600 / 700.</div>
+      </div>
+      <div style="background:#13110c; border:1px solid rgba(212,175,55,0.16); border-radius:18px; padding:32px 34px;">
+        <div style="display:flex; justify-content:space-between; align-items:baseline; margin-bottom:18px;">
+          <span style="font-family:'Hanken Grotesk'; font-weight:700; font-size:22px; color:#a87d2c;">Hanken Grotesk</span>
+          <span style="font-family:ui-monospace,Menlo,monospace; font-size:11px; color:#9c947f; letter-spacing:0.1em;">BODY · UI</span>
+        </div>
+        <div style="font-family:'Hanken Grotesk'; font-weight:700; font-size:42px; line-height:1.05; color:#f5efdf;">Every duck<br>deserves a badge.</div>
+        <div style="font-family:'Hanken Grotesk'; font-size:15px; line-height:1.6; color:#cfc7b2; margin-top:18px;">Clean and neutral for long lists, captions and the dashboard. AaBbCc 0123456789.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BADGE COMPONENT -->
+  <div style="padding-top:90px;">
+    <div style="font-family:ui-monospace,Menlo,monospace; font-size:12px; letter-spacing:0.22em; color:#a87d2c; text-transform:uppercase; margin-bottom:10px;">04 / The duck badge</div>
+    <h2 style="font-family:'Fredoka'; font-weight:600; font-size:38px; margin:0 0 8px; color:#f5efdf; letter-spacing:-0.01em;">One octagon per duck</h2>
+    <p style="font-size:16px; color:#9c947f; margin:0 0 34px; max-width:560px;">Minted-coin frame, the duck's photo at the center, name on the plate. Drop a real photo onto any badge below — it sticks.</p>
+
+    <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:40px 24px; justify-items:center;">
+      <sc-for list="{{ ducks }}" as="duck" hint-placeholder-count="6">
+        <div style="display:flex; flex-direction:column; align-items:center; gap:16px; width:100%;">
+          <div style="width:172px; height:86px; clip-path:url(#octR); background:linear-gradient(150deg,#ecd286,#a87d2c); padding:6px; filter:drop-shadow(0 14px 24px rgba(0,0,0,0.5));">
+            <div style="width:100%; height:100%; clip-path:url(#octR); background:#0c0b0a; padding:4px;">
+              <image-slot id="{{ duck.slotId }}" src="{{ duck.photo }}" mask="url(#octR)" style="width:100%; height:100%; display:block;" placeholder="duck photo"></image-slot>
+            </div>
+          </div>
+          <div style="text-align:center;">
+            <div style="font-family:'Fredoka'; font-weight:600; font-size:18px; color:#f5efdf; letter-spacing:-0.01em;">{{ duck.name }}</div>
+            <div style="font-family:ui-monospace,Menlo,monospace; font-size:10.5px; color:#8f876f; letter-spacing:0.06em; margin-top:5px;">{{ duck.loc }}</div>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+
+  <!-- DASHBOARD -->
+  <div style="padding-top:96px;">
+    <div style="font-family:ui-monospace,Menlo,monospace; font-size:12px; letter-spacing:0.22em; color:#a87d2c; text-transform:uppercase; margin-bottom:10px;">05 / Dashboard</div>
+    <h2 style="font-family:'Fredoka'; font-weight:600; font-size:38px; margin:0 0 30px; color:#f5efdf; letter-spacing:-0.01em;">The brand in the wild</h2>
+
+    <div style="border-radius:22px; overflow:hidden; border:1px solid rgba(212,175,55,0.18); background:#100e0a; box-shadow:0 30px 70px rgba(0,0,0,0.55);">
+      <!-- app top bar -->
+      <div style="display:flex; align-items:center; justify-content:space-between; padding:16px 24px; border-bottom:1px solid rgba(212,175,55,0.12); background:#0d0b07;">
+        <div style="display:flex; align-items:center; gap:10px;">
+          <svg width="24" height="24" viewBox="0 0 64 64" style="display:block;">
+            <g transform="translate(64,0) scale(-1,1)"><path d="M17.406,25.591c0,0 2.059,0.83 1.986,2.891c-0.072,2.062 -6.66,2.957 -6.66,11.094c0,8.137 9.096,14.532 19.217,14.532c10.12,0 23.872,-5.932 23.872,-17.83c0,-19.976 -1.513,-6.134 -17.276,-6.134c-5.235,0 -6.169,-1.787 -5.342,-2.806c3.91,-4.811 5.342,-17.446 -7.42,-17.446c-8.327,0.173 -10.338,6.946 -10.325,8.587c0.008,1.153 -1.204,1.543 -7.308,1.308c-1.536,5.619 9.256,5.804 9.256,5.804Zm3.77,-10.366c1.104,0 2,0.897 2,2c0,1.104 -0.896,2 -2,2c-1.103,0 -2,-0.896 -2,-2c0,-1.103 0.897,-2 2,-2Z" fill="#a87d2c" fill-rule="evenodd"></path></g>
+          </svg>
+          <span style="font-family:'Fredoka'; font-weight:600; font-size:16px;">DashDuckies</span>
+        </div>
+        <div style="flex:1; max-width:340px; margin:0 28px; background:#1a1710; border:1px solid rgba(212,175,55,0.14); border-radius:24px; padding:8px 16px; font-size:13px; color:#7d765f;">Search your roster…</div>
+        <div style="display:flex; align-items:center; gap:14px;">
+          <span style="display:inline-flex; flex-shrink:0; white-space:nowrap; background:linear-gradient(115deg, transparent 38%, rgba(255,255,255,0.5) 50%, transparent 62%), #a87d2c; background-size:200% 100%, 100% 100%; background-position:200% 0, 0 0; background-repeat:no-repeat; transition:background-position 0.6s ease; color:#0c0b0a; font-weight:700; font-size:13px; padding:8px 17px; clip-path:polygon(7px 0, calc(100% - 14px) 0, 100% 7px, 100% calc(100% - 7px), calc(100% - 7px) 100%, 14px 100%, 0 calc(100% - 7px), 0 7px);" style-hover="background-position:-100% 0, 0 0;">+ Log a duck</span>
+          <div style="width:32px; height:32px; border-radius:50%; background:linear-gradient(150deg,#ecd286,#a87d2c);"></div>
+        </div>
+      </div>
+
+      <div style="padding:28px 30px 34px;">
+        <div style="display:flex; align-items:flex-end; justify-content:space-between; margin-bottom:24px;">
+          <div>
+            <h3 style="font-family:'Fredoka'; font-weight:600; font-size:30px; margin:0; letter-spacing:-0.01em;">Your roster</h3>
+            <div style="font-size:14px; color:#9c947f; margin-top:4px;">10 ducks tracked &nbsp;·&nbsp; 4 new this month</div>
+          </div>
+          <div style="display:flex; gap:9px;">
+            <span style="font-size:12.5px; font-weight:600; color:#0c0b0a; background:#a87d2c; padding:7px 16px; clip-path:polygon(7px 0, calc(100% - 14px) 0, 100% 7px, 100% calc(100% - 7px), calc(100% - 7px) 100%, 14px 100%, 0 calc(100% - 7px), 0 7px);">All</span>
+            <span style="display:inline-flex; clip-path:polygon(7px 0, calc(100% - 14px) 0, 100% 7px, 100% calc(100% - 7px), calc(100% - 7px) 100%, 14px 100%, 0 calc(100% - 7px), 0 7px); background:rgba(168,125,44,0.45); padding:1px;"><span style="display:inline-flex; clip-path:polygon(7px 0, calc(100% - 14px) 0, 100% 7px, 100% calc(100% - 7px), calc(100% - 7px) 100%, 14px 100%, 0 calc(100% - 7px), 0 7px); background:#100e0a; color:#cfc7b2; font-size:12.5px; font-weight:500; padding:6px 14px;">Rare</span></span>
+            <span style="display:inline-flex; clip-path:polygon(7px 0, calc(100% - 14px) 0, 100% 7px, 100% calc(100% - 7px), calc(100% - 7px) 100%, 14px 100%, 0 calc(100% - 7px), 0 7px); background:rgba(168,125,44,0.45); padding:1px;"><span style="display:inline-flex; clip-path:polygon(7px 0, calc(100% - 14px) 0, 100% 7px, 100% calc(100% - 7px), calc(100% - 7px) 100%, 14px 100%, 0 calc(100% - 7px), 0 7px); background:#100e0a; color:#cfc7b2; font-size:12.5px; font-weight:500; padding:6px 14px;">Recent</span></span>
+          </div>
+        </div>
+
+        <!-- stats -->
+        <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-bottom:30px;">
+          <sc-for list="{{ stats }}" as="st" hint-placeholder-count="3">
+            <div style="background:#15120c; border:1px solid rgba(212,175,55,0.14); border-radius:14px; padding:18px 20px;">
+              <div style="font-family:'Fredoka'; font-weight:600; font-size:34px; color:#a87d2c; line-height:1;">{{ st.v }}</div>
+              <div style="font-size:13px; color:#9c947f; margin-top:8px;">{{ st.k }}</div>
+            </div>
+          </sc-for>
+        </div>
+
+        <div style="display:grid; grid-template-columns:1fr 280px; gap:30px;">
+          <!-- badge grid -->
+          <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:22px;">
+            <sc-for list="{{ ducks }}" as="duck" hint-placeholder-count="6">
+              <div style="display:flex; flex-direction:column; align-items:center; gap:10px;">
+                <div style="width:100%; aspect-ratio:2; clip-path:url(#octR); background:linear-gradient(150deg,#ecd286,#a87d2c); padding:4px;">
+                  <div style="width:100%; height:100%; clip-path:url(#octR); background:#0c0b0a; padding:3px;">
+                    <image-slot id="{{ duck.dashSlotId }}" src="{{ duck.photo }}" mask="url(#octR)" style="width:100%; height:100%; display:block;" placeholder="photo"></image-slot>
+                  </div>
+                </div>
+                <div style="font-family:'Fredoka'; font-weight:500; font-size:13px; color:#e8e0cb; text-align:center;">{{ duck.name }}</div>
+              </div>
+            </sc-for>
+          </div>
+
+          <!-- recent feed -->
+          <div style="background:#15120c; border:1px solid rgba(212,175,55,0.14); border-radius:16px; padding:20px 22px; align-self:start;">
+            <div style="font-family:'Fredoka'; font-weight:600; font-size:16px; margin-bottom:16px;">Recent quacks</div>
+            <div style="display:flex; flex-direction:column; gap:16px;">
+              <sc-for list="{{ recent }}" as="r" hint-placeholder-count="4">
+                <div style="display:flex; gap:11px; align-items:flex-start;">
+                  <div style="width:8px; height:8px; border-radius:50%; background:#a87d2c; margin-top:6px; flex:none;"></div>
+                  <div>
+                    <div style="font-size:13.5px; color:#e8e0cb; line-height:1.4;">{{ r.text }}</div>
+                    <div style="font-family:ui-monospace,Menlo,monospace; font-size:10.5px; color:#7d765f; margin-top:3px;">{{ r.when }}</div>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div style="margin-top:80px; padding-top:30px; border-top:1px solid rgba(212,175,55,0.14); display:flex; justify-content:space-between; align-items:center;">
+    <span style="font-family:'Fredoka'; font-weight:600; font-size:16px; color:#cfc7b2;">DashDuckies</span>
+    <span style="font-family:ui-monospace,Menlo,monospace; font-size:11px; color:#7d765f; letter-spacing:0.14em; text-transform:uppercase;">Find 'em · Badge 'em · Keep 'em</span>
+  </div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals() {
+    const swatches = [
+      { name: 'Bronze',    hex: '#A87D2C', role: 'Primary accent' },
+      { name: 'Gold',      hex: '#D4AF37', role: 'Highlight / shine' },
+      { name: 'Lamplight', hex: '#ECD286', role: 'Metallic sheen' },
+      { name: 'Ink',       hex: '#0C0B0A', role: 'Background' },
+      { name: 'Pitch',     hex: '#16140F', role: 'Panels & cards' },
+      { name: 'Cream',     hex: '#F5EFDF', role: 'On-dark text' },
+    ];
+    const ducks = [
+      { name: 'Major Quack',   photo: 'uploads/astronaught-duck.png',   slotId: 'duck-1',  dashSlotId: 'dash-1',  loc: 'ROCKET RD · CAPE CANAVERAL' },
+      { name: 'Chef Quackers', photo: 'uploads/chef-duck.png',          slotId: 'duck-2',  dashSlotId: 'dash-2',  loc: 'FOOD TRUCK · PORTLAND' },
+      { name: 'Wrigley',       photo: 'uploads/chicago-duck.png',       slotId: 'duck-3',  dashSlotId: 'dash-3',  loc: 'WRIGLEYVILLE · CHICAGO' },
+      { name: 'Raven',         photo: 'uploads/emo-duck.png',           slotId: 'duck-4',  dashSlotId: 'dash-4',  loc: 'RECORD SHOP · SEATTLE' },
+      { name: 'Birdie',        photo: 'uploads/golf-duck.png',          slotId: 'duck-5',  dashSlotId: 'dash-5',  loc: '18TH GREEN · PINEHURST' },
+      { name: 'Indy',          photo: 'uploads/indiana-jones-duck.png', slotId: 'duck-6',  dashSlotId: 'dash-6',  loc: 'DESERT PASS · MOAB' },
+      { name: 'Rex',           photo: 'uploads/jurrasic-park-duck.png', slotId: 'duck-7',  dashSlotId: 'dash-7',  loc: 'VISITOR CENTER · KAUAI' },
+      { name: 'Paco',          photo: 'uploads/mexican-duck.png',       slotId: 'duck-8',  dashSlotId: 'dash-8',  loc: 'TAQUERIA · SANTA FE' },
+      { name: 'Big Apple',     photo: 'uploads/newyork-duck.png',       slotId: 'duck-9',  dashSlotId: 'dash-9',  loc: '5TH AVE · NEW YORK' },
+      { name: 'Bjorn',         photo: 'uploads/viking-duck.png',        slotId: 'duck-10', dashSlotId: 'dash-10', loc: 'FJORD LOT · DULUTH' },
+    ];
+    const stats = [
+      { k: 'Ducks tracked', v: '10' },
+      { k: 'New this month', v: '+4' },
+      { k: 'Longest streak', v: '9 wk' },
+    ];
+    const recent = [
+      { text: 'You badged Goldie', when: '2 HOURS AGO' },
+      { text: 'Found Nugget at a drive-thru', when: 'YESTERDAY' },
+      { text: 'You badged Bubbles', when: '3 DAYS AGO' },
+      { text: 'Captain Floats added to roster', when: '5 DAYS AGO' },
+    ];
+    return { swatches, ducks, stats, recent };
+  }
+}
+</script>
+</body>
+</html>
