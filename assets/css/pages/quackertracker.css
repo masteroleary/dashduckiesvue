@@ -1,19 +1,21 @@
 .map-container {
     height: 600px;
     width: 100%;
-    border-radius: 0.375rem;
+    border-radius: 18px;
     overflow: hidden;
+    border: var(--dd-hairline);
 }
 
 .duck-profile {
-    background-color: #f8f9fa;
+    background-color: var(--dd-pitch);
+    border: var(--dd-hairline);
     margin-bottom: 1rem;
 }
 
 .stats {
     margin-top: 1rem;
     padding-top: 1rem;
-    border-top: 1px solid #dee2e6;
+    border-top: var(--dd-hairline);
 }
 
 .cosmic-duck-canvas {
@@ -31,11 +33,11 @@
 @keyframes qt-pulse-glow {
     0%, 100% {
         transform: scale(1);
-        box-shadow: 0 0 0 0 rgba(25, 135, 84, 0.5);
+        box-shadow: 0 0 0 0 rgba(168, 125, 44, 0.5);
     }
     50% {
         transform: scale(1.05);
-        box-shadow: 0 0 20px 10px rgba(25, 135, 84, 0.3);
+        box-shadow: 0 0 20px 10px rgba(168, 125, 44, 0.3);
     }
 }
 

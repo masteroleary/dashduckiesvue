@@ -64,7 +64,7 @@ function fmtDate(d: string | null) {
             <td class="text-center">
               <v-switch
                 :model-value="m.isAdmin"
-                color="deep-purple"
+                color="warning"
                 density="compact"
                 hide-details
                 :disabled="m.id === user?.id"

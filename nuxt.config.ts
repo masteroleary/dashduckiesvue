@@ -58,7 +58,7 @@ export default defineNuxtConfig({
         { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' },
         {
           rel: 'stylesheet',
-          href: 'https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,700;0,9..144,900;1,9..144,700&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap',
+          href: 'https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Hanken+Grotesk:wght@400;500;600;700;800&display=swap',
         },
       ],
     },
@@ -71,21 +71,24 @@ export default defineNuxtConfig({
       styles: 'none',
     },
     vuetifyOptions: {
-      // Brand palette ported from the old MudBlazor CustomTheme.
+      // DashDuckies brand: dark, bronze-gold "minted-coin" identity.
       theme: {
-        defaultTheme: 'light',
+        defaultTheme: 'dark',
         themes: {
-          light: {
-            dark: false,
+          dark: {
+            dark: true,
             colors: {
-              primary: '#1b6ec2',
-              secondary: '#6c757d',
-              success: '#198754',
-              info: '#0dcaf0',
-              warning: '#ffc107',
-              error: '#dc3545',
-              background: '#f8f9fa',
-              surface: '#ffffff',
+              primary: '#A87D2C', // bronze
+              secondary: '#9C947F', // muted
+              success: '#5C8A4A',
+              info: '#A87D2C',
+              warning: '#D4AF37', // gold
+              error: '#C0524A',
+              background: '#0C0B0A', // ink
+              surface: '#16140F', // pitch
+              'surface-bright': '#15120C',
+              'on-background': '#F5EFDF',
+              'on-surface': '#F5EFDF',
             },
           },
         },

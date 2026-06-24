@@ -82,7 +82,7 @@ async function save() {
 
         <v-card class="pa-4">
           <div class="d-flex align-center mb-4 ga-4">
-            <v-avatar size="72" color="grey-lighten-2">
+            <v-avatar size="72" color="surface-bright">
               <v-img v-if="form.profileImageUrl" :src="form.profileImageUrl" />
               <v-icon v-else icon="mdi-account" size="40" />
             </v-avatar>

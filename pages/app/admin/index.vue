@@ -17,7 +17,7 @@ const cards = computed(() => [
     <v-alert v-if="user && !user.isAdmin" type="error" variant="tonal">Admins only.</v-alert>
     <v-row v-else>
       <v-col v-for="c in cards" :key="c.label" cols="6" md="3">
-        <v-card variant="tonal" color="deep-purple" class="pa-4 text-center">
+        <v-card variant="tonal" color="primary" class="pa-4 text-center">
           <v-icon :icon="c.icon" size="36" class="mb-2" />
           <div class="text-h4 font-weight-bold">{{ c.value }}</div>
           <div class="text-subtitle-2">{{ c.label }}</div>

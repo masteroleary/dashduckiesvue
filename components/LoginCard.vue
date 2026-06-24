@@ -48,8 +48,12 @@ function reset() {
   <v-container class="py-12">
     <v-row justify="center">
       <v-col cols="12" sm="8" md="5">
-        <v-card>
-          <v-card-title>Sign in to Dash Duckies</v-card-title>
+        <v-card class="pa-2">
+          <div class="d-flex align-center justify-center pt-6 pb-1" style="gap: 10px">
+            <DuckMark :size="34" color="#a87d2c" />
+            <span class="dd-login-wordmark">DashDuckies</span>
+          </div>
+          <v-card-title class="text-center">Sign in to your roster</v-card-title>
           <v-card-text>
             <v-alert v-if="error" type="error" variant="tonal" density="compact" class="mb-4">
               {{ error }}
@@ -94,3 +98,13 @@ function reset() {
     </v-row>
   </v-container>
 </template>
+
+<style scoped>
+.dd-login-wordmark {
+  font-family: 'Fredoka', system-ui, sans-serif;
+  font-weight: 600;
+  font-size: 22px;
+  letter-spacing: -0.01em;
+  color: #f5efdf;
+}
+</style>

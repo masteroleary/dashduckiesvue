@@ -72,29 +72,33 @@ async function follow() {
 
 <style scoped>
 .follow-box {
-  background: var(--dd-yellow-light, #fff4b8);
+  background: rgba(168, 125, 44, 0.12);
+  border: var(--dd-hairline);
   border-radius: 16px;
   padding: 24px;
   text-align: center;
   font-family: var(--font-body);
+  color: var(--dd-cream);
   margin-top: 24px;
 }
 .follow-emoji { font-size: 40px; }
-.follow-h { font-family: var(--font-display); margin: 4px 0 8px; }
-.follow-sub { color: var(--dd-gray); margin: 0 0 16px; }
-.follow-perk { margin: 8px 0 16px; }
+.follow-h { font-family: var(--font-display); font-weight: 600; letter-spacing: -0.01em; color: var(--dd-cream); margin: 4px 0 8px; }
+.follow-sub { color: var(--dd-text-2); margin: 0 0 16px; }
+.follow-perk { margin: 8px 0 16px; color: var(--dd-text-2); }
+.follow-perk strong { color: var(--dd-lamplight); }
 .follow-row {
   display: flex;
   gap: 10px;
   max-width: 420px;
   margin: 0 auto 10px;
 }
-.follow-input { flex: 1; background: #fff; }
-.follow-trust { font-size: 13px; color: var(--dd-gray); margin: 8px 0; }
+.follow-input { flex: 1; }
+.follow-trust { font-size: 13px; color: var(--dd-muted); margin: 8px 0; }
 .follow-skip {
   display: inline-block;
   margin-top: 6px;
-  color: var(--dd-gray);
+  color: var(--dd-muted);
   font-size: 14px;
 }
+.follow-skip:hover { color: var(--dd-bronze); }
 </style>
