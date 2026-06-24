@@ -80,29 +80,35 @@ async function subscribe() {
   position: fixed;
   inset: 0;
   z-index: 1300;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.7);
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 16px;
 }
 .dd-modal {
-  background: #fff;
+  background: var(--dd-pitch);
+  border: var(--dd-hairline);
   border-radius: 16px;
   max-width: 460px;
   width: 100%;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  color: var(--dd-cream);
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.6);
   font-family: var(--font-body);
   overflow: hidden;
 }
+.dd-modal h3 { font-family: var(--font-display); font-weight: 600; letter-spacing: -0.01em; color: var(--dd-cream); }
 .dd-modal-head {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 20px 24px 0;
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 18px;
+  font-family: var(--font-mono);
+  font-weight: 500;
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--dd-bronze);
 }
 .dd-modal-close {
   border: none;
@@ -110,7 +116,7 @@ async function subscribe() {
   font-size: 26px;
   line-height: 1;
   cursor: pointer;
-  color: var(--dd-gray);
+  color: var(--dd-muted);
 }
 .dd-modal-body {
   padding: 12px 24px 20px;
@@ -119,11 +125,16 @@ async function subscribe() {
   width: 100%;
   margin-top: 12px;
   padding: 12px 16px;
-  border: 1px solid #d8d6cf;
+  background: var(--dd-panel-3);
+  border: 1px solid rgba(212, 175, 55, 0.2);
   border-radius: 10px;
   font-size: 15px;
   font-family: var(--font-body);
+  color: var(--dd-cream);
+  box-sizing: border-box;
 }
+.dd-input::placeholder { color: var(--dd-faint); }
+.dd-input:focus { outline: none; border-color: var(--dd-bronze); }
 .dd-modal-actions {
   display: flex;
   justify-content: flex-end;

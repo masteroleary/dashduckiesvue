@@ -10,9 +10,10 @@
     display: flex;
     align-items: center;
     gap: 3rem;
-    background: white;
+    background: var(--dd-pitch);
+    border: var(--dd-hairline);
     border-radius: 1.5rem;
-    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 14px 40px rgba(0, 0, 0, 0.45);
     padding: 3rem;
     max-width: 800px;
     width: 100%;
@@ -27,18 +28,18 @@
     height: 280px;
     border-radius: 1rem;
     object-fit: cover;
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 16px rgba(0, 0, 0, 0.4);
 }
 
 .stickers-placeholder {
     width: 280px;
     height: 280px;
     border-radius: 1rem;
-    background: var(--dd-yellow, #FFD700);
+    background: var(--dd-grad-gold);
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 2px 12px rgba(255, 215, 0, 0.3);
+    box-shadow: 0 2px 16px rgba(168, 125, 44, 0.35);
 }
 
 .stickers-info-side {
@@ -48,14 +49,16 @@
 }
 
 .stickers-heading {
+    font-family: var(--font-display);
     font-size: 2rem;
-    font-weight: 700;
-    color: #222;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: var(--dd-cream);
     margin: 0;
 }
 
 .stickers-text {
-    color: #555;
+    color: var(--dd-text-2);
     font-size: 1.05rem;
     margin: 0;
     line-height: 1.6;
@@ -71,11 +74,12 @@
 .stickers-email {
     font-size: 1.15rem;
     font-weight: 600;
-    color: var(--dd-yellow, #FFD700);
+    color: var(--dd-bronze);
     text-decoration: none;
 }
 
 .stickers-email:hover {
+    color: var(--dd-lamplight);
     text-decoration: underline;
 }
 

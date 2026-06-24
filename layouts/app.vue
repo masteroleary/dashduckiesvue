@@ -56,19 +56,21 @@ async function onLogout() {
     </template>
 
     <template v-else>
-      <v-app-bar color="black" flat>
+      <v-app-bar color="#0d0b07" flat class="dd-app-bar">
         <v-app-bar-nav-icon @click="drawer = !drawer" />
         <v-app-bar-title>
-          <NuxtLink to="/" class="d-inline-flex align-center text-decoration-none">
-            <img src="/logo.webp" alt="Dash Duckies" height="36" />
+          <NuxtLink to="/" class="d-inline-flex align-center text-decoration-none dd-app-wordmark">
+            <DuckMark :size="24" color="#a87d2c" />
+            <span class="ml-2">DashDuckies</span>
           </NuxtLink>
         </v-app-bar-title>
         <template #append>
-          <v-btn variant="text" @click="onLogout">Sign out</v-btn>
+          <div class="dd-app-avatar mr-3" />
+          <v-btn variant="text" color="primary" @click="onLogout">Sign out</v-btn>
         </template>
       </v-app-bar>
 
-      <v-navigation-drawer v-model="drawer">
+      <v-navigation-drawer v-model="drawer" color="#100e0a">
         <v-list nav>
           <v-list-item
             v-for="item in nav"
@@ -77,6 +79,7 @@ async function onLogout() {
             :title="item.title"
             :prepend-icon="item.icon"
             :exact="item.exact"
+            color="primary"
           />
         </v-list>
       </v-navigation-drawer>
@@ -87,3 +90,22 @@ async function onLogout() {
     </template>
   </v-app>
 </template>
+
+<style scoped>
+.dd-app-bar {
+  border-bottom: 1px solid rgba(212, 175, 55, 0.14);
+}
+.dd-app-wordmark {
+  font-family: 'Fredoka', system-ui, sans-serif;
+  font-weight: 600;
+  font-size: 18px;
+  letter-spacing: -0.01em;
+  color: #f5efdf;
+}
+.dd-app-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: linear-gradient(150deg, #ecd286, #a87d2c);
+}
+</style>

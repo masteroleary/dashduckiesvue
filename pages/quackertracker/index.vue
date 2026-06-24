@@ -78,10 +78,11 @@ function relativeAge(d: string | null) {
 }
 .dd-feed-title {
   font-family: var(--font-display);
-  font-weight: 700;
+  font-weight: 600;
   font-size: 28px;
+  letter-spacing: -0.01em;
   margin: 0 0 20px;
-  color: var(--dd-black);
+  color: var(--dd-cream);
 }
 .dd-feed-grid {
   display: grid;
@@ -100,17 +101,19 @@ function relativeAge(d: string | null) {
 .dd-tile {
   display: block;
   text-decoration: none;
-  color: inherit;
-  background: #fff;
+  color: var(--dd-cream);
+  background: var(--dd-pitch);
+  border: var(--dd-hairline);
   border-radius: 14px;
   overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
   font-family: var(--font-body);
 }
 .dd-tile:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5);
+  border-color: var(--dd-bronze);
 }
 .dd-tile-img {
   width: 100%;
