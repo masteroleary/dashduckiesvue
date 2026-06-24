@@ -51,7 +51,7 @@ async function subscribe() {
         </template>
         <template v-else>
           <h3 style="margin: 0 0 8px">Get 10% Off Your First Order!</h3>
-          <p style="color: var(--dd-gray)">
+          <p style="color: var(--dd-text-2)">
             Subscribe to our newsletter and receive a 10% discount code for your first DashDuckies
             purchase. Plus, stay updated on new duck releases and exclusive offers!
           </p>
