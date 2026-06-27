@@ -152,4 +152,15 @@ async function onReturnToAdmin() {
   border-radius: 50%;
   background: linear-gradient(150deg, #ecd286, #a87d2c);
 }
+/* Selected nav item: solid bronze background with white text/icon. */
+:deep(.v-navigation-drawer .v-list-item--active) {
+  background-color: #a87d2c;
+  color: #fff;
+}
+:deep(.v-navigation-drawer .v-list-item--active .v-list-item__overlay) {
+  opacity: 0;
+}
+:deep(.v-navigation-drawer .v-list-item--active .v-icon) {
+  color: #fff;
+}
 </style>
