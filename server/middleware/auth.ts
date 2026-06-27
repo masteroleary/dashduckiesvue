@@ -1,4 +1,4 @@
-import { AUTH_COOKIE, verifyAuthToken } from '../utils/jwt'
+import { ADMIN_COOKIE, AUTH_COOKIE, verifyAuthToken } from '../utils/jwt'
 import { isTokenActive } from '../utils/userAuth'
 
 // Runs on every request. If a valid, non-revoked session cookie is present,
@@ -19,6 +19,8 @@ export default defineEventHandler(async (event) => {
       isAdmin: claims.isAdmin,
       isMember: claims.isMember,
     }
+    // A stashed admin token means this active session is an impersonation.
+    if (getCookie(event, ADMIN_COOKIE)) event.context.impersonating = true
   } catch {
     // invalid/expired token → remain anonymous
   }

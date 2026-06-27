@@ -10,10 +10,16 @@ export interface AuthUser {
 export function useAuth() {
   // Shared, SSR-safe reactive auth state.
   const user = useState<AuthUser | null>('auth-user', () => null)
+  // True when an admin is impersonating the current user.
+  const impersonating = useState<boolean>('auth-impersonating', () => false)
 
   async function fetchMe() {
-    const { user: u } = await $fetch<{ user: AuthUser | null }>('/api/auth/me')
+    const { user: u, impersonating: imp } = await $fetch<{
+      user: AuthUser | null
+      impersonating?: boolean
+    }>('/api/auth/me')
     user.value = u
+    impersonating.value = Boolean(imp)
     return u
   }
 
@@ -41,7 +47,29 @@ export function useAuth() {
   async function logout() {
     await $fetch('/api/auth/logout', { method: 'POST' })
     user.value = null
+    impersonating.value = false
   }
 
-  return { user, fetchMe, requestCode, verifyCode, logout }
+  // Admin-only: become the given user while keeping the admin session stashed.
+  async function impersonate(userId: string) {
+    await $fetch('/api/admin/impersonate', { method: 'POST', body: { userId } })
+    await fetchMe()
+  }
+
+  // Restore the stashed admin session after impersonating.
+  async function stopImpersonate() {
+    await $fetch('/api/auth/stop-impersonate', { method: 'POST' })
+    await fetchMe()
+  }
+
+  return {
+    user,
+    impersonating,
+    fetchMe,
+    requestCode,
+    verifyCode,
+    logout,
+    impersonate,
+    stopImpersonate,
+  }
 }

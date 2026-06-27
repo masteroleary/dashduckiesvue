@@ -1,6 +1,6 @@
 <script setup lang="ts">
 definePageMeta({ layout: 'app' })
-const { user } = useAuth()
+const { user, impersonate } = useAuth()
 
 interface Member {
   id: string
@@ -36,6 +36,17 @@ async function del() {
 
 function fmtDate(d: string | null) {
   return d ? new Date(d).toLocaleDateString() : '—'
+}
+
+const switchingTo = ref<string | null>(null)
+async function loginAs(m: Member) {
+  switchingTo.value = m.id
+  try {
+    await impersonate(m.id)
+    await navigateTo('/app')
+  } finally {
+    switchingTo.value = null
+  }
 }
 </script>
 
@@ -82,7 +93,17 @@ function fmtDate(d: string | null) {
             </td>
             <td class="text-center">{{ m.duckCount }}</td>
             <td>{{ fmtDate(m.lastLogin) }}</td>
-            <td>
+            <td class="text-no-wrap">
+              <v-btn
+                icon="mdi-login-variant"
+                size="small"
+                variant="text"
+                color="primary"
+                :disabled="m.id === user?.id"
+                :loading="switchingTo === m.id"
+                :title="`Sign in as ${m.userName}`"
+                @click="loginAs(m)"
+              />
               <v-btn
                 icon="mdi-delete"
                 size="small"
