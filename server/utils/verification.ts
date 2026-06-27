@@ -20,9 +20,21 @@ export function isEmail(identifier: string): boolean {
   return identifier.includes('@')
 }
 
+// Normalize a phone number to E.164 (defaults to US +1). Both Twilio and the
+// dev-bypass list require E.164, so users can type "3216151531",
+// "(321) 615-1531", "1-321-615-1531", etc. and still match.
+export function normalizePhone(input: string): string {
+  const hasPlus = input.trim().startsWith('+')
+  const digits = input.replace(/\D/g, '')
+  if (hasPlus) return `+${digits}`
+  if (digits.length === 10) return `+1${digits}` // US/Canada 10-digit
+  if (digits.length === 11 && digits.startsWith('1')) return `+${digits}`
+  return digits ? `+${digits}` : input.trim()
+}
+
 export function normalizeIdentifier(identifier: string): string {
   const t = identifier.trim()
-  return isEmail(t) ? t.toLowerCase() : t
+  return isEmail(t) ? t.toLowerCase() : normalizePhone(t)
 }
 
 // Dev bypass is driven purely by the DEVELOPER_* lists, which are intentionally

@@ -215,7 +215,7 @@ const feed = computed(() => {
 }
 .dd-badge-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: 22px;
 }
 .dd-badge-cell {
@@ -224,6 +224,13 @@ const feed = computed(() => {
   align-items: center;
   gap: 10px;
   text-decoration: none;
+}
+/* Force the duck badge to a 2:1 frame (height = half the width). */
+.dd-badge-cell :deep(.dd-octbadge) {
+  width: 100% !important;
+  height: auto !important;
+  aspect-ratio: 2 / 1 !important;
+  min-height: 0;
 }
 .dd-badge-name {
   font-family: var(--font-display);
@@ -279,10 +286,10 @@ const feed = computed(() => {
 
 @media (max-width: 900px) {
   .dd-dash-split { grid-template-columns: 1fr; }
-  .dd-badge-grid { grid-template-columns: repeat(3, 1fr); }
+  .dd-badge-grid { grid-template-columns: repeat(2, 1fr); }
 }
 @media (max-width: 600px) {
   .dd-dash-stats { grid-template-columns: 1fr; }
-  .dd-badge-grid { grid-template-columns: repeat(2, 1fr); }
+  .dd-badge-grid { grid-template-columns: 1fr; }
 }
 </style>
