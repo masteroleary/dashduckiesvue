@@ -7,25 +7,76 @@ interface MyDuck {
   description: string | null
   imageUrl: string | null
   qtCode: number
-  sightings: Array<{ sightingDate: string; address: string | null }>
+  sightings: Array<{
+    sightingDate: string
+    address: string | null
+    latitude: number | null
+    longitude: number | null
+  }>
 }
 
 const { data: ducks, pending, refresh } = useFetch<MyDuck[]>('/api/my-ducks')
 
 // Edit dialog
 const editing = ref<MyDuck | null>(null)
-const form = reactive({ name: '', description: '', address: '' })
+const form = reactive({
+  name: '',
+  description: '',
+  address: '',
+  lat: null as number | null,
+  lng: null as number | null,
+})
 const editFile = ref<File | null>(null)
 const saving = ref(false)
 const errorMsg = ref('')
+const locating = ref(false)
 
 function openEdit(d: MyDuck) {
-  editing.value = d
+  const s = d.sightings?.[0]
+  const hasLoc = !!s && s.latitude != null && s.longitude != null && (s.latitude !== 0 || s.longitude !== 0)
   form.name = d.name || ''
   form.description = d.description || ''
-  form.address = d.sightings?.[0]?.address || ''
+  form.address = s?.address || ''
+  form.lat = hasLoc ? (s!.latitude as number) : null
+  form.lng = hasLoc ? (s!.longitude as number) : null
   editFile.value = null
   errorMsg.value = ''
+  pendingPick.value = null
+  editing.value = d
+}
+
+// Map drag -> capture the pin (map center) coords + reverse-geocode the address.
+async function onMapChange(coords: { lat: number; lng: number }) {
+  pendingPick.value = null
+  form.lat = coords.lat
+  form.lng = coords.lng
+  locating.value = true
+  try {
+    const res = await $fetch<{ address: string }>('/api/geocode/reverse', {
+      query: { lat: coords.lat, lng: coords.lng },
+    })
+    if (res.address) form.address = res.address
+  } catch {
+    /* keep whatever address we had */
+  } finally {
+    locating.value = false
+  }
+}
+
+const mapPicker = ref<{ recenter: (lat: number, lng: number, zoom?: number) => void } | null>(null)
+// Picking a suggestion stashes its coords; the map only moves when the user
+// hits "Update Map to Address".
+const pendingPick = ref<{ lat: number; lng: number } | null>(null)
+function onAddressPick(p: { address: string; lat: number; lng: number }) {
+  form.address = p.address
+  pendingPick.value = { lat: p.lat, lng: p.lng }
+}
+function applyPickToMap() {
+  if (!pendingPick.value) return
+  form.lat = pendingPick.value.lat
+  form.lng = pendingPick.value.lng
+  mapPicker.value?.recenter(pendingPick.value.lat, pendingPick.value.lng)
+  pendingPick.value = null
 }
 
 async function save() {
@@ -37,6 +88,10 @@ async function save() {
     fd.append('name', form.name)
     fd.append('description', form.description)
     fd.append('address', form.address)
+    if (form.lat != null && form.lng != null) {
+      fd.append('lat', String(form.lat))
+      fd.append('lng', String(form.lng))
+    }
     if (editFile.value) fd.append('image', editFile.value)
     await $fetch(`/api/my-ducks/${editing.value.id}`, { method: 'PUT', body: fd })
     editing.value = null
@@ -109,7 +164,38 @@ function fmtDate(d: string) {
           </v-alert>
           <v-text-field v-model="form.name" label="Name" variant="outlined" />
           <v-textarea v-model="form.description" label="Description" variant="outlined" rows="2" />
-          <v-text-field v-model="form.address" label="Current location" variant="outlined" />
+          <AddressAutocomplete
+            v-model="form.address"
+            label="Location"
+            :lat="form.lat"
+            :lng="form.lng"
+            :loading="locating"
+            @pick="onAddressPick"
+          />
+          <div class="d-flex align-center flex-wrap mt-2 mb-2" style="gap: 10px">
+            <v-btn
+              v-if="pendingPick"
+              size="small"
+              color="primary"
+              variant="flat"
+              prepend-icon="mdi-map-marker-check"
+              @click="applyPickToMap"
+            >
+              Update Map to Address
+            </v-btn>
+            <span class="text-caption text-medium-emphasis">
+              Drag the map to drop the pin — its lat/lng are what get saved.
+            </span>
+          </div>
+          <MapPicker
+            ref="mapPicker"
+            :key="editing?.id"
+            :lat="form.lat"
+            :lng="form.lng"
+            height="240px"
+            class="mb-4"
+            @change="onMapChange"
+          />
           <v-file-input
             v-model="editFile"
             label="Replace photo (optional)"

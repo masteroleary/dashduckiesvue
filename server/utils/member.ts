@@ -29,15 +29,25 @@ export async function getMyDucks(userId: string) {
       duckId: duckSightings.duckId,
       sightingDate: duckSightings.sightingDate,
       address: duckSightings.address,
+      latitude: duckSightings.latitude,
+      longitude: duckSightings.longitude,
     })
     .from(duckSightings)
     .where(inArray(duckSightings.duckId, ids))
     .orderBy(desc(duckSightings.sightingDate))
 
-  const byDuck = new Map<string, Array<{ sightingDate: Date; address: string | null }>>()
+  const byDuck = new Map<
+    string,
+    Array<{ sightingDate: Date; address: string | null; latitude: number | null; longitude: number | null }>
+  >()
   for (const s of sightingRows) {
     if (!byDuck.has(s.duckId)) byDuck.set(s.duckId, [])
-    byDuck.get(s.duckId)!.push({ sightingDate: s.sightingDate, address: s.address })
+    byDuck.get(s.duckId)!.push({
+      sightingDate: s.sightingDate,
+      address: s.address,
+      latitude: s.latitude,
+      longitude: s.longitude,
+    })
   }
 
   return duckRows.map((d) => ({

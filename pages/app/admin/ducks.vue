@@ -106,12 +106,44 @@ async function openSightings(d: AdminDuck) {
 const editingSighting = ref<AdminSighting | null>(null)
 const sForm = reactive({ address: '', latitude: 0, longitude: 0, sightingDate: '' })
 const savingSighting = ref(false)
+const locatingSighting = ref(false)
 function openSightingEdit(s: AdminSighting) {
-  editingSighting.value = s
   sForm.address = s.address || ''
   sForm.latitude = s.latitude || 0
   sForm.longitude = s.longitude || 0
   sForm.sightingDate = s.sightingDate ? new Date(s.sightingDate).toISOString().slice(0, 10) : ''
+  sPendingPick.value = null
+  editingSighting.value = s
+}
+// Map drag -> set the sighting's lat/lng (and reverse-geocode the address).
+async function onSightingMapChange(coords: { lat: number; lng: number }) {
+  sPendingPick.value = null
+  sForm.latitude = coords.lat
+  sForm.longitude = coords.lng
+  locatingSighting.value = true
+  try {
+    const res = await $fetch<{ address: string }>('/api/geocode/reverse', {
+      query: { lat: coords.lat, lng: coords.lng },
+    })
+    if (res.address) sForm.address = res.address
+  } catch {
+    /* keep existing address */
+  } finally {
+    locatingSighting.value = false
+  }
+}
+const sMapPicker = ref<{ recenter: (lat: number, lng: number, zoom?: number) => void } | null>(null)
+const sPendingPick = ref<{ lat: number; lng: number } | null>(null)
+function onSightingAddressPick(p: { address: string; lat: number; lng: number }) {
+  sForm.address = p.address
+  sPendingPick.value = { lat: p.lat, lng: p.lng }
+}
+function applySightingPickToMap() {
+  if (!sPendingPick.value) return
+  sForm.latitude = sPendingPick.value.lat
+  sForm.longitude = sPendingPick.value.lng
+  sMapPicker.value?.recenter(sPendingPick.value.lat, sPendingPick.value.lng)
+  sPendingPick.value = null
 }
 async function saveSighting() {
   if (!editingSighting.value) return
@@ -258,7 +290,38 @@ function fmtDate(d: string) {
       <v-card>
         <v-card-title>Edit sighting</v-card-title>
         <v-card-text>
-          <v-text-field v-model="sForm.address" label="Address" variant="outlined" />
+          <AddressAutocomplete
+            v-model="sForm.address"
+            label="Address"
+            :lat="sForm.latitude || null"
+            :lng="sForm.longitude || null"
+            :loading="locatingSighting"
+            @pick="onSightingAddressPick"
+          />
+          <div class="d-flex align-center flex-wrap mt-2 mb-2" style="gap: 10px">
+            <v-btn
+              v-if="sPendingPick"
+              size="small"
+              color="primary"
+              variant="flat"
+              prepend-icon="mdi-map-marker-check"
+              @click="applySightingPickToMap"
+            >
+              Update Map to Address
+            </v-btn>
+            <span class="text-caption text-medium-emphasis">
+              Drag the map, or edit lat/lng directly.
+            </span>
+          </div>
+          <MapPicker
+            ref="sMapPicker"
+            :key="editingSighting?.id"
+            :lat="sForm.latitude || null"
+            :lng="sForm.longitude || null"
+            height="220px"
+            class="mb-4"
+            @change="onSightingMapChange"
+          />
           <v-row>
             <v-col cols="6"><v-text-field v-model.number="sForm.latitude" label="Latitude" type="number" variant="outlined" /></v-col>
             <v-col cols="6"><v-text-field v-model.number="sForm.longitude" label="Longitude" type="number" variant="outlined" /></v-col>
