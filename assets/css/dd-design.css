@@ -126,6 +126,11 @@
 }
 .dd-nav-cta:hover { filter: brightness(1.08); }
 
+.dd-nav-cta-green {
+  background: #2ea44f !important;
+  color: #ffffff !important;
+}
+
 /* ============================================
    BUTTONS — notched, with diagonal sheen on hover
    ============================================ */

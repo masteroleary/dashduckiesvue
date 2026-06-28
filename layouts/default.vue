@@ -14,6 +14,7 @@ const year = new Date().getFullYear()
         <li><NuxtLink to="/quackertracker">Quacker Tracker</NuxtLink></li>
         <li><NuxtLink to="/contact">Contact</NuxtLink></li>
         <li><NuxtLink to="/login" class="dd-nav-cta">Login</NuxtLink></li>
+        <li><NuxtLink to="/login" class="dd-nav-cta dd-nav-cta-green">Join Now</NuxtLink></li>
       </ul>
     </nav>
 
