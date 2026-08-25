@@ -149,6 +149,7 @@ async function toggleLike() {
         <h2>Invalid QT Code</h2>
         <p>We couldn't find a duck for <strong>{{ identifier }}</strong>. Double-check the code on the sticker.</p>
         <NuxtLink to="/quackertracker" class="dd-btn-primary">Try another code</NuxtLink>
+        <ReportDuck :identifier="identifier" prompt="Report a problem" />
       </div>
     </div>
 
@@ -159,6 +160,8 @@ async function toggleLike() {
         <h2>Register This Duck</h2>
         <p>This duck hasn't been registered yet. Be the first to give it a name and start its journey!</p>
         <NuxtLink :to="`/duck/register/${data.duck.id}`" class="dd-btn-primary">Upload Photo</NuxtLink>
+
+        <ReportDuck :duck-id="data.duck.id" />
       </div>
     </div>
 
@@ -363,6 +366,7 @@ async function toggleLike() {
 }
 .qt-card-dark h2 { font-family: var(--font-display); font-weight: 600; letter-spacing: -0.01em; }
 .qt-card-dark p { color: var(--dd-text-2); }
+
 
 /* ---- profile: one continuous white sheet on the black page ---- */
 .qtp { max-width: 780px; margin: 0 auto; }

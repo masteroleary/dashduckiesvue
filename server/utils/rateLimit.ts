@@ -64,3 +64,10 @@ export function enforceGeocodeLimit(event: H3Event) {
   const key = user ? `geo:user:${user.id}` : `geo:ip:${clientIp(event)}`
   if (!allow(key, limit, WINDOW_MS)) throw tooMany()
 }
+
+// Reporting an unregistered duck: 3/duck and 10/IP per 10min. Enough for a
+// genuine finder, low enough that nobody can flood the admin inbox.
+export function enforceReportLimit(event: H3Event, duckId: string) {
+  if (!allow(`report:duck:${duckId}`, 3, WINDOW_MS)) throw tooMany()
+  if (!allow(`report:ip:${clientIp(event)}`, 10, WINDOW_MS)) throw tooMany()
+}

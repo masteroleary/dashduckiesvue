@@ -162,22 +162,32 @@ onBeforeUnmount(() => {
       <h2>Three steps to a globe-trotting duck</h2>
       <div class="dd-hp-steps">
         <article class="dd-hp-step">
-          <span class="dd-hp-num">1</span>
-          <div class="dd-hp-step-ico">📦</div>
-          <h3>Get your ducks</h3>
-          <p>Two fresh characters arrive at your door every month — each ready to roam.</p>
+          <img
+            src="/images/step1.jpg"
+            alt="The underside of a gold DashDuckies rubber duck, showing its round Quacker Tracker QR code sticker"
+            class="dd-hp-step-photo"
+          />
+          <h3>Scan the QR code</h3>
+          <p>Point your phone's camera at the code on any QT duck. (Get QT ducks through a subscription,
+            or purchase QT stickers for your own ducks.)</p>
         </article>
         <article class="dd-hp-step">
-          <span class="dd-hp-num">2</span>
-          <div class="dd-hp-step-ico">🦆</div>
-          <h3>Set them loose</h3>
-          <p>Leave one for a stranger to find, or gift it to a friend. The adventure starts on the first scan.</p>
+          <img
+            src="/images/step2.jpg"
+            alt="A man outdoors beside a jeep taking a selfie while holding up a small yellow DashDuckies duck"
+            class="dd-hp-step-photo"
+          />
+          <h3>Post a sighting</h3>
+          <p>Add a photo and where you spotted it, then send the duck on its way to the next finder.</p>
         </article>
         <article class="dd-hp-step">
-          <span class="dd-hp-num">3</span>
-          <div class="dd-hp-step-ico">📍</div>
-          <h3>Watch them travel</h3>
-          <p>Every scan drops a new pin on your live map. Follow your duck city to city.</p>
+          <img
+            src="/images/step3.jpg"
+            alt="A map of North America dotted with yellow duck pins marking cities where ducks have been scanned"
+            class="dd-hp-step-photo"
+          />
+          <h3>Watch your ducks travel</h3>
+          <p>Every sighting drops a fresh pin on the live map — follow your ducks from city to city.</p>
         </article>
       </div>
     </section>
