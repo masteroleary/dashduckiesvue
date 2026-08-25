@@ -13,7 +13,7 @@
     background: var(--dd-pitch);
     border: var(--dd-hairline);
     border-radius: 1.5rem;
-    box-shadow: 0 14px 40px rgba(0, 0, 0, 0.45);
+    box-shadow: 0 14px 34px rgba(60, 45, 15, 0.10);
     padding: 3rem;
     max-width: 800px;
     width: 100%;
@@ -28,7 +28,7 @@
     height: 280px;
     border-radius: 1rem;
     object-fit: cover;
-    box-shadow: 0 2px 16px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 2px 16px rgba(60, 45, 15, 0.12);
 }
 
 .stickers-placeholder {

@@ -54,3 +54,13 @@ export function enforceVerifyLimit(event: H3Event, identifier: string) {
   if (!allow(`verify:id:${identifier}`, 8, WINDOW_MS)) throw tooMany()
   if (!allow(`verify:ip:${clientIp(event)}`, 30, WINDOW_MS)) throw tooMany()
 }
+
+// Geocode autosuggest is proxied to HERE (paid), so cap it. Public so anonymous
+// duck-finders get address suggestions on the register page: 60/10min per
+// authenticated user, 40/10min per anonymous IP.
+export function enforceGeocodeLimit(event: H3Event) {
+  const user = event.context.user as { id: string } | undefined
+  const limit = user ? 60 : 40
+  const key = user ? `geo:user:${user.id}` : `geo:ip:${clientIp(event)}`
+  if (!allow(key, limit, WINDOW_MS)) throw tooMany()
+}

@@ -1,4 +1,4 @@
-import { requireUser } from '../../utils/session'
+import { enforceGeocodeLimit } from '../../utils/rateLimit'
 
 interface HereItem {
   address?: {
@@ -30,7 +30,7 @@ function cityStateFromLabel(label: string): string | null {
 // Address typeahead via HERE Autosuggest. For each result we return up to two
 // options: the full street address and a "City, ST" shortcut (deduped).
 export default defineEventHandler(async (event) => {
-  requireUser(event)
+  enforceGeocodeLimit(event)
   const q = getQuery(event)
   const query = String(q.q || '').trim()
   if (query.length < 3) return { suggestions: [] }

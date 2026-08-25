@@ -26,8 +26,6 @@ export default defineNuxtConfig({
   routeRules: {
     // /app/** renders client-side only (non-SSR SPA), per project requirements.
     '/app/**': { ssr: false },
-    // Old site linked sign-in as /login; keep that URL working.
-    '/login': { redirect: '/app' },
     // Cache static brand/demo images (not content-hashed, so a 30-day max-age).
     '/images/**': { headers: { 'cache-control': 'public, max-age=2592000' } },
     '/sampleducks/**': { headers: { 'cache-control': 'public, max-age=2592000' } },
@@ -58,7 +56,7 @@ export default defineNuxtConfig({
         { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' },
         {
           rel: 'stylesheet',
-          href: 'https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Hanken+Grotesk:wght@400;500;600;700;800&display=swap',
+          href: 'https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700&family=Fredoka:wght@400;500;600;700&family=Hanken+Grotesk:wght@400;500;600;700;800&display=swap',
         },
       ],
     },

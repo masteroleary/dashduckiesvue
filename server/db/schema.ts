@@ -192,3 +192,43 @@ export const duckLikesRelations = relations(duckLikes, ({ one }) => ({
 export const authTokensRelations = relations(authTokens, ({ one }) => ({
   user: one(users, { fields: [authTokens.userId], references: [users.id] }),
 }))
+
+// --- forum (Jeep Talk community) -------------------------------------------
+export const forumThreads = pgTable(
+  'forum_threads',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    title: text('title').notNull(), // headline shown before opening
+    body: text('body'),
+    authorName: text('author_name').notNull(),
+    userId: uuid('user_id').references(() => users.id), // null = anonymous poster
+    imageUrl: text('image_url'),
+    likes: integer('likes').notNull().default(0),
+    createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+    deletedAt: timestamp('deleted_at', { withTimezone: true }),
+  },
+  (t) => [index('forum_threads_created_at_idx').on(t.createdAt)],
+)
+
+export const forumComments = pgTable(
+  'forum_comments',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    threadId: uuid('thread_id')
+      .notNull()
+      .references(() => forumThreads.id, { onDelete: 'cascade' }),
+    authorName: text('author_name').notNull(),
+    userId: uuid('user_id').references(() => users.id),
+    text: text('text').notNull(),
+    createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+    deletedAt: timestamp('deleted_at', { withTimezone: true }),
+  },
+  (t) => [index('forum_comments_thread_id_idx').on(t.threadId)],
+)
+
+export const forumThreadsRelations = relations(forumThreads, ({ many }) => ({
+  comments: many(forumComments),
+}))
+export const forumCommentsRelations = relations(forumComments, ({ one }) => ({
+  thread: one(forumThreads, { fields: [forumComments.threadId], references: [forumThreads.id] }),
+}))

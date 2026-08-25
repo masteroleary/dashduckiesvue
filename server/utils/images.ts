@@ -2,7 +2,7 @@ import { Jimp } from 'jimp'
 import exifr from 'exifr'
 import { BlobServiceClient } from '@azure/storage-blob'
 
-export type ContainerType = 'profile-images' | 'duck-images' | 'sighting-images'
+export type ContainerType = 'profile-images' | 'duck-images' | 'sighting-images' | 'forum-images'
 
 const MAX_DIM = 1920
 const JPEG_QUALITY = 85

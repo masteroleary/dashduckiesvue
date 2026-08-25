@@ -31,6 +31,9 @@ onMounted(async () => {
     /* not signed in */
   } finally {
     ready.value = true
+    // Sign-in now lives on the public, light-themed /login page (with the top
+    // nav). Send logged-out visitors there instead of an in-app login card.
+    if (!user.value) navigateTo('/login')
   }
 })
 
@@ -42,7 +45,7 @@ async function onLogout() {
     return
   }
   await logout()
-  await navigateTo('/app')
+  await navigateTo('/login')
 }
 
 async function onReturnToAdmin() {
@@ -58,17 +61,11 @@ async function onReturnToAdmin() {
 
 <template>
   <v-app>
-    <template v-if="!ready">
+    <template v-if="!ready || !user">
       <v-main>
         <div class="d-flex justify-center align-center" style="height: 60vh">
           <v-progress-circular indeterminate color="primary" size="48" />
         </div>
-      </v-main>
-    </template>
-
-    <template v-else-if="!user">
-      <v-main>
-        <LoginCard />
       </v-main>
     </template>
 

@@ -11,6 +11,10 @@ const done = ref(false)
 const discountCode = ref('')
 const error = ref('')
 
+// Surface the entered email so the parent can pre-fill the sign-in / sign-up area.
+const emit = defineEmits<{ (e: 'email', v: string): void }>()
+watch(email, (v) => emit('email', v))
+
 async function follow() {
   error.value = ''
   if (!email.value.trim()) {

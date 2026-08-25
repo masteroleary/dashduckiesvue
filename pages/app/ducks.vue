@@ -17,6 +17,10 @@ interface MyDuck {
 
 const { data: ducks, pending, refresh } = useFetch<MyDuck[]>('/api/my-ducks')
 
+// Show a congrats banner right after a duck is registered (?registered=<name>).
+const route = useRoute()
+const justRegistered = ref<string | null>(route.query.registered ? String(route.query.registered) : null)
+
 // Edit dialog
 const editing = ref<MyDuck | null>(null)
 const form = reactive({
@@ -124,6 +128,27 @@ function fmtDate(d: string) {
 
 <template>
   <v-container class="py-8">
+    <v-alert
+      v-if="justRegistered"
+      variant="tonal"
+      color="success"
+      border="start"
+      class="mb-6"
+    >
+      <div class="d-flex flex-wrap align-center justify-space-between ga-4">
+        <div>
+          <div class="text-h6 font-weight-bold">🎉 Congratulations — your duck is registered!</div>
+          <div class="text-body-2 mt-1">
+            {{ justRegistered !== '1' ? justRegistered + ' is on the map and ready to roam.' : 'Your new duck is on the map and ready to roam.' }}
+          </div>
+        </div>
+        <div class="d-flex align-center ga-2">
+          <v-btn color="primary" to="/quackertracker" class="text-none">Track all your ducks now →</v-btn>
+          <v-btn variant="text" size="small" class="text-none" @click="justRegistered = null">Dismiss</v-btn>
+        </div>
+      </div>
+    </v-alert>
+
     <h1 class="text-h4 font-weight-bold mb-6">My Ducks</h1>
 
     <div v-if="pending" class="text-center py-12">
