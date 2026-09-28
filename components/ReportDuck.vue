@@ -5,6 +5,7 @@ const props = defineProps<{
   duckId?: string | null
   identifier?: string | null
   prompt?: string
+  notePlaceholder?: string
 }>()
 
 const open = ref(false)
@@ -48,7 +49,7 @@ async function send() {
           v-model="note"
           rows="3"
           maxlength="1000"
-          placeholder="e.g. someone is selling this duck, or the sticker looks copied"
+          :placeholder="notePlaceholder || 'e.g. someone is selling this duck, or the sticker looks copied'"
         ></textarea>
         <label class="rd-label" for="rd-contact">Your email or phone (optional)</label>
         <input id="rd-contact" v-model="contact" maxlength="200" placeholder="If you're happy for us to follow up" />

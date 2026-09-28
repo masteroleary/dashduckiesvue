@@ -149,7 +149,11 @@ async function toggleLike() {
         <h2>Invalid QT Code</h2>
         <p>We couldn't find a duck for <strong>{{ identifier }}</strong>. Double-check the code on the sticker.</p>
         <NuxtLink to="/quackertracker" class="dd-btn-primary">Try another code</NuxtLink>
-        <ReportDuck :identifier="identifier" prompt="Report a problem" />
+        <ReportDuck
+          :identifier="identifier"
+          prompt="Report a problem"
+          note-placeholder="e.g. the code on the sticker won't scan, or it's worn out and hard to read"
+        />
       </div>
     </div>
 

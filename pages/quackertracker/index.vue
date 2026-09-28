@@ -16,6 +16,58 @@ interface FeedTile {
 }
 const { data: feed } = await useFetch<FeedTile[]>('/api/feed')
 
+// Signed-in members get their own ducks pinned above the map. This page is
+// public and served to everyone, so auth resolves on the client after mount.
+const { user, fetchMe } = useAuth()
+interface MyDuck {
+  id: string
+  name: string | null
+  description: string | null
+  imageUrl: string | null
+  qtCode: number
+  sightings: Array<{ address: string | null; sightingDate: string }>
+}
+const myDucks = ref<MyDuck[]>([])
+
+async function loadMyDucks() {
+  if (!user.value) {
+    myDucks.value = []
+    return
+  }
+  try {
+    myDucks.value = await $fetch<MyDuck[]>('/api/my-ducks')
+  } catch {
+    myDucks.value = []
+  }
+}
+
+// Reshaped to the same card the public profiles use, so both grids render alike.
+const myDuckCards = computed<DuckCard[]>(() =>
+  myDucks.value.map((d, i) => {
+    const times = d.sightings
+      .map((sg) => new Date(sg.sightingDate).getTime())
+      .filter((t) => !Number.isNaN(t))
+    return {
+      duckId: d.id,
+      name: d.name || `Duck ${d.qtCode}`,
+      story: d.description,
+      location: d.sightings.find((sg) => sg.address)?.address ?? null,
+      image: d.imageUrl,
+      order: i,
+      ts: times.length ? Math.max(...times) : null,
+    }
+  }),
+)
+
+// "My Ducks" filters the profile grid down to the signed-in member's own ducks.
+// Signed-out visitors still see the button — it's how they discover the feature —
+// and get sent to sign in.
+const showMine = ref(false)
+function toggleMine() {
+  if (!user.value) return navigateTo('/login')
+  showMine.value = !showMine.value
+}
+
 // Which duck is hovered in a card — enlarges its marker on the map.
 const hoveredDuckId = ref<string | null>(null)
 // The map shows as a small square preview; "View map" opens the full one.
@@ -64,10 +116,12 @@ const ducks = computed<DuckCard[]>(() => {
 // Search the flock by name OR location. Pre-fill from the top-nav search (?q=).
 const route = useRoute()
 const search = ref(String(route.query.q || ''))
+// Search/sort/paging all run off this, so the My Ducks toggle just swaps the source.
+const sourceDucks = computed<DuckCard[]>(() => (showMine.value ? myDuckCards.value : ducks.value))
 const filteredDucks = computed(() => {
   const q = search.value.trim().toLowerCase()
-  if (!q) return ducks.value
-  return ducks.value.filter(
+  if (!q) return sourceDucks.value
+  return sourceDucks.value.filter(
     (d) => d.name.toLowerCase().includes(q) || (d.location || '').toLowerCase().includes(q),
   )
 })
@@ -97,7 +151,7 @@ const sortedDucks = computed(() => {
 // Show 6 example ducks at first; "View more" reveals 10 at a time.
 const START = 6
 const shown = ref(START)
-watch([search, sortKey], () => { shown.value = START })
+watch([search, sortKey, showMine], () => { shown.value = START })
 const visibleDucks = computed(() => sortedDucks.value.slice(0, shown.value))
 const canShowMore = computed(() => sortedDucks.value.length > shown.value)
 const moreLabel = computed(() => (shown.value <= START ? 'View more ducks' : 'View next 10'))
@@ -122,12 +176,15 @@ function paletteFor(duckId: string) {
   for (let i = 0; i < duckId.length; i++) h = (h * 31 + duckId.charCodeAt(i)) >>> 0
   return DUCK_PALETTE[h % DUCK_PALETTE.length]
 }
-function coverStyle(d: DuckCard) {
+function coverStyle(d: { duckId: string }) {
   return { background: paletteFor(d.duckId).cover }
 }
 
 // Arriving from the top-nav search? Jump down to this section.
 onMounted(async () => {
+  fetchMe()
+    .catch(() => {})
+    .finally(() => loadMyDucks())
   if (search.value) {
     await nextTick()
     document.getElementById('dd-find')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
@@ -185,12 +242,12 @@ onMounted(async () => {
       </div>
     </div>
 
-    <div v-if="ducks.length" class="dd-gold-divider" aria-hidden="true"></div>
+    <div v-if="ducks.length || myDuckCards.length" class="dd-gold-divider" aria-hidden="true"></div>
 
     <!-- FIND A QT: search + example ducks + reveal-10-at-a-time -->
-    <div v-if="ducks.length" id="dd-find" class="dd-find">
+    <div v-if="ducks.length || myDuckCards.length" id="dd-find" class="dd-find">
       <div class="dd-find-head">
-        <h3 class="dd-feed-title">QT Profiles</h3>
+        <h3 class="dd-feed-title">{{ showMine ? 'My Ducks' : 'QT Profiles' }}</h3>
       </div>
 
       <div class="dd-find-controls">
@@ -219,9 +276,21 @@ onMounted(async () => {
             </svg>
           </div>
         </div>
+        <button
+          type="button"
+          class="dd-mine-btn"
+          :class="{ 'is-on': showMine }"
+          :aria-pressed="showMine"
+          @click="toggleMine"
+        >
+          My Ducks Only
+        </button>
       </div>
 
-      <p v-if="search && !filteredDucks.length" class="dd-feed-empty">
+      <p v-if="showMine && !myDuckCards.length" class="dd-feed-empty">
+        You haven't registered any ducks yet. Enter your duck's number above to start its journey.
+      </p>
+      <p v-else-if="search && !filteredDucks.length" class="dd-feed-empty">
         No ducks match “{{ search }}”. Try a different name or place.
       </p>
 
@@ -692,6 +761,34 @@ onMounted(async () => {
   border-radius: 50%;
 }
 .dd-find-clear:hover { color: var(--dd-cream); background: rgba(255, 255, 255, 0.06); }
+
+/* "My Ducks Only" filter — the one solid, coloured control in a row of neutral
+   greys, so it reads as an action rather than another form field. Inverts to a
+   pressed treatment when it's on. */
+.dd-mine-btn {
+  align-self: flex-end;
+  padding: 14px 22px;
+  border-radius: 12px;
+  border: 1px solid var(--dd-bronze);
+  background: var(--dd-bronze);
+  color: #16140F;
+  font: inherit;
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  cursor: pointer;
+  white-space: nowrap;
+  box-shadow: 0 6px 18px rgba(212, 175, 55, 0.32);
+  transition: background 0.18s, color 0.18s, box-shadow 0.18s, border-color 0.18s;
+}
+.dd-mine-btn:hover { background: #C9A544; box-shadow: 0 8px 22px rgba(212, 175, 55, 0.42); }
+.dd-mine-btn:focus-visible { outline: 2px solid var(--dd-cream); outline-offset: 2px; }
+.dd-mine-btn.is-on {
+  background: #6E5119;
+  border-color: #E3C069;
+  color: #F5EFDF;
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.4);
+}
 
 .dd-find-sort { display: flex; flex-direction: column; gap: 6px; }
 .dd-find-sort-label {

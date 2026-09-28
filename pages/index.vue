@@ -36,7 +36,7 @@ onBeforeUnmount(() => {
     <header class="dd-hp-hero">
       <div class="dd-hp-hero-copy">
         <span class="dd-hp-pill">🦆 Monthly duck club</span>
-        <h1>Send a QT on a <span class="hl">big adventure</span></h1>
+        <h1>Send a duckie on a <span class="hl">big adventure</span></h1>
         <p class="dd-hp-sub">
           Two brand-new DashDuckies land on your doorstep every month — each with a secret QR code.
           Set them loose and watch them travel the world, one sighting at a time.
@@ -150,7 +150,7 @@ onBeforeUnmount(() => {
           </div>
         </div>
         <p class="dd-promo-eyebrow">QR Stickers</p>
-        <h3 class="dd-promo-title">Give your QT a name and story</h3>
+        <h3 class="dd-promo-title">Give your duckie a name and story</h3>
         <p class="dd-promo-text">Peel-and-stick QR codes made just for your ducks — scan to tell your duck's story, snap photos along the way, and watch them travel the world and tell their new stories.</p>
         <NuxtLink to="/stickers" class="dd-hp-btn dd-hp-btn-primary">Purchase now →</NuxtLink>
       </div>
@@ -168,8 +168,8 @@ onBeforeUnmount(() => {
             class="dd-hp-step-photo"
           />
           <h3>Scan the QR code</h3>
-          <p>Point your phone's camera at the code on any QT duck. (Get QT ducks through a subscription,
-            or purchase QT stickers for your own ducks.)</p>
+          <p>Point your phone's camera at the code on any duckie. (Get duckies through a subscription,
+            or purchase duckie stickers for your own ducks.)</p>
         </article>
         <article class="dd-hp-step">
           <img
