@@ -1,11 +1,14 @@
 import { eq } from 'drizzle-orm'
 import { useDb } from '../../db'
 import { forumThreads } from '../../db/schema'
+import { requireUser } from '../../utils/session'
 import { processAndUpload } from '../../utils/images'
 import { readMultipart, validateImage } from '../../utils/upload'
 
 // Create a new Jeep Talk thread. Anonymous allowed; photo optional.
 export default defineEventHandler(async (event) => {
+  // Members-only: posting to the community requires an account.
+  requireUser(event)
   const { fields, file } = await readMultipart(event)
   validateImage(file)
 

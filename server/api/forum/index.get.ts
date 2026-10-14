@@ -1,9 +1,12 @@
 import { and, desc, inArray, isNull } from 'drizzle-orm'
 import { useDb } from '../../db'
 import { forumComments, forumThreads } from '../../db/schema'
+import { requireUser } from '../../utils/session'
 
 // List Jeep Talk threads (newest first) with their comments.
-export default defineEventHandler(async () => {
+export default defineEventHandler(async (event) => {
+  // Members-only: the map and the community are behind sign-in.
+  requireUser(event)
   const db = useDb()
   const threads = await db
     .select()

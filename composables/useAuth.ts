@@ -12,6 +12,10 @@ export function useAuth() {
   const user = useState<AuthUser | null>('auth-user', () => null)
   // True when an admin is impersonating the current user.
   const impersonating = useState<boolean>('auth-impersonating', () => false)
+  // Whether we've actually asked the server yet. `user === null` on its own is
+  // ambiguous — it means both "signed out" and "haven't looked". The nav needs
+  // to tell those apart so it doesn't ask again on every page.
+  const resolved = useState<boolean>('auth-resolved', () => false)
 
   async function fetchMe() {
     const { user: u, impersonating: imp } = await $fetch<{
@@ -20,11 +24,12 @@ export function useAuth() {
     }>('/api/auth/me')
     user.value = u
     impersonating.value = Boolean(imp)
+    resolved.value = true
     return u
   }
 
   async function requestCode(identifier: string) {
-    return await $fetch<{ ok: boolean; dev: boolean }>('/api/auth/request-code', {
+    return await $fetch<{ ok: boolean }>('/api/auth/request-code', {
       method: 'POST',
       body: { identifier },
     })
@@ -48,6 +53,7 @@ export function useAuth() {
     await $fetch('/api/auth/logout', { method: 'POST' })
     user.value = null
     impersonating.value = false
+    resolved.value = true
   }
 
   // Admin-only: become the given user while keeping the admin session stashed.
@@ -65,6 +71,7 @@ export function useAuth() {
   return {
     user,
     impersonating,
+    resolved,
     fetchMe,
     requestCode,
     verifyCode,

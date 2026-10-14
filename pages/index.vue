@@ -12,8 +12,15 @@ useHead({
   ],
 })
 
+// The map preview is members-only, like /quackertracker itself, so the session
+// has to resolve during SSR too. Stats are plain counts and stay public.
+const user = await useResolvedUser()
+
 const { data: stats } = await useFetch('/api/stats')
-const { data: sightings } = await useFetch('/api/map/sightings')
+const { data: sightings } = await useFetch('/api/map/sightings', {
+  immediate: Boolean(user.value),
+  default: () => [],
+})
 
 // "How it works" popup
 const howOpen = ref(false)
@@ -42,7 +49,7 @@ onBeforeUnmount(() => {
           Set them loose and watch them travel the world, one sighting at a time.
         </p>
         <div class="dd-hp-cta-row">
-          <NuxtLink to="/#shop" class="dd-hp-btn dd-hp-btn-primary">Start your flock →</NuxtLink>
+          <NuxtLink to="/shop" class="dd-hp-btn dd-hp-btn-primary">Start your flock →</NuxtLink>
           <button type="button" class="dd-hp-btn dd-hp-btn-ghost" @click="howOpen = true">How it works</button>
         </div>
         <p class="dd-hp-trust">★★★★★ &nbsp;{{ stats?.ducks ?? 0 }}+ ducks in the wild · new ducks every month</p>
@@ -59,7 +66,7 @@ onBeforeUnmount(() => {
       </div>
     </header>
 
-    <!-- PROMOS: Quacker Tracker (left) + QR Stickers (right) -->
+    <!-- PROMOS: Quacker Tracker (left) + Shop (right) -->
     <section class="dd-promos">
       <NuxtLink to="/quackertracker" class="dd-promo dd-promo-tracker">
         <div class="dd-promo-map" aria-hidden="true">
@@ -107,59 +114,43 @@ onBeforeUnmount(() => {
             </g>
           </svg>
         </div>
-        <p class="dd-promo-eyebrow dd-promo-eyebrow--teal">Live map</p>
-        <h3 class="dd-promo-title">Quacker Tracker</h3>
+        <p class="dd-promo-eyebrow dd-promo-eyebrow--teal">Sightings map</p>
+        <h3 class="dd-promo-title"><span class="qt-brand">Quacker Tracker</span></h3>
         <p class="dd-promo-text">See where every duck is right now — and follow the whole flock as it roams the world, pin by pin.</p>
         <span class="dd-promo-link">Open the tracker →</span>
       </NuxtLink>
 
-      <div class="dd-promo dd-promo-stickers">
-        <div class="dd-promo-stage" aria-hidden="true">
-          <div class="dd-promo-sticker">
-            <svg viewBox="0 0 100 100" class="dd-qr-svg" aria-hidden="true">
-              <rect width="100" height="100" rx="8" fill="#fff" />
-              <g fill="#16140F">
-                <rect x="10" y="10" width="24" height="24" rx="4" />
-                <rect x="66" y="10" width="24" height="24" rx="4" />
-                <rect x="10" y="66" width="24" height="24" rx="4" />
-              </g>
-              <g fill="#fff">
-                <rect x="15" y="15" width="14" height="14" rx="2.5" />
-                <rect x="71" y="15" width="14" height="14" rx="2.5" />
-                <rect x="15" y="71" width="14" height="14" rx="2.5" />
-              </g>
-              <g fill="#16140F">
-                <rect x="19" y="19" width="6" height="6" rx="1.5" />
-                <rect x="75" y="19" width="6" height="6" rx="1.5" />
-                <rect x="19" y="75" width="6" height="6" rx="1.5" />
-                <rect x="42" y="12" width="5" height="5" /><rect x="50" y="12" width="5" height="5" />
-                <rect x="42" y="20" width="5" height="5" /><rect x="57" y="18" width="5" height="5" />
-                <rect x="12" y="42" width="5" height="5" /><rect x="20" y="42" width="5" height="5" />
-                <rect x="12" y="50" width="5" height="5" /><rect x="18" y="57" width="5" height="5" />
-                <rect x="42" y="42" width="5" height="5" /><rect x="50" y="42" width="5" height="5" />
-                <rect x="58" y="42" width="5" height="5" /><rect x="42" y="50" width="5" height="5" />
-                <rect x="50" y="58" width="5" height="5" /><rect x="66" y="50" width="5" height="5" />
-                <rect x="74" y="42" width="5" height="5" /><rect x="82" y="50" width="5" height="5" />
-                <rect x="66" y="66" width="5" height="5" /><rect x="75" y="74" width="5" height="5" />
-                <rect x="82" y="66" width="5" height="5" /><rect x="50" y="74" width="5" height="5" />
-                <rect x="42" y="82" width="5" height="5" /><rect x="66" y="82" width="5" height="5" />
-                <rect x="82" y="82" width="5" height="5" />
-              </g>
-            </svg>
-            <span class="dd-qr-scan">🦆 Scan me</span>
-          </div>
+      <NuxtLink to="/subscription" class="dd-promo dd-promo-sub">
+        <span class="dd-promo-ribbon">New ducks every month</span>
+        <div class="dd-promo-boxart" aria-hidden="true">
+          <CoolDuck :size="132" />
         </div>
-        <p class="dd-promo-eyebrow">QR Stickers</p>
-        <h3 class="dd-promo-title">Give your duckie a name and story</h3>
-        <p class="dd-promo-text">Peel-and-stick QR codes made just for your ducks — scan to tell your duck's story, snap photos along the way, and watch them travel the world and tell their new stories.</p>
-        <NuxtLink to="/stickers" class="dd-hp-btn dd-hp-btn-primary">Purchase now →</NuxtLink>
+        <p class="dd-promo-eyebrow dd-promo-eyebrow--gold">Subscription Box</p>
+        <h3 class="dd-promo-title"><span class="dd-promo-hl">Not just a duck</span></h3>
+        <p class="dd-promo-text">
+          Each one is <span class="dd-promo-pop">a little work of art</span> —
+          <strong>individually styled by hand, one at a time.</strong>
+          Accessories, colours, character. No two ever the same.
+        </p>
+        <span class="dd-promo-link">See what's in the box →</span>
+      </NuxtLink>
+
+      <div class="dd-promo dd-promo-shop dd-promo-wide">
+        <div class="shop-band">
+          <div>
+            <p class="dd-promo-eyebrow">Shop</p>
+            <h3 class="dd-promo-title">Everything for your flock</h3>
+            <p class="dd-promo-text">Subscriptions, single ducks, stickers, merch and gift cards.</p>
+          </div>
+          <NuxtLink to="/shop" class="dd-hp-btn dd-hp-btn-primary">Browse the shop →</NuxtLink>
+        </div>
       </div>
     </section>
 
     <!-- HOW IT WORKS -->
     <section id="how" class="dd-hp-how">
-      <p class="dd-hp-eyebrow">How it works</p>
-      <h2>Three steps to a globe-trotting duck</h2>
+      <p class="dd-hp-eyebrow">3 Steps</p>
+      <h2>Scan. Post. Follow.</h2>
       <div class="dd-hp-steps">
         <article class="dd-hp-step">
           <img
@@ -187,7 +178,7 @@ onBeforeUnmount(() => {
             class="dd-hp-step-photo"
           />
           <h3>Watch your ducks travel</h3>
-          <p>Every sighting drops a fresh pin on the live map — follow your ducks from city to city.</p>
+          <p>Every sighting drops a fresh pin on the map — follow your ducks from city to city.</p>
         </article>
       </div>
     </section>
@@ -221,19 +212,99 @@ onBeforeUnmount(() => {
     <!-- LIVE TRACKING -->
     <section class="dd-hp-track">
       <div class="dd-hp-track-copy">
-        <p class="dd-hp-eyebrow">Live tracking</p>
-        <h2>Follow every waddle, in real time</h2>
+        <p class="dd-hp-eyebrow">The map</p>
+        <h2>Follow every waddle, sighting by sighting</h2>
         <p>
           Whenever someone finds your duck and scans its code, a new sighting lands on the global
           map. Watch your little traveler hop from city to city.
         </p>
-        <NuxtLink to="/quackertracker" class="dd-hp-btn dd-hp-btn-ghost">Explore the live map →</NuxtLink>
+        <p class="dd-hp-note">
+          The map only moves when someone chooses to post a sighting — there's no tracking in
+          between, and no location is ever shared on its own.
+        </p>
+        <NuxtLink to="/quackertracker" class="dd-hp-btn dd-hp-btn-ghost">Explore the map →</NuxtLink>
       </div>
       <div class="dd-hp-track-map">
-        <span class="dd-hp-chip"><i></i>Live map</span>
-        <ClientOnly>
+        <span class="dd-hp-chip"><i></i>Sightings map</span>
+        <ClientOnly v-if="user">
           <LiveMap :sightings="sightings || []" height="320px" />
         </ClientOnly>
+        <div v-else class="dd-hp-maplock">
+          <span class="dd-hp-maplock-icon" aria-hidden="true">🔒</span>
+          <p class="dd-hp-maplock-title">The map is for members</p>
+          <p class="dd-hp-maplock-text">Sign in to see every duck that's been spotted, and where.</p>
+          <NuxtLink to="/quackertracker" class="dd-hp-btn dd-hp-btn-primary">Sign in to see the map →</NuxtLink>
+        </div>
+      </div>
+    </section>
+
+    <!-- SOCIAL MEDIA FOR DUCKS -->
+    <section class="dd-hp-social">
+      <div class="dd-hp-social-copy">
+        <p class="dd-hp-eyebrow">What is <span class="qt-brand">Quacker Tracker</span>?</p>
+        <h2>Social media — for ducks</h2>
+        <p class="dd-hp-social-lede">
+          The ducks have the profiles, not you.
+        </p>
+        <p>
+          Every DashDuckie gets its own page: a name, a story, and a photo. Then it goes out into the
+          world. Whoever finds it scans the code on its base, reads how far it has already come, and
+          posts the next chapter — a photo and the place they found it.
+        </p>
+        <ul class="dd-hp-social-list">
+          <li>
+            <span class="dd-hp-social-icon" aria-hidden="true">🪪</span>
+            <span><b>A profile for every duck</b> — its name, its story, and everywhere it has been.</span>
+          </li>
+          <li>
+            <span class="dd-hp-social-icon" aria-hidden="true">➕</span>
+            <span><b>Follow the ones you like</b> — yours, or somebody else's that caught your eye.</span>
+          </li>
+          <li>
+            <span class="dd-hp-social-icon" aria-hidden="true">📰</span>
+            <span><b>A feed of new sightings</b> — the latest finds from across the whole flock.</span>
+          </li>
+          <li>
+            <span class="dd-hp-social-icon" aria-hidden="true">🔔</span>
+            <span><b>A nudge when yours turns up</b> — we tell you the moment someone posts one.</span>
+          </li>
+        </ul>
+        <p class="dd-hp-note">
+          The only thing with a profile is a rubber duck. Nobody's movements are followed — a post
+          happens because a person chose to make one.
+        </p>
+        <NuxtLink to="/quackertracker" class="dd-hp-btn dd-hp-btn-primary">See <span class="qt-brand">Quacker Tracker</span> →</NuxtLink>
+      </div>
+
+      <!-- Illustrative only: this is what a duck's page looks like, not a real duck. -->
+      <div class="dd-hp-social-card" aria-hidden="true">
+        <span class="dd-hp-social-tag">Example profile</span>
+        <div class="dd-hp-social-head">
+          <span class="dd-hp-social-avatar"><DuckMark :size="34" color="#FFC61A" /></span>
+          <span class="dd-hp-social-who">
+            <b>Captain Waddles</b>
+            <i>Duck #1042</i>
+          </span>
+          <span class="dd-hp-social-follow">Following</span>
+        </div>
+        <p class="dd-hp-social-story">
+          "Started out on a kitchen windowsill. Packed for the airport in a coat pocket and hasn't
+          been home since."
+        </p>
+        <div class="dd-hp-social-post">
+          <span class="dd-hp-social-pin" aria-hidden="true">📍</span>
+          <span>
+            <b>Spotted on a harbour wall</b>
+            <i>Posted by whoever found it</i>
+          </span>
+        </div>
+        <div class="dd-hp-social-post">
+          <span class="dd-hp-social-pin" aria-hidden="true">📍</span>
+          <span>
+            <b>Left in a hostel lobby</b>
+            <i>Posted by whoever found it</i>
+          </span>
+        </div>
       </div>
     </section>
 
@@ -295,12 +366,12 @@ onBeforeUnmount(() => {
               <span class="dd-how-num">5</span>
               <div>
                 <h3>Watch it roam</h3>
-                <p>Every scan drops a pin on your <strong>live map</strong> — follow your duck city to city!</p>
+                <p>Every scan drops a pin on your <strong>map</strong> — follow your duck city to city!</p>
               </div>
             </li>
           </ol>
           <div class="dd-how-actions">
-            <NuxtLink to="/#shop" class="dd-hp-btn dd-hp-btn-primary" @click="howOpen = false">Start your flock →</NuxtLink>
+            <NuxtLink to="/shop" class="dd-hp-btn dd-hp-btn-primary" @click="howOpen = false">Start your flock →</NuxtLink>
           </div>
         </div>
       </div>

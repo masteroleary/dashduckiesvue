@@ -1,0 +1,155 @@
+/* ============================================
+   DUCK ADMIN PANEL
+   Inline admin editing on a duck's public page (components/DuckAdminPanel.vue).
+   Deliberately set apart from the page around it — an orange-edged tool panel,
+   so there's never a question about whether you're looking at the public view
+   or the controls that change it.
+   ============================================ */
+
+.dap {
+  max-width: 1000px;
+  margin: 26px auto 0;
+  padding: 0 20px;
+  font-family: var(--font-body);
+}
+
+.dap-toggle {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 18px;
+  border-radius: 14px;
+  border: 2px solid var(--dd-orange);
+  background: rgba(244, 136, 31, 0.1);
+  color: var(--dd-cream);
+  font-family: var(--font-body);
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  text-align: left;
+}
+.dap-toggle:hover { background: rgba(244, 136, 31, 0.16); }
+.dap-badge {
+  flex: none;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: var(--dd-orange);
+  color: #16140F;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.dap-toggle-text { flex: 1; }
+.dap-chev { transition: transform 0.22s ease; }
+.dap-chev.is-open { transform: rotate(180deg); }
+
+.dap-body { display: grid; gap: 16px; margin-top: 14px; }
+.dap-card {
+  padding: 20px 18px;
+  border-radius: 14px;
+  border: 1px solid rgba(244, 136, 31, 0.34);
+  background: rgba(255, 255, 255, 0.04);
+}
+.dap-h {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 18px;
+  margin: 0 0 4px;
+  color: var(--dd-cream);
+}
+.dap-code { font-size: 13px; color: var(--dd-muted); margin: 0 0 14px; }
+.dap-code b { font-family: var(--font-mono); color: var(--dd-cream); }
+
+.dap-label {
+  display: block;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--dd-muted);
+  margin: 12px 0 5px;
+}
+.dap-input {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(244, 136, 31, 0.3);
+  background: rgba(0, 0, 0, 0.18);
+  color: var(--dd-cream);
+  font-family: var(--font-body);
+  font-size: 14.5px;
+  box-sizing: border-box;
+}
+.dap-input:focus { outline: 2px solid var(--dd-orange); outline-offset: 1px; }
+.dap-file { display: block; font-size: 13px; color: var(--dd-text-2); }
+
+.dap-btn {
+  margin-top: 14px;
+  padding: 10px 18px;
+  border: none;
+  border-radius: 999px;
+  background: var(--dd-orange);
+  color: #16140F;
+  font-family: var(--font-body);
+  font-weight: 800;
+  font-size: 14px;
+  cursor: pointer;
+}
+.dap-btn:hover:not(:disabled) { filter: brightness(1.06); }
+.dap-btn:disabled { opacity: 0.55; cursor: not-allowed; }
+.dap-btn--danger { background: var(--dd-error); color: #fff; }
+
+.dap-mini {
+  padding: 7px 13px;
+  border-radius: 999px;
+  border: 1px solid rgba(244, 136, 31, 0.4);
+  background: transparent;
+  color: var(--dd-cream);
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.dap-mini:hover:not(:disabled) { background: rgba(244, 136, 31, 0.14); }
+.dap-mini:disabled { opacity: 0.55; cursor: not-allowed; }
+.dap-mini--danger { border-color: rgba(192, 82, 74, 0.6); color: #E59A94; }
+.dap-mini--danger:hover { background: rgba(192, 82, 74, 0.16); }
+
+.dap-sighting {
+  padding: 14px 0;
+  border-top: 1px solid rgba(244, 136, 31, 0.22);
+}
+.dap-sighting:first-of-type { border-top: 0; }
+.dap-sighting-head { display: flex; gap: 12px; align-items: center; }
+.dap-thumb {
+  flex: none;
+  width: 52px;
+  height: 52px;
+  border-radius: 10px;
+  object-fit: cover;
+  background: rgba(0, 0, 0, 0.25);
+}
+.dap-thumb--none { display: grid; place-items: center; font-size: 22px; }
+.dap-sighting-main { display: flex; flex-direction: column; min-width: 0; }
+.dap-sighting-main b { font-size: 14.5px; color: var(--dd-cream); }
+.dap-sighting-main span { font-size: 12.5px; color: var(--dd-muted); margin-top: 2px; }
+
+.dap-sighting-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 11px; }
+.dap-sighting-actions label { cursor: pointer; }
+
+.dap-edit,
+.dap-confirm {
+  margin-top: 12px;
+  padding: 14px;
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.2);
+}
+.dap-confirm p { margin: 0 0 12px; font-size: 14px; color: var(--dd-text-2); }
+.dap-coords { margin: 6px 0 0; font-size: 12.5px; }
+.dap-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.dap-row .dap-btn { margin-top: 0; }
+
+.dap-muted { color: var(--dd-muted); font-size: 13.5px; }
+.dap-error { color: #E59A94; font-weight: 600; font-size: 14px; margin: 0 0 10px; }
+.dap-note { color: #9FD08F; font-weight: 600; font-size: 14px; margin: 0 0 10px; }

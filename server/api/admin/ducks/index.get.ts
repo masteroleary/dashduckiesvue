@@ -3,5 +3,6 @@ import { getAdminDucks } from '../../../utils/admin'
 
 export default defineEventHandler(async (event) => {
   requireAdmin(event)
-  return await getAdminDucks()
+  const q = getQuery(event).q
+  return await getAdminDucks(typeof q === 'string' ? q : undefined)
 })

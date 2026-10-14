@@ -19,7 +19,7 @@ useHead({
         The DashDuckies shop is coming soon. Once it opens, the ducks and merch you add will show up
         here — ready to check out.
       </p>
-      <NuxtLink to="/#shop" class="dd-btn-primary">Browse the shop</NuxtLink>
+      <NuxtLink to="/shop" class="dd-btn-primary">Browse the shop</NuxtLink>
     </div>
   </div>
 </template>

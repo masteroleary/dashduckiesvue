@@ -232,3 +232,34 @@ export const forumThreadsRelations = relations(forumThreads, ({ many }) => ({
 export const forumCommentsRelations = relations(forumComments, ({ one }) => ({
   thread: one(forumThreads, { fields: [forumComments.threadId], references: [forumThreads.id] }),
 }))
+
+// --- subscriptions ---------------------------------------------------------
+// Which box plan a member is on, and whether the next box is going out. There is
+// no billing here yet — payment is handled outside the app, so a subscription is
+// created by an admin rather than by checkout.
+
+export const subscriptionPlanEnum = pgEnum('subscription_plan', ['monthly', 'six_month', 'twelve_month'])
+export const subscriptionStatusEnum = pgEnum('subscription_status', ['active', 'cancelled'])
+
+export const subscriptions = pgTable(
+  'subscriptions',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    userId: uuid('user_id')
+      .notNull()
+      .references(() => users.id),
+    plan: subscriptionPlanEnum('plan').notNull().default('monthly'),
+    status: subscriptionStatusEnum('status').notNull().default('active'),
+    // Set when a member skips the upcoming box; cleared once that box date passes.
+    skipNextShipment: boolean('skip_next_shipment').notNull().default(false),
+    startedAt: timestamp('started_at', { withTimezone: true }).notNull().defaultNow(),
+    cancelledAt: timestamp('cancelled_at', { withTimezone: true }),
+    createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+    updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [index('subscriptions_user_id_idx').on(t.userId)],
+)
+
+export const subscriptionsRelations = relations(subscriptions, ({ one }) => ({
+  user: one(users, { fields: [subscriptions.userId], references: [users.id] }),
+}))

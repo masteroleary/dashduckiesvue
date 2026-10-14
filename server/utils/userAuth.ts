@@ -1,4 +1,4 @@
-import { and, eq, isNull } from 'drizzle-orm'
+import { and, asc, eq, isNull, sql } from 'drizzle-orm'
 import { useDb } from '../db'
 import { authTokens, duckSightings, ducks, users } from '../db/schema'
 import { signAuthToken } from './jwt'
@@ -27,11 +27,26 @@ export async function findOrCreateUser(identifier: string): Promise<UserRow> {
   const email = isEmail(identifier) ? identifier : null
   const phone = isEmail(identifier) ? null : identifier
 
+  // Phone match is on the last 10 digits, not on the exact string. Sign-in
+  // normalises what's typed to E.164 ("+14074564001"), but accounts imported
+  // from the old system hold plain digits ("4074564001") — an exact comparison
+  // missed those rows and silently created a SECOND, empty account instead,
+  // which is how an admin ended up signing in to a members-only session.
+  // Oldest row first, so a real account always beats one created that way.
+  const phoneDigits = phone ? phone.replace(/\D/g, '').slice(-10) : ''
   const whereActive = email
     ? and(eq(users.email, email), isNull(users.deletedAt))
-    : and(eq(users.phoneNumber, phone as string), isNull(users.deletedAt))
+    : and(
+        isNull(users.deletedAt),
+        sql`right(regexp_replace(${users.phoneNumber}, '[^0-9]', '', 'g'), 10) = ${phoneDigits}`,
+      )
 
-  const [existing] = await db.select().from(users).where(whereActive).limit(1)
+  const [existing] = await db
+    .select()
+    .from(users)
+    .where(whereActive)
+    .orderBy(asc(users.createdAt))
+    .limit(1)
   if (existing) {
     await db.update(users).set({ lastLoginAt: new Date() }).where(eq(users.id, existing.id))
     return existing

@@ -10,8 +10,10 @@ export default defineEventHandler(async (event) => {
   enforceRequestCodeLimit(event, normalizeIdentifier(identifier))
 
   try {
-    const { dev } = await requestCode(identifier)
-    return { ok: true, dev }
+    // The response is the same whether or not a code was actually sent, so the
+    // form can't be used to find out which accounts skip the real send.
+    await requestCode(identifier)
+    return { ok: true }
   } catch (err: any) {
     console.error('request-code failed:', err?.message || err)
     throw createError({ statusCode: 502, statusMessage: 'Failed to send verification code' })

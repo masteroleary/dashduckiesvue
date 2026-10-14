@@ -101,12 +101,28 @@ export async function deleteMember(userId: string) {
   return { deletedDucks: result.length }
 }
 
-export async function getAdminDucks() {
+/**
+ * Admin duck list, newest code first, capped at 100 rows.
+ *
+ * `search` is applied in the DATABASE rather than in the browser. Filtering the
+ * capped page client-side would look fine today and then quietly stop finding
+ * older ducks as soon as there are more than 100 of them — the cap and the
+ * search have to agree about what they're looking at.
+ */
+export async function getAdminDucks(search?: string) {
   const db = useDb()
+  const term = (search || '').trim()
+  const like = `%${term}%`
+  // A numeric term is almost always someone reading a code off a sticker, so it
+  // matches the code as well as the name.
+  const matches = /^[0-9]+$/.test(term)
+    ? sql`(cast(${ducks.qtCode} as text) like ${like} or ${ducks.name} ilike ${like})`
+    : sql`(${ducks.name} ilike ${like} or ${ducks.description} ilike ${like})`
+
   const rows = await db
     .select()
     .from(ducks)
-    .where(isNull(ducks.deletedAt))
+    .where(term ? and(isNull(ducks.deletedAt), matches) : isNull(ducks.deletedAt))
     .orderBy(desc(ducks.qtCode))
     .limit(100)
   const counts = (await db.execute(sql`

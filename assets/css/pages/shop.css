@@ -1,0 +1,446 @@
+/* ============================================
+   SHOP PAGES — merch, gift cards, single ducks
+   One product-grid layout shared by all three, so new shop pages only need
+   markup. Products are placeholders until the store is live; `is-soon` marks
+   an item that can't be bought yet.
+   ============================================ */
+
+.shop-page {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 48px 24px 90px;
+  font-family: var(--font-body);
+  color: var(--dd-cream);
+}
+
+.shop-head { max-width: 640px; margin: 0 0 38px; }
+.shop-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--dd-bronze);
+  margin: 0 0 12px;
+}
+.shop-heading {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(30px, 4vw, 42px);
+  line-height: 1.08;
+  letter-spacing: -0.01em;
+  margin: 0 0 12px;
+  color: var(--dd-cream);
+}
+.shop-sub { font-size: 16px; line-height: 1.65; color: var(--dd-text-2); margin: 0; }
+
+/* Banner for shops that aren't taking orders yet — states it plainly rather
+   than letting someone click a dead "Buy" button. */
+.shop-notice {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin: 0 0 34px;
+  padding: 16px 18px;
+  border: var(--dd-hairline);
+  border-radius: 14px;
+  background: rgba(242, 183, 5, 0.08);
+}
+.shop-notice p { margin: 0; font-size: 15px; line-height: 1.6; color: var(--dd-text-2); }
+.shop-notice b { color: var(--dd-cream); }
+
+.shop-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 20px;
+}
+
+.shop-card {
+  display: flex;
+  flex-direction: column;
+  background: var(--dd-pitch);
+  border: var(--dd-hairline);
+  border-radius: 18px;
+  padding: 22px;
+  box-shadow: 0 14px 34px rgba(60, 45, 15, 0.10);
+  transition: transform 0.18s, box-shadow 0.18s;
+}
+.shop-card:hover { transform: translateY(-3px); box-shadow: 0 18px 40px rgba(60, 45, 15, 0.16); }
+
+/* Stand-in for a product photo — a tinted panel with the item's emoji, so the
+   grid reads as products before any photography exists. */
+.shop-thumb {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 4 / 3;
+  margin-bottom: 16px;
+  border-radius: 12px;
+  background: linear-gradient(140deg, rgba(255, 224, 102, 0.34), rgba(242, 183, 5, 0.16));
+  font-size: 46px;
+  line-height: 1;
+}
+.shop-card-name {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 19px;
+  margin: 0 0 6px;
+  color: var(--dd-cream);
+}
+.shop-card-text { font-size: 14px; line-height: 1.6; color: var(--dd-text-2); margin: 0 0 16px; }
+.shop-card-foot { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: auto; }
+.shop-price { font-family: var(--font-display); font-weight: 700; font-size: 18px; color: var(--dd-cream); }
+.shop-tag {
+  padding: 5px 11px;
+  border-radius: 999px;
+  background: rgba(242, 183, 5, 0.18);
+  color: var(--dd-bronze);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+}
+
+.shop-cta { margin-top: 44px; text-align: center; }
+.shop-cta p { color: var(--dd-text-2); font-size: 15px; margin: 0 0 16px; }
+
+@media (max-width: 640px) {
+  .shop-page { padding: 32px 18px 70px; }
+  .shop-grid { grid-template-columns: 1fr; }
+}
+
+/* ---- Subscription page ---- */
+
+.shop-hero {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 42px;
+  align-items: center;
+  margin: 0 0 46px;
+}
+.shop-hero-photo {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: 20px;
+  display: block;
+  box-shadow: 0 18px 44px rgba(60, 45, 15, 0.18);
+}
+.shop-ticks { list-style: none; margin: 20px 0 26px; padding: 0; }
+.shop-ticks li {
+  position: relative;
+  padding-left: 30px;
+  margin-bottom: 11px;
+  font-size: 15.5px;
+  line-height: 1.55;
+  color: var(--dd-text-2);
+}
+.shop-ticks li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  top: -1px;
+  display: grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: rgba(242, 183, 5, 0.22);
+  color: var(--dd-bronze);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.shop-section-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 26px;
+  letter-spacing: -0.01em;
+  margin: 46px 0 8px;
+  color: var(--dd-cream);
+}
+.shop-section-sub { font-size: 15px; line-height: 1.6; color: var(--dd-text-2); margin: 0 0 22px; }
+
+/* The recommended plan gets a gold edge and a ribbon so the eye lands on it. */
+.shop-card.is-featured { border: 2px solid var(--dd-gold); position: relative; }
+.shop-ribbon {
+  position: absolute;
+  top: -11px;
+  left: 22px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: var(--dd-grad-gold);
+  color: #16140F;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.shop-plan-price {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 32px;
+  line-height: 1;
+  color: var(--dd-cream);
+  margin: 0 0 4px;
+}
+.shop-plan-per { font-size: 13px; color: var(--dd-muted); margin: 0 0 16px; }
+
+.shop-faq { margin-top: 12px; border-top: var(--dd-hairline); }
+.shop-faq details {
+  border-bottom: var(--dd-hairline);
+  padding: 16px 2px;
+}
+.shop-faq summary {
+  cursor: pointer;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 16.5px;
+  color: var(--dd-cream);
+  list-style: none;
+}
+.shop-faq summary::-webkit-details-marker { display: none; }
+.shop-faq summary::after { content: '+'; float: right; color: var(--dd-bronze); font-weight: 700; }
+.shop-faq details[open] summary::after { content: '−'; }
+.shop-faq p { margin: 10px 0 0; font-size: 15px; line-height: 1.65; color: var(--dd-text-2); }
+
+@media (max-width: 860px) {
+  .shop-hero { grid-template-columns: 1fr; gap: 26px; }
+  .shop-hero-photo { order: -1; }
+}
+
+.shop-input {
+  width: 100%;
+  padding: 12px 14px;
+  border: var(--dd-hairline);
+  border-radius: 11px;
+  background: var(--dd-panel-3);
+  color: var(--dd-cream);
+  font: inherit;
+  font-size: 15px;
+  font-weight: 600;
+}
+.shop-input:focus-visible { outline: 2px solid var(--dd-gold); outline-offset: 1px; }
+.shop-hint { font-size: 12.5px; color: var(--dd-muted); margin: 0; }
+.shop-hint.is-error { color: #C0524A; }
+
+/* ---- Gift cards: selectable amount tiles, the pattern most gift-card pages
+   use — every option visible at once, one tap to choose ---- */
+
+.gift-block { max-width: 720px; margin: 0 0 40px; }
+.gift-block-head { display: flex; align-items: baseline; gap: 10px; margin: 0 0 14px; }
+.gift-block-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 21px;
+  margin: 0;
+  color: var(--dd-cream);
+}
+.gift-block-note { font-size: 14px; color: var(--dd-muted); margin: 0; }
+
+.gift-tiles {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(108px, 1fr));
+  gap: 10px;
+}
+.gift-tile {
+  position: relative;
+  padding: 18px 10px;
+  border: 2px solid rgba(154, 123, 8, 0.28);
+  border-radius: 14px;
+  background: var(--dd-pitch);
+  color: var(--dd-cream);
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 1.15;
+  cursor: pointer;
+  text-align: center;
+  transition: transform 0.15s, border-color 0.15s, background 0.15s, box-shadow 0.15s;
+}
+.gift-tile small { display: block; font-family: var(--font-body); font-size: 12px; font-weight: 600; color: var(--dd-muted); margin-top: 3px; }
+.gift-tile:hover { transform: translateY(-2px); border-color: var(--dd-gold); }
+.gift-tile.is-on {
+  border-color: var(--dd-gold);
+  background: rgba(255, 224, 102, 0.22);
+  box-shadow: 0 6px 18px rgba(242, 183, 5, 0.26);
+}
+.gift-tile.is-on small { color: var(--dd-bronze); }
+/* A yellow duck ticks the chosen tile — the brand DuckMark, not the emoji, which
+   renders as a brown mallard. The one bit of fun on an otherwise plain grid. */
+.gift-tile-duck {
+  position: absolute;
+  top: -11px;
+  right: -7px;
+  transform: rotate(12deg);
+  filter: drop-shadow(0 1px 1.5px rgba(0, 0, 0, 0.25));
+  pointer-events: none;
+}
+.gift-tile:focus-visible { outline: 2px solid var(--dd-gold); outline-offset: 2px; }
+
+.gift-custom { margin-top: 12px; max-width: 260px; }
+
+/* Result bar — price and action, so the tiles stay uncluttered. */
+.gift-bar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-top: 18px;
+  padding: 16px 18px;
+  border: var(--dd-hairline);
+  border-radius: 14px;
+  background: var(--dd-panel-2);
+}
+.gift-bar-price {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 26px;
+  line-height: 1;
+  color: var(--dd-cream);
+}
+.gift-bar-note { font-size: 13.5px; color: var(--dd-muted); margin: 0; flex: 1 1 auto; }
+
+/* Tiles on the left, illustration on the right; stacks on narrow screens. */
+.gift-block { max-width: 1000px; }
+.gift-split {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 300px);
+  gap: 30px;
+  align-items: center;
+}
+.gift-controls { min-width: 0; }
+@media (max-width: 800px) {
+  .gift-split { grid-template-columns: 1fr; gap: 18px; }
+}
+
+/* ---- Playful page title: big dark type on a hand-drawn yellow highlight.
+   Yellow *text* would wash out on the cream background, so the colour goes
+   behind the word instead and the type stays high-contrast. ---- */
+
+.shop-title {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin: 0 0 10px;
+}
+.shop-title-word {
+  position: relative;
+  isolation: isolate; /* keeps the highlight's z-index inside this word */
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(46px, 7.5vw, 74px);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--dd-cream);
+  transform: rotate(-2deg);
+  padding: 0 6px;
+}
+/* The swipe — uneven corners and a slight tilt so it reads as marker, not a box. */
+.shop-title-word::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  left: -4px;
+  right: -4px;
+  bottom: 8%;
+  height: 38%;
+  background: linear-gradient(90deg, #FFE066, #FFC61A 60%, #F2B705);
+  border-radius: 14px 8px 12px 6px;
+  transform: rotate(-1.4deg);
+}
+.shop-title-duck {
+  flex: none;
+  filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.2));
+  transform-origin: 60% 70%;
+  animation: shop-title-bob 2.8s ease-in-out infinite;
+}
+@keyframes shop-title-bob {
+  0%, 100% { transform: translateY(0) rotate(-6deg); }
+  50% { transform: translateY(-6px) rotate(6deg); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .shop-title-duck { animation: none; }
+}
+
+/* ---- Subscription: compact "what's in the box" list, lighter than a card grid ---- */
+.box-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 14px 26px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-width: 760px;
+}
+.box-list li { display: flex; gap: 12px; align-items: flex-start; }
+.box-list-emoji { font-size: 22px; line-height: 1.2; flex: none; }
+.box-list b { display: block; font-family: var(--font-display); font-size: 16px; color: var(--dd-cream); margin-bottom: 2px; }
+.box-list span { font-size: 14px; line-height: 1.55; color: var(--dd-text-2); }
+
+/* Plans sit tighter than the generic shop cards. */
+.plan-grid { grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); max-width: 760px; }
+.plan-save {
+  display: inline-block;
+  margin-top: 8px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: rgba(242, 183, 5, 0.18);
+  color: var(--dd-bronze);
+  font-size: 12px;
+  font-weight: 700;
+}
+/* A quieter one-line version of the shop notice. */
+.shop-footnote { font-size: 14.5px; color: var(--dd-muted); margin: 34px 0 0; }
+.shop-footnote a { color: var(--dd-bronze); font-weight: 700; }
+
+/* A single emotional beat between the hero and the pricing — the reason you'd
+   want this, stated once, before the page turns practical. */
+.shop-band {
+  margin: 48px 0 8px;
+  padding: 32px 34px;
+  border: var(--dd-hairline);
+  border-radius: 20px;
+  background: linear-gradient(135deg, rgba(255, 224, 102, 0.20), rgba(242, 183, 5, 0.09));
+  text-align: center;
+}
+.shop-band h2 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(22px, 3.2vw, 31px);
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  margin: 0 0 10px;
+  color: var(--dd-cream);
+  text-wrap: balance;
+}
+.shop-band p {
+  max-width: 54ch;
+  margin: 0 auto;
+  font-size: 16px;
+  line-height: 1.65;
+  color: var(--dd-text-2);
+  text-wrap: pretty;
+}
+
+/* ---- Shop landing page ----
+   The category grid reuses .shop-card, with the whole card as the link. */
+.shop-lede { max-width: 48ch; margin: 0 0 34px; }
+.shop-grid--cats { grid-template-columns: repeat(auto-fill, minmax(258px, 1fr)); }
+.shop-card--link {
+  position: relative;
+  text-decoration: none;
+  color: inherit;
+}
+.shop-card--link:hover { text-decoration: none; }
+.shop-card-go {
+  margin-top: auto;
+  font-weight: 800;
+  font-size: 14.5px;
+  color: #A24E02;
+}
+.shop-card--link:hover .shop-card-go { text-decoration: underline; }
+.shop-card--link:focus-visible { outline: 2px solid var(--dd-orange); outline-offset: 3px; }
+/* The featured card already carries a gold edge; give it the warmer glow too, so
+   it matches how the subscription box is flagged on the home page. */
+.shop-card--link.is-featured { box-shadow: 0 16px 38px rgba(191, 98, 5, 0.16); }
+.shop-card--link.is-featured:hover { box-shadow: 0 22px 48px rgba(191, 98, 5, 0.22); }
+.shop-notice--foot { margin: 40px 0 0; }
+.shop-notice--foot a { color: #A24E02; font-weight: 700; }

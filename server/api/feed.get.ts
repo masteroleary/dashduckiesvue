@@ -1,10 +1,13 @@
 import { and, desc, eq, isNotNull, isNull, ne } from 'drizzle-orm'
 import { useDb } from '../db'
 import { duckSightings, ducks } from '../db/schema'
+import { requireUser } from '../utils/session'
 
 // "Latest Activity" feed for /quackertracker: interleave recent sightings (with
 // photos) and recently-registered ducks (with photos), newest first.
-export default defineEventHandler(async () => {
+export default defineEventHandler(async (event) => {
+  // Members-only: the map and the community are behind sign-in.
+  requireUser(event)
   const db = useDb()
 
   const duckTiles = await db

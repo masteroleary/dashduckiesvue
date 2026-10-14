@@ -14,18 +14,22 @@ interface MyDuck {
 }
 const { data: ducks } = useFetch<MyDuck[]>('/api/my-ducks')
 
+const firstName = computed(() => {
+  const n = (user.value?.name || '').trim()
+  return n ? n.split(/\s+/)[0] : null
+})
+
 const cards = computed(() => [
-  { label: 'Ducks tracked', value: stats.value?.totalDucks ?? 0 },
-  { label: 'Sightings posted', value: stats.value?.totalSightings ?? 0 },
-  { label: 'Connections', value: stats.value?.totalConnections ?? 0 },
+  { label: 'Ducks on your roster', value: stats.value?.totalDucks ?? 0, icon: 'mdi-duck' },
+  { label: 'Sightings posted', value: stats.value?.totalSightings ?? 0, icon: 'mdi-map-marker-radius' },
+  { label: 'People who found them', value: stats.value?.totalConnections ?? 0, icon: 'mdi-account-multiple' },
 ])
 
-// Filter tabs (adapted from the handoff's All / Rare / Recent to real data).
 type Filter = 'all' | 'recent' | 'seen'
 const filter = ref<Filter>('all')
 const tabs: Array<{ key: Filter; label: string }> = [
   { key: 'all', label: 'All' },
-  { key: 'recent', label: 'Recent' },
+  { key: 'recent', label: 'Recently seen' },
   { key: 'seen', label: 'Most seen' },
 ]
 
@@ -40,29 +44,31 @@ const roster = computed(() => {
   return list
 })
 
-const subtitle = computed(() => {
-  const d = stats.value?.totalDucks ?? 0
-  const s = stats.value?.totalSightings ?? 0
-  return `${d} duck${d === 1 ? '' : 's'} tracked · ${s} sighting${s === 1 ? '' : 's'} logged`
-})
-
-// "Recent quacks" feed — flatten every duck's sightings, newest first.
 function relAge(ts: number) {
+  if (!ts) return 'never seen'
   const days = Math.floor((Date.now() - ts) / 86400000)
-  if (days <= 0) return 'TODAY'
-  if (days === 1) return 'YESTERDAY'
-  if (days < 7) return `${days} DAYS AGO`
-  if (days < 30) return `${Math.floor(days / 7)} WK AGO`
-  return `${Math.floor(days / 30)} MO AGO`
+  if (days <= 0) return 'today'
+  if (days === 1) return 'yesterday'
+  if (days < 7) return `${days} days ago`
+  if (days < 30) return `${Math.floor(days / 7)} week${Math.floor(days / 7) === 1 ? '' : 's'} ago`
+  if (days < 365) return `${Math.floor(days / 30)} month${Math.floor(days / 30) === 1 ? '' : 's'} ago`
+  return `${Math.floor(days / 365)} year${Math.floor(days / 365) === 1 ? '' : 's'} ago`
 }
+
+function lastPlace(d: MyDuck) {
+  return d.sightings?.find((s) => s.address)?.address || null
+}
+
 const feed = computed(() => {
-  const items: Array<{ text: string; ts: number }> = []
+  const items: Array<{ name: string; place: string | null; ts: number; img: string | null }> = []
   for (const d of ducks.value || []) {
     for (const s of d.sightings || []) {
       if (!s.sightingDate) continue
       items.push({
-        text: `${d.name || 'A duck'} spotted${s.address ? ` at ${s.address}` : ''}`,
+        name: d.name || `Duck ${d.qtCode}`,
+        place: s.address,
         ts: new Date(s.sightingDate).getTime(),
+        img: d.imageUrl,
       })
     }
   }
@@ -72,224 +78,133 @@ const feed = computed(() => {
 
 <template>
   <v-container class="py-8 dd-dash">
-    <!-- header -->
-    <div class="dd-dash-head">
-      <div>
-        <h1 class="dd-dash-title">Your roster</h1>
-        <div class="dd-dash-sub">{{ subtitle }}</div>
-        <div class="dd-dash-signed">Signed in as {{ user?.email || user?.phone }}</div>
+    <!-- Greeting -->
+    <div class="d-flex flex-wrap align-center mb-6" style="gap: 16px">
+      <div class="flex-grow-1">
+        <h1 class="text-h4 font-weight-bold mb-1">
+          {{ firstName ? `Welcome back, ${firstName}` : 'Welcome back' }}
+        </h1>
+        <p class="text-body-2 text-medium-emphasis mb-0">
+          Here's where your flock has got to.
+        </p>
       </div>
-      <div class="dd-dash-tabs">
-        <button
-          v-for="t in tabs"
-          :key="t.key"
-          class="dd-tab"
-          :class="{ active: filter === t.key }"
-          @click="filter = t.key"
-        >
-          {{ t.label }}
-        </button>
-      </div>
+      <v-btn color="primary" variant="flat" prepend-icon="mdi-map" to="/quackertracker">
+        Open the map
+      </v-btn>
     </div>
 
-    <!-- stats -->
-    <div class="dd-dash-stats">
-      <div v-for="c in cards" :key="c.label" class="dd-statcard">
-        <div class="dd-statcard-num">{{ c.value }}</div>
-        <div class="dd-statcard-label">{{ c.label }}</div>
-      </div>
-    </div>
-
-    <!-- split: badge grid + recent feed -->
-    <div class="dd-dash-split">
-      <div>
-        <div v-if="roster.length" class="dd-badge-grid">
-          <NuxtLink
-            v-for="d in roster"
-            :key="d.id"
-            :to="`/quackertracker/${d.qtCode}`"
-            class="dd-badge-cell"
-          >
-            <OctagonBadge :src="d.imageUrl" :alt="d.name || 'Duck'" variant="photo" />
-            <div class="dd-badge-name">{{ d.name || 'Unnamed' }}</div>
-          </NuxtLink>
-        </div>
-        <div v-else class="dd-dash-empty">
-          No ducks on your roster yet — find one in the wild and be its first sighting!
-        </div>
-      </div>
-
-      <div class="dd-feed-card">
-        <div class="dd-feed-card-title">Recent quacks</div>
-        <div v-if="feed.length" class="dd-feed-list">
-          <div v-for="(r, i) in feed" :key="i" class="dd-feed-item">
-            <span class="dd-feed-dot" />
+    <!-- Numbers -->
+    <v-row class="mb-2">
+      <v-col v-for="c in cards" :key="c.label" cols="12" sm="4">
+        <v-card variant="tonal" color="primary" rounded="lg">
+          <v-card-text class="d-flex align-center" style="gap: 14px">
+            <v-avatar size="44" color="primary" variant="flat">
+              <v-icon :icon="c.icon" size="22" />
+            </v-avatar>
             <div>
-              <div class="dd-feed-text">{{ r.text }}</div>
-              <div class="dd-feed-when">{{ relAge(r.ts) }}</div>
+              <div class="text-h5 font-weight-bold" style="line-height: 1.1">{{ c.value }}</div>
+              <div class="text-caption text-medium-emphasis">{{ c.label }}</div>
             </div>
-          </div>
-        </div>
-        <div v-else class="dd-feed-empty">No activity yet.</div>
-      </div>
-    </div>
+          </v-card-text>
+        </v-card>
+      </v-col>
+    </v-row>
 
-    <!-- recent sightings map (existing feature) -->
-    <h2 class="dd-dash-maph">Recent sightings</h2>
-    <ClientOnly>
-      <LiveMap :sightings="sightings || []" height="400px" />
-      <template #fallback>
-        <v-skeleton-loader type="image" height="400" />
-      </template>
-    </ClientOnly>
+    <v-row>
+      <!-- Roster -->
+      <v-col cols="12" md="8">
+        <div class="d-flex flex-wrap align-center mb-3" style="gap: 12px">
+          <h2 class="text-h6 font-weight-bold flex-grow-1 mb-0">Your flock</h2>
+          <v-btn-toggle
+            v-model="filter"
+            density="comfortable"
+            variant="outlined"
+            color="primary"
+            divided
+            mandatory
+          >
+            <v-btn v-for="t in tabs" :key="t.key" :value="t.key" size="small" class="text-none">
+              {{ t.label }}
+            </v-btn>
+          </v-btn-toggle>
+        </div>
+
+        <v-row v-if="roster.length" dense>
+          <v-col v-for="d in roster" :key="d.id" cols="6" sm="4">
+            <v-card :to="`/quackertracker/${d.qtCode}`" rounded="lg" class="h-100">
+              <v-img :src="d.imageUrl || undefined" :aspect-ratio="1" cover>
+                <template #placeholder>
+                  <div class="d-flex align-center justify-center h-100 dd-dash-noimg">
+                    <v-icon icon="mdi-duck" size="34" class="text-medium-emphasis" />
+                  </div>
+                </template>
+              </v-img>
+              <v-card-text class="py-3">
+                <div class="text-subtitle-2 font-weight-bold text-truncate">
+                  {{ d.name || `Duck ${d.qtCode}` }}
+                </div>
+                <div class="text-caption text-medium-emphasis d-flex align-center" style="gap: 4px">
+                  <v-icon icon="mdi-map-marker" size="13" />
+                  <span class="text-truncate">{{ lastPlace(d) || 'Not spotted yet' }}</span>
+                </div>
+                <div class="text-caption text-disabled mt-1">{{ relAge(latest(d)) }}</div>
+              </v-card-text>
+            </v-card>
+          </v-col>
+        </v-row>
+
+        <v-card v-else rounded="lg" class="text-center py-10 px-6">
+          <v-icon icon="mdi-duck" size="42" class="text-medium-emphasis mb-3" />
+          <div class="text-subtitle-1 font-weight-bold mb-1">No ducks yet</div>
+          <p class="text-body-2 text-medium-emphasis mb-4">
+            Scan a duck's code and post the first sighting, and it lands here.
+          </p>
+          <v-btn color="primary" variant="flat" to="/shop">Get your first ducks</v-btn>
+        </v-card>
+      </v-col>
+
+      <!-- Activity -->
+      <v-col cols="12" md="4">
+        <h2 class="text-h6 font-weight-bold mb-3">Latest sightings</h2>
+        <v-card rounded="lg">
+          <v-list v-if="feed.length" lines="two" density="comfortable">
+            <v-list-item v-for="(r, i) in feed" :key="i">
+              <template #prepend>
+                <v-avatar size="38" :image="r.img || undefined">
+                  <v-icon v-if="!r.img" icon="mdi-duck" size="18" />
+                </v-avatar>
+              </template>
+              <v-list-item-title class="text-body-2 font-weight-medium">{{ r.name }}</v-list-item-title>
+              <v-list-item-subtitle class="text-caption">
+                {{ r.place || 'Place not given' }} · {{ relAge(r.ts) }}
+              </v-list-item-subtitle>
+            </v-list-item>
+          </v-list>
+          <v-card-text v-else class="text-body-2 text-medium-emphasis">
+            Nothing yet. When someone finds one of your ducks, it shows up here.
+          </v-card-text>
+        </v-card>
+      </v-col>
+    </v-row>
+
+    <!-- Map -->
+    <h2 class="text-h6 font-weight-bold mt-8 mb-3">Where they've been</h2>
+    <v-card rounded="lg" class="overflow-hidden">
+      <ClientOnly>
+        <LiveMap :sightings="sightings || []" height="400px" />
+        <template #fallback>
+          <v-skeleton-loader type="image" height="400" />
+        </template>
+      </ClientOnly>
+    </v-card>
   </v-container>
 </template>
 
 <style scoped>
 .dd-dash { max-width: 1180px; }
-
-.dd-dash-head {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 16px;
-  margin-bottom: 24px;
-  flex-wrap: wrap;
-}
-.dd-dash-title {
-  font-family: var(--font-display);
-  font-weight: 600;
-  font-size: 30px;
-  letter-spacing: -0.01em;
-  color: var(--dd-cream);
-  margin: 0;
-}
-.dd-dash-sub { font-size: 14px; color: var(--dd-muted); margin-top: 4px; }
-.dd-dash-signed { font-size: 12px; color: var(--dd-faint); margin-top: 2px; }
-
-.dd-dash-tabs { display: flex; gap: 9px; }
-.dd-tab {
-  font-size: 12.5px;
-  font-weight: 600;
-  color: var(--dd-text-2);
-  background: var(--dd-panel-4);
-  border: 1px solid rgba(168, 125, 44, 0.45);
-  padding: 6px 16px;
-  cursor: pointer;
-  clip-path: var(--dd-notch);
-  transition: background 0.15s, color 0.15s;
-}
-.dd-tab:hover { color: var(--dd-cream); }
-.dd-tab.active {
-  background: var(--dd-bronze);
-  color: var(--dd-ink);
-  border-color: var(--dd-bronze);
-}
-
-.dd-dash-stats {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
-  margin-bottom: 30px;
-}
-.dd-statcard {
-  background: var(--dd-panel-3);
-  border: var(--dd-hairline);
-  border-radius: 14px;
-  padding: 18px 20px;
-}
-.dd-statcard-num {
-  font-family: var(--font-display);
-  font-weight: 600;
-  font-size: 34px;
-  line-height: 1;
-  color: var(--dd-bronze);
-}
-.dd-statcard-label { font-size: 13px; color: var(--dd-muted); margin-top: 8px; }
-
-.dd-dash-split {
-  display: grid;
-  grid-template-columns: 1fr 280px;
-  gap: 30px;
-  margin-bottom: 40px;
-}
-.dd-badge-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 22px;
-}
-.dd-badge-cell {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-  text-decoration: none;
-}
-/* Force the duck badge to a 2:1 frame (height = half the width). */
-.dd-badge-cell :deep(.dd-octbadge) {
-  width: 100% !important;
-  height: auto !important;
-  aspect-ratio: 2 / 1 !important;
-  min-height: 0;
-}
-.dd-badge-name {
-  font-family: var(--font-display);
-  font-weight: 500;
-  font-size: 13px;
-  color: #e8e0cb;
-  text-align: center;
-}
-.dd-dash-empty {
-  color: var(--dd-muted);
-  background: var(--dd-panel-3);
-  border: var(--dd-hairline);
-  border-radius: 14px;
-  padding: 32px;
-  text-align: center;
-}
-
-.dd-feed-card {
-  background: var(--dd-panel-3);
-  border: var(--dd-hairline);
-  border-radius: 16px;
-  padding: 20px 22px;
-  align-self: start;
-}
-.dd-feed-card-title {
-  font-family: var(--font-display);
-  font-weight: 600;
-  font-size: 16px;
-  color: var(--dd-cream);
-  margin-bottom: 16px;
-}
-.dd-feed-list { display: flex; flex-direction: column; gap: 16px; }
-.dd-feed-item { display: flex; gap: 11px; align-items: flex-start; }
-.dd-feed-dot {
-  width: 8px; height: 8px;
-  border-radius: 50%;
-  background: var(--dd-bronze);
-  margin-top: 6px;
-  flex: none;
-}
-.dd-feed-text { font-size: 13.5px; color: #e8e0cb; line-height: 1.4; }
-.dd-feed-when { font-family: var(--font-mono); font-size: 10.5px; color: var(--dd-faint); margin-top: 3px; }
-.dd-feed-empty { font-size: 13px; color: var(--dd-muted); }
-
-.dd-dash-maph {
-  font-family: var(--font-display);
-  font-weight: 600;
-  font-size: 20px;
-  letter-spacing: -0.01em;
-  color: var(--dd-cream);
-  margin: 0 0 16px;
-}
-
-@media (max-width: 900px) {
-  .dd-dash-split { grid-template-columns: 1fr; }
-  .dd-badge-grid { grid-template-columns: repeat(2, 1fr); }
-}
-@media (max-width: 600px) {
-  .dd-dash-stats { grid-template-columns: 1fr; }
-  .dd-badge-grid { grid-template-columns: 1fr; }
+/* Stand-in behind a duck with no photo. currentColor keeps it correct in both
+   themes, rather than pinning a hex that only suits one of them. */
+.dd-dash-noimg {
+  background: rgba(var(--v-theme-on-surface), 0.06);
 }
 </style>

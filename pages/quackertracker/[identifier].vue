@@ -8,7 +8,11 @@ function goBack() {
   if (window.history.length > 1) router.back()
   else router.push('/quackertracker')
 }
-const { data, pending } = await useFetch(`/api/scan/${identifier}`)
+// Admins get inline editing below the page. Resolved during SSR so the panel
+// isn't briefly absent on first paint.
+const user = await useResolvedUser()
+
+const { data, pending, refresh } = await useFetch(`/api/scan/${identifier}`)
 const duck = computed(() => (data.value && 'duck' in data.value ? data.value.duck : null))
 
 useHead(() => ({
@@ -288,6 +292,14 @@ async function toggleLike() {
 
         </div>
       </div>
+
+      <!-- Admin-only editing for everything above. Refreshes the page's own data
+           after a change, so the public view never lags behind the edit. -->
+      <DuckAdminPanel
+        v-if="user?.isAdmin && duck"
+        :duck-id="duck.id"
+        @changed="refresh()"
+      />
     </template>
   </div>
 </template>

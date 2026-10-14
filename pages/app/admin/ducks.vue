@@ -12,7 +12,24 @@ interface AdminDuck {
   lastSighting: string | null
 }
 
-const { data: ducks, refresh } = useFetch<AdminDuck[]>('/api/admin/ducks')
+// Search runs on the server (see getAdminDucks), so it finds ducks beyond the
+// 100 the table shows. Debounced so typing doesn't fire a query per keystroke.
+const search = ref('')
+const searchTerm = ref('')
+let searchTimer: ReturnType<typeof setTimeout> | undefined
+watch(search, (v) => {
+  clearTimeout(searchTimer)
+  searchTimer = setTimeout(() => { searchTerm.value = (v || '').trim() }, 300)
+})
+
+const { data: ducks, refresh } = useFetch<AdminDuck[]>('/api/admin/ducks', {
+  query: { q: searchTerm },
+})
+
+const shown = computed(() => ducks.value?.length ?? 0)
+// The list is capped at 100 rows, so say when we're sitting on that cap rather
+// than letting a truncated list read as "this is everything".
+const atCap = computed(() => shown.value >= 100)
 
 // Bulk create
 const bulkOpen = ref(false)
@@ -92,6 +109,11 @@ interface AdminSighting {
 const sightingsDuck = ref<AdminDuck | null>(null)
 const detail = ref<{ sightings: AdminSighting[] } | null>(null)
 const loadingDetail = ref(false)
+// NOTE: nothing opens this any more — the map-pin button that used to was
+// replaced by the "view profile" link. It is the only place a sighting's address
+// or map position can be corrected, so it is kept rather than deleted until
+// there's another way in. Delete this and the two sighting dialogs below if that
+// capability isn't wanted.
 async function openSightings(d: AdminDuck) {
   sightingsDuck.value = d
   detail.value = null
@@ -172,13 +194,33 @@ function fmtDate(d: string) {
     </div>
     <v-alert v-if="user && !user.isAdmin" type="error" variant="tonal">Admins only.</v-alert>
 
-    <v-card v-else>
+    <template v-else>
+      <v-text-field
+        v-model="search"
+        class="mb-2"
+        placeholder="Search by QT code or name…"
+        prepend-inner-icon="mdi-magnify"
+        variant="outlined"
+        density="comfortable"
+        clearable
+        hide-details
+      />
+
+      <p class="text-body-2 text-medium-emphasis mb-4">
+        <template v-if="searchTerm">
+          {{ shown }} {{ shown === 1 ? 'duck' : 'ducks' }} matching “{{ searchTerm }}”
+        </template>
+        <template v-else>{{ shown }} {{ shown === 1 ? 'duck' : 'ducks' }}</template>
+        <template v-if="atCap"> — showing the first 100 only, narrow the search to reach older ones</template>
+      </p>
+
+      <v-card>
       <v-table>
         <thead>
           <tr>
             <th></th>
-            <th>Name</th>
-            <th class="text-center">QT</th>
+            <th class="text-center">QT Code</th>
+            <th>Duck name</th>
             <th class="text-center">Sightings</th>
             <th></th>
           </tr>
@@ -191,18 +233,32 @@ function fmtDate(d: string) {
                 <v-icon v-else icon="mdi-duck" />
               </v-avatar>
             </td>
-            <td>{{ d.name || '(unregistered)' }}</td>
-            <td class="text-center">{{ d.qtCode }}</td>
+            <td class="text-center">
+              <span class="dd-qt-code">{{ d.qtCode }}</span>
+            </td>
+            <td>
+              <span v-if="d.name" class="font-weight-medium">{{ d.name }}</span>
+              <span v-else class="text-medium-emphasis font-italic">Not named yet</span>
+            </td>
             <td class="text-center">{{ d.sightingsCount }}</td>
             <td class="text-no-wrap">
-              <v-btn icon="mdi-map-marker" size="small" variant="text" @click="openSightings(d)" />
+              <v-btn
+                icon="mdi-card-account-details-outline"
+                size="small"
+                variant="text"
+                :href="`/quackertracker/${d.id}`"
+                target="_blank"
+                rel="noopener"
+                title="View this duck's profile"
+              />
               <v-btn icon="mdi-pencil" size="small" variant="text" @click="openEdit(d)" />
               <v-btn icon="mdi-delete" size="small" variant="text" color="error" @click="deleting = d" />
             </td>
           </tr>
         </tbody>
-      </v-table>
-    </v-card>
+        </v-table>
+      </v-card>
+    </template>
 
     <!-- Bulk create -->
     <v-dialog v-model="bulkOpen" max-width="460">
@@ -337,3 +393,19 @@ function fmtDate(d: string) {
     </v-dialog>
   </v-container>
 </template>
+
+<style scoped>
+/* The code is an identifier people read off a physical sticker, so it gets a
+   monospace chip with tabular figures — the digits line up down the column. */
+.dd-qt-code {
+  display: inline-block;
+  min-width: 5.5ch;
+  padding: 2px 8px;
+  border-radius: 6px;
+  background: rgba(168, 125, 44, 0.14);
+  font-family: ui-monospace, Menlo, monospace;
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+</style>

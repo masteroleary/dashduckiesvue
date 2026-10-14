@@ -8,14 +8,12 @@ const identifier = ref('')
 const code = ref('')
 const loading = ref(false)
 const error = ref('')
-const devHint = ref(false)
 
 async function onRequestCode() {
   error.value = ''
   loading.value = true
   try {
     const res = await requestCode(identifier.value)
-    devHint.value = res.dev
     step.value = 'code'
   } catch (e: any) {
     error.value = e?.data?.statusMessage || 'Could not send a code. Check the address and try again.'
@@ -40,7 +38,6 @@ function reset() {
   step.value = 'identifier'
   code.value = ''
   error.value = ''
-  devHint.value = false
 }
 </script>
 
@@ -77,10 +74,7 @@ function reset() {
               <p class="text-medium-emphasis mb-4">
                 Enter the code we sent to <strong>{{ identifier }}</strong>.
               </p>
-              <v-alert v-if="devHint" type="info" variant="tonal" density="compact" class="mb-4">
-                Dev account — use code <strong>000000</strong>.
-              </v-alert>
-              <v-text-field
+                <v-text-field
                 v-model="code"
                 label="6-digit code"
                 variant="outlined"

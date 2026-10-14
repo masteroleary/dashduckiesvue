@@ -1,11 +1,14 @@
 import { eq, sql } from 'drizzle-orm'
 import { useDb } from '../../../db'
 import { forumThreads } from '../../../db/schema'
+import { requireUser } from '../../../utils/session'
 
 // Like / unlike a thread. Anonymous — a simple count, no per-user record.
 // The client tracks which threads it has liked (localStorage) and sends the
 // intended direction so the count can't run away.
 export default defineEventHandler(async (event) => {
+  // Members-only: posting to the community requires an account.
+  requireUser(event)
   const threadId = getRouterParam(event, 'id')
   if (!threadId) throw createError({ statusCode: 400, statusMessage: 'Thread id required' })
   const body = await readBody(event).catch(() => ({}))

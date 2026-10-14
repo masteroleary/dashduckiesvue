@@ -1,9 +1,12 @@
 import { and, eq, isNull } from 'drizzle-orm'
 import { useDb } from '../../../db'
 import { forumComments, forumThreads } from '../../../db/schema'
+import { requireUser } from '../../../utils/session'
 
 // Add a comment to a thread. Anonymous allowed.
 export default defineEventHandler(async (event) => {
+  // Members-only: posting to the community requires an account.
+  requireUser(event)
   const threadId = getRouterParam(event, 'id')
   const b = await readBody(event)
   const text = (b?.text ?? '').toString().trim()

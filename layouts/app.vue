@@ -3,6 +3,7 @@
 // (moduleOptions.styles: 'none' in nuxt.config). Keeps the public bundle lean;
 // /app is client-only + behind login, so the one-time CSS load is fine.
 import 'vuetify/dist/vuetify.min.css'
+import { useTheme } from 'vuetify'
 
 // Member app shell (client-only routes). Gates on auth: shows the login card
 // until signed in, then renders the member nav + page.
@@ -11,9 +12,24 @@ const ready = ref(false)
 const drawer = ref(true)
 const returning = ref(false)
 
+// Admins work in day mode — long stretches in the admin tables are easier to
+// read on a light background. Members keep the brand's dark look. Driven off
+// the role rather than the route so it doesn't flip between admin pages and
+// the dashboard mid-session. Note an admin who is impersonating a member is
+// still an admin at work, so the light theme stays on.
+const theme = useTheme()
+const dayMode = computed(() => Boolean(user.value?.isAdmin))
+watch(dayMode, (light) => { theme.global.name.value = light ? 'light' : 'dark' }, { immediate: true })
+
+// Bars and the drawer were hard-coded near-black; they now follow the theme.
+const barColor = computed(() => (dayMode.value ? '#FFFFFF' : '#0d0b07'))
+const drawerColor = computed(() => (dayMode.value ? '#FBF9F4' : '#100e0a'))
+const bannerBg = computed(() => (dayMode.value ? '#FFF6DF' : '#2a2008'))
+
 const nav = computed(() => [
   { title: 'Dashboard', to: '/app', icon: 'mdi-view-dashboard', exact: true },
   { title: 'My Ducks', to: '/app/ducks', icon: 'mdi-duck', exact: false },
+  { title: 'Subscription', to: '/app/subscription', icon: 'mdi-package-variant-closed', exact: false },
   { title: 'Account', to: '/app/account', icon: 'mdi-account', exact: false },
   ...(user.value?.isAdmin
     ? [
@@ -60,7 +76,7 @@ async function onReturnToAdmin() {
 </script>
 
 <template>
-  <v-app>
+  <v-app :class="{ 'dd-app--day': dayMode }">
     <template v-if="!ready || !user">
       <v-main>
         <div class="d-flex justify-center align-center" style="height: 60vh">
@@ -70,12 +86,11 @@ async function onReturnToAdmin() {
     </template>
 
     <template v-else>
-      <v-app-bar color="#0d0b07" flat class="dd-app-bar">
+      <v-app-bar :color="barColor" flat class="dd-app-bar" :class="{ 'dd-app-bar--day': dayMode }">
         <v-app-bar-nav-icon @click="drawer = !drawer" />
         <v-app-bar-title>
-          <NuxtLink to="/" class="d-inline-flex align-center text-decoration-none dd-app-wordmark">
-            <DuckMark :size="24" color="#a87d2c" />
-            <span class="ml-2">DashDuckies</span>
+          <NuxtLink to="/" class="d-inline-flex align-center text-decoration-none dd-app-wordmark" aria-label="DashDuckies home">
+            <BrandMark :size="20" />
           </NuxtLink>
         </v-app-bar-title>
         <template #append>
@@ -89,7 +104,7 @@ async function onReturnToAdmin() {
       <v-banner
         v-if="impersonating"
         color="warning"
-        bg-color="#2a2008"
+        :bg-color="bannerBg"
         lines="one"
         icon="mdi-account-eye"
         sticky
@@ -111,7 +126,7 @@ async function onReturnToAdmin() {
         </template>
       </v-banner>
 
-      <v-navigation-drawer v-model="drawer" color="#100e0a">
+      <v-navigation-drawer v-model="drawer" :color="drawerColor">
         <v-list nav class="px-3">
           <v-list-item
             v-for="item in nav"
@@ -137,11 +152,14 @@ async function onReturnToAdmin() {
   border-bottom: 1px solid rgba(212, 175, 55, 0.14);
 }
 .dd-app-wordmark {
-  font-family: 'Fredoka', system-ui, sans-serif;
-  font-weight: 600;
-  font-size: 18px;
-  letter-spacing: -0.01em;
   color: #f5efdf;
+}
+/* Day mode: a warm hairline reads on white, and the wordmark goes to ink. */
+.dd-app-bar--day {
+  border-bottom: 1px solid rgba(168, 125, 44, 0.3);
+}
+.dd-app-bar--day .dd-app-wordmark {
+  color: #1c1813;
 }
 .dd-app-avatar {
   width: 32px;
@@ -153,6 +171,11 @@ async function onReturnToAdmin() {
 :deep(.v-navigation-drawer .v-list-item--active) {
   background-color: #a87d2c;
   color: #fff;
+}
+/* Day mode uses the deeper orange instead: white on the bronze is only 3.73:1,
+   which is under the mark for the nav label, while this one holds 5.79:1. */
+.dd-app--day :deep(.v-navigation-drawer .v-list-item--active) {
+  background-color: #a24e02;
 }
 :deep(.v-navigation-drawer .v-list-item--active .v-list-item__overlay) {
   opacity: 0;

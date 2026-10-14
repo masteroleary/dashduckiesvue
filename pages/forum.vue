@@ -16,9 +16,16 @@ interface Thread {
   comments: Comment[]
 }
 
+// Members-only page. Resolve the session before anything else (SSR included)
+// so guests get the explainer on the first paint instead of a flash of threads.
+const user = await useResolvedUser()
+
 // Threads live in Postgres — load them (SSR) and keep a local copy we can
 // update optimistically after posts / likes / comments.
-const { data } = await useFetch<Thread[]>('/api/forum', { default: () => [] })
+const { data, refresh: refreshThreads } = await useFetch<Thread[]>('/api/forum', {
+  immediate: Boolean(user.value),
+  default: () => [],
+})
 const threads = ref<Thread[]>(data.value ?? [])
 watch(data, (v) => { threads.value = v ?? [] })
 
@@ -162,7 +169,21 @@ async function share(t: Thread) {
 </script>
 
 <template>
-  <div class="fm-wrap">
+  <MembersGate
+    v-if="!user"
+    eyebrow="Jeep Talk"
+    title="The DashDuckies community"
+    lede="Where duckers swap builds, trails, gear and the stories behind their ducks. It's a members' room, so you know who you're talking to."
+    :points="[
+      { icon: '💬', title: 'Read every discussion', text: 'Trail reports, recovery tips, build threads and the odd duck that turned up somewhere ridiculous.' },
+      { icon: '✏️', title: 'Start your own', text: 'Post a headline, add a photo, and let the crew weigh in.' },
+      { icon: '🚙', title: 'Real people, not drive-bys', text: 'Sign-in keeps the spam out and the conversation worth reading.' },
+      { icon: '🦆', title: 'Share the finds', text: 'Post the duck you found, or the one that came back from three countries away.' },
+    ]"
+    @signed-in="refreshThreads"
+  />
+
+  <div v-else class="fm-wrap">
     <header class="fm-head">
       <span class="fm-eyebrow">🚙 Community</span>
       <h1 class="fm-title">Jeep Talk</h1>

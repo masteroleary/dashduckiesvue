@@ -1,0 +1,264 @@
+/* ============================================
+   ABOUT US
+   Shares the visual language of the shop pages (same page width, same playful
+   highlighted title) so it doesn't read as a page from a different site.
+   ============================================ */
+
+.about-page {
+  max-width: 1040px;
+  margin: 0 auto;
+  padding: 48px 24px 90px;
+  font-family: var(--font-body);
+  color: var(--dd-cream);
+}
+
+/* ---- Title ---- */
+.about-title {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin: 0 0 10px;
+}
+.about-title-word {
+  position: relative;
+  isolation: isolate; /* keeps the highlight's z-index inside this word */
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(42px, 7vw, 68px);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--dd-cream);
+  transform: rotate(-2deg);
+  padding: 0 6px;
+}
+.about-title-word::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  left: -4px;
+  right: -4px;
+  bottom: 8%;
+  height: 38%;
+  background: linear-gradient(90deg, #FFE066, #FFC61A 60%, #F2B705);
+  border-radius: 14px 8px 12px 6px;
+  transform: rotate(-1.4deg);
+}
+.about-title-duck {
+  flex: none;
+  filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.2));
+  transform-origin: 60% 70%;
+  animation: about-title-bob 2.8s ease-in-out infinite;
+}
+@keyframes about-title-bob {
+  0%, 100% { transform: translateY(0) rotate(-6deg); }
+  50% { transform: translateY(-6px) rotate(6deg); }
+}
+.about-sub {
+  font-size: 18px;
+  line-height: 1.55;
+  color: var(--dd-text-2);
+  max-width: 54ch;
+  margin: 0 0 46px;
+}
+
+/* ---- Shared type ---- */
+.about-h2 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(24px, 3vw, 32px);
+  letter-spacing: -0.01em;
+  line-height: 1.1;
+  color: var(--dd-cream);
+  margin: 0 0 14px;
+}
+.about-h2--center { text-align: center; margin: 66px 0 26px; }
+.about-lede { font-size: 18px; line-height: 1.55; color: var(--dd-cream); font-weight: 600; margin: 0 0 14px; }
+.about-text { font-size: 15.5px; line-height: 1.7; color: var(--dd-text-2); margin: 0 0 14px; }
+.about-text a { color: var(--dd-orange); font-weight: 700; }
+
+/* ---- Intro ---- */
+.about-hero {
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  gap: 44px;
+  align-items: center;
+}
+.about-photo {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: 22px;
+  display: block;
+  box-shadow: 0 18px 44px rgba(60, 45, 15, 0.18);
+}
+
+/* ---- How a duck travels ---- */
+.about-journey {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  counter-reset: none;
+}
+.about-journey li {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: var(--dd-pitch);
+  border: var(--dd-hairline);
+  border-radius: 18px;
+  padding: 24px 22px;
+}
+.about-journey-num {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--dd-grad-gold);
+  color: #16140F;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 17px;
+  box-shadow: 0 3px 9px rgba(168, 125, 44, 0.3);
+}
+.about-journey-main { display: flex; flex-direction: column; gap: 6px; }
+.about-journey-main strong { font-size: 16px; font-weight: 700; color: var(--dd-cream); }
+.about-journey-main span { font-size: 14.5px; line-height: 1.6; color: var(--dd-text-2); }
+
+/* ---- What we care about ---- */
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+.about-card {
+  background: var(--dd-pitch);
+  border: var(--dd-hairline);
+  border-radius: 20px;
+  padding: 28px 26px;
+}
+.about-card-icon {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 13px;
+  background: rgba(242, 183, 5, 0.18);
+  font-size: 21px;
+  margin-bottom: 14px;
+}
+.about-card h3 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 19px;
+  color: var(--dd-cream);
+  margin: 0 0 8px;
+}
+.about-card p { font-size: 15px; line-height: 1.65; color: var(--dd-text-2); margin: 0; }
+
+/* ---- Numbers ---- */
+.about-numbers {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+  margin: 60px 0 0;
+  padding: 30px 26px;
+  border-radius: 22px;
+  background: radial-gradient(130% 130% at 12% 12%, #FDF5E0, #F4E7C6);
+  border: 1px solid rgba(168, 125, 44, 0.3);
+}
+.about-numbers div { display: flex; flex-direction: column; align-items: center; flex: 1; min-width: 130px; }
+.about-numbers b {
+  font-family: var(--font-display);
+  font-size: 40px;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--dd-bronze);
+  font-variant-numeric: tabular-nums;
+}
+.about-numbers span { font-size: 13.5px; color: var(--dd-muted); margin-top: 6px; text-align: center; }
+
+/* ---- Tracking note ---- */
+.about-note {
+  margin: 60px 0 0;
+  padding: 30px 30px 24px;
+  border-radius: 22px;
+  border-left: 5px solid var(--dd-orange);
+  background: var(--dd-panel-2);
+  border-top: var(--dd-hairline-soft);
+  border-right: var(--dd-hairline-soft);
+  border-bottom: var(--dd-hairline-soft);
+}
+.about-note .about-h2 { font-size: 24px; }
+
+/* ---- Where to start ---- */
+.about-links { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.about-link {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 22px 22px;
+  border-radius: 18px;
+  background: var(--dd-pitch);
+  border: var(--dd-hairline);
+  text-decoration: none;
+  transition: transform 0.16s ease, border-color 0.16s ease, box-shadow 0.16s ease;
+}
+.about-link:hover {
+  transform: translateY(-3px);
+  border-color: rgba(191, 98, 5, 0.42);
+  box-shadow: 0 12px 26px rgba(60, 45, 15, 0.13);
+  text-decoration: none;
+}
+.about-link strong { font-size: 16px; font-weight: 700; color: var(--dd-cream); }
+.about-link span { font-size: 14px; color: var(--dd-muted); line-height: 1.5; }
+
+/* ---- Contact ---- */
+.about-cta {
+  margin: 66px 0 0;
+  text-align: center;
+  padding: 44px 26px;
+  border-radius: 24px;
+  background: var(--dd-panel-2);
+  border: var(--dd-hairline);
+}
+.about-cta h2 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(24px, 3vw, 32px);
+  color: var(--dd-cream);
+  margin: 0 0 8px;
+}
+.about-cta p { font-size: 15.5px; line-height: 1.6; color: var(--dd-text-2); margin: 0 auto 22px; max-width: 46ch; }
+.about-cta-btn {
+  display: inline-block;
+  padding: 13px 26px;
+  border-radius: 100px;
+  background: var(--dd-grad-gold);
+  color: #16140F;
+  font-weight: 800;
+  font-size: 15px;
+  text-decoration: none;
+  box-shadow: 0 8px 20px rgba(242, 183, 5, 0.34);
+  transition: filter 0.16s ease, transform 0.16s ease;
+}
+.about-cta-btn:hover { filter: brightness(1.06); transform: translateY(-2px); text-decoration: none; }
+
+/* ---- Narrower screens ---- */
+@media (max-width: 900px) {
+  .about-hero { grid-template-columns: 1fr; gap: 28px; }
+  .about-journey { grid-template-columns: 1fr 1fr; }
+  .about-links { grid-template-columns: 1fr; }
+}
+@media (max-width: 620px) {
+  .about-page { padding: 34px 18px 70px; }
+  .about-journey { grid-template-columns: 1fr; }
+  .about-grid { grid-template-columns: 1fr; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .about-title-duck { animation: none; }
+}

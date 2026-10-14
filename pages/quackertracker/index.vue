@@ -4,7 +4,14 @@ useHead({
   meta: [{ name: 'description', content: "Track your duck's journey on the live DashDuckies map." }],
 })
 
-const { data: sightings } = await useFetch('/api/map/sightings')
+// Members-only page. Resolve the session before anything else (SSR included)
+// so guests get the explainer on the first paint instead of a flash of the map.
+const user = await useResolvedUser()
+
+const { data: sightings, refresh: refreshSightings } = await useFetch('/api/map/sightings', {
+  immediate: Boolean(user.value),
+  default: () => [],
+})
 interface FeedTile {
   isSighting: boolean
   duckId: string
@@ -14,11 +21,16 @@ interface FeedTile {
   sightingDate: string | null
   description: string | null
 }
-const { data: feed } = await useFetch<FeedTile[]>('/api/feed')
+const { data: feed, refresh: refreshFeed } = await useFetch<FeedTile[]>('/api/feed', {
+  immediate: Boolean(user.value),
+  default: () => [],
+})
 
-// Signed-in members get their own ducks pinned above the map. This page is
-// public and served to everyone, so auth resolves on the client after mount.
-const { user, fetchMe } = useAuth()
+// Pulls the page's data in once someone signs in through the gate.
+async function onSignedIn() {
+  await Promise.all([refreshSightings(), refreshFeed(), loadMyDucks()])
+}
+
 interface MyDuck {
   id: string
   name: string | null
@@ -182,9 +194,7 @@ function coverStyle(d: { duckId: string }) {
 
 // Arriving from the top-nav search? Jump down to this section.
 onMounted(async () => {
-  fetchMe()
-    .catch(() => {})
-    .finally(() => loadMyDucks())
+  loadMyDucks()
   if (search.value) {
     await nextTick()
     document.getElementById('dd-find')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
@@ -193,7 +203,27 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="dd-qt-dark" style="min-height: 100vh; padding-top: 24px">
+  <div v-if="!user" class="dd-qt-dark" style="min-height: 100vh">
+    <MembersGate
+      dark
+      eyebrow="Quacker Tracker"
+      title="Follow your ducks around the world"
+      lede="Every DashDuckie carries its own code. When someone finds one and posts where they saw it, a pin lands on the map — and the duck's journey grows another leg."
+      :points="[
+        { icon: '🗺️', title: 'The sightings map', text: 'Every duck that has been spotted, pinned across the world, with the photo and the place.' },
+        { icon: '🦆', title: 'Your own flock', text: 'Your ducks pinned at the top of the page, so you can check on them in one glance.' },
+        { icon: '🔔', title: 'Know the moment it happens', text: 'Get a message whenever one of your ducks turns up somewhere new.' },
+        { icon: '📖', title: 'Every duck\'s story', text: 'Read where a duck has already been, and who has been looking after it along the way.' },
+      ]"
+      @signed-in="onSignedIn"
+    >
+      <template #preview>
+        <TrackerPreview />
+      </template>
+    </MembersGate>
+  </div>
+
+  <div v-else class="dd-qt-dark" style="min-height: 100vh; padding-top: 24px">
     <!-- MAP -->
     <div class="dd-map-section" style="padding-top: 20px; padding-bottom: 56px">
       <div class="dd-maprow">
@@ -210,7 +240,7 @@ onMounted(async () => {
           </ClientOnly>
         </div>
         <div class="dd-maprow-cta">
-          <span class="dd-live-badge"><span class="dd-live-dot" />Live map</span>
+          <span class="dd-live-badge"><span class="dd-live-dot" />Sightings map</span>
           <h2 class="dd-maprow-title">See the whole flock on the map</h2>
           <p class="dd-maprow-text">Every DashDuckie that's been spotted, pinned across the world.</p>
           <button type="button" class="dd-viewmap-btn" @click="mapOpen = true">View map →</button>

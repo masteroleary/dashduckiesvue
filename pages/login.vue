@@ -18,7 +18,6 @@ const identifier = ref(route.query.id ? String(route.query.id) : '')
 const code = ref('')
 const loading = ref(false)
 const error = ref('')
-const devHint = ref(false)
 
 const heading = computed(() => (mode.value === 'join' ? 'Join DashDuckies' : 'Sign in to your roster'))
 const subtitle = computed(() =>
@@ -46,8 +45,7 @@ async function onRequestCode() {
   error.value = ''
   loading.value = true
   try {
-    const res = await requestCode(identifier.value)
-    devHint.value = res.dev
+    await requestCode(identifier.value)
     step.value = 'code'
   } catch (e: any) {
     error.value = e?.data?.statusMessage || 'Could not send a code. Check the address and try again.'
@@ -74,7 +72,6 @@ function reset() {
   step.value = 'identifier'
   code.value = ''
   error.value = ''
-  devHint.value = false
 }
 
 function setMode(m: 'signin' | 'join') {
@@ -86,7 +83,9 @@ function setMode(m: 'signin' | 'join') {
 <template>
   <div class="dd-form-page">
     <div class="dd-login-head">
-      <DuckMark :size="42" color="#a87d2c" />
+      <NuxtLink to="/" class="dd-login-brand" aria-label="DashDuckies home">
+        <BrandMark :size="27" />
+      </NuxtLink>
       <h1 class="dd-form-heading">{{ heading }}</h1>
       <p class="dd-form-sub">{{ subtitle }}</p>
     </div>
@@ -119,7 +118,6 @@ function setMode(m: 'signin' | 'join') {
         <p class="dd-form-sub" style="margin-bottom: 16px">
           Enter the code we sent to <strong>{{ identifier }}</strong>.
         </p>
-        <div v-if="devHint" class="dd-form-note">Dev account — use code <strong>000000</strong>.</div>
         <label class="dd-label" for="dd-code">6-digit code</label>
         <input
           id="dd-code"
@@ -157,6 +155,13 @@ function setMode(m: 'signin' | 'join') {
 .dd-login-head {
   text-align: center;
   margin-bottom: 24px;
+}
+/* The full brand mark, not a bare duck — this is often the first page a new
+   member sees, so it should say who we are. */
+.dd-login-brand {
+  display: inline-flex;
+  text-decoration: none;
+  color: var(--dd-cream);
 }
 .dd-login-head .dd-form-heading {
   margin-top: 12px;

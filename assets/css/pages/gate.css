@@ -1,0 +1,317 @@
+/* ============================================
+   MEMBERS GATE
+   The signed-out face of Quacker Tracker and the Forum: explain the thing,
+   then sign in without leaving the page. Two palettes — the default light one,
+   and `.gate--dark` for the black Quacker Tracker pages.
+   ============================================ */
+
+.gate {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 52px 24px 90px;
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 48px;
+  align-items: start;
+  font-family: var(--font-body);
+  color: var(--dd-cream);
+
+  /* Palette knobs, so the dark variant only overrides these four. */
+  --gate-panel: var(--dd-pitch);
+  --gate-line: rgba(168, 125, 44, 0.3);
+  --gate-body: var(--dd-text-2);
+  --gate-muted: var(--dd-muted);
+}
+
+/* ---- Explainer ---- */
+.gate-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--dd-orange);
+  margin: 0 0 12px;
+}
+.gate-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(34px, 5vw, 52px);
+  line-height: 1.04;
+  letter-spacing: -0.02em;
+  margin: 0 0 16px;
+  color: var(--dd-cream);
+  text-wrap: balance;
+}
+.gate-lede {
+  font-size: 18px;
+  line-height: 1.6;
+  color: var(--gate-body);
+  margin: 0 0 32px;
+  max-width: 46ch;
+}
+
+.gate-points { display: grid; gap: 14px; }
+.gate-point {
+  display: flex;
+  gap: 15px;
+  align-items: flex-start;
+  padding: 18px 20px;
+  border-radius: 16px;
+  background: var(--gate-panel);
+  border: 1px solid var(--gate-line);
+}
+.gate-point-icon {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: rgba(242, 183, 5, 0.18);
+  font-size: 19px;
+}
+.gate-point h2 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 17px;
+  margin: 2px 0 5px;
+  color: var(--dd-cream);
+}
+.gate-point p { font-size: 14.5px; line-height: 1.6; color: var(--gate-body); margin: 0; }
+
+/* ---- Sign-in card ---- */
+.gate-auth { position: sticky; top: 96px; }
+.gate-card {
+  background: var(--gate-panel);
+  border: 1px solid var(--gate-line);
+  border-radius: 22px;
+  padding: 32px 28px 26px;
+  box-shadow: 0 20px 48px rgba(60, 45, 15, 0.14);
+  text-align: center;
+}
+.gate-lock {
+  display: inline-grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  background: var(--dd-grad-gold);
+  font-size: 21px;
+  margin-bottom: 14px;
+  box-shadow: 0 5px 14px rgba(168, 125, 44, 0.32);
+}
+.gate-card-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 24px;
+  margin: 0 0 8px;
+  color: var(--dd-cream);
+}
+.gate-card-sub { font-size: 14.5px; line-height: 1.6; color: var(--gate-body); margin: 0 0 22px; }
+
+.gate-form { display: flex; flex-direction: column; gap: 10px; text-align: left; }
+.gate-label {
+  font-size: 12.5px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--gate-muted);
+}
+.gate-input {
+  width: 100%;
+  padding: 13px 14px;
+  border-radius: 12px;
+  border: 1px solid var(--gate-line);
+  background: var(--dd-panel-3);
+  color: var(--dd-cream);
+  font-family: var(--font-body);
+  font-size: 15px;
+}
+.gate-input::placeholder { color: var(--dd-faint); }
+.gate-input:focus { outline: 2px solid var(--dd-orange); outline-offset: 1px; border-color: transparent; }
+.gate-input-code {
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 24px;
+  letter-spacing: 0.34em;
+  padding-left: 0.34em; /* re-centres text that letter-spacing pushes right */
+}
+.gate-btn {
+  margin-top: 4px;
+  padding: 13px 18px;
+  border: none;
+  border-radius: 100px;
+  background: var(--dd-grad-gold);
+  color: #16140F;
+  font-family: var(--font-body);
+  font-weight: 800;
+  font-size: 15px;
+  cursor: pointer;
+  transition: filter 0.16s ease, transform 0.16s ease;
+}
+.gate-btn:hover:not(:disabled) { filter: brightness(1.06); transform: translateY(-1px); }
+.gate-btn:disabled { opacity: 0.55; cursor: not-allowed; }
+.gate-back {
+  background: none;
+  border: none;
+  padding: 2px;
+  font-family: var(--font-body);
+  font-size: 13.5px;
+  color: var(--gate-muted);
+  cursor: pointer;
+  text-align: left;
+}
+.gate-back:hover { color: var(--dd-orange); }
+.gate-dev { font-size: 12.5px; color: var(--gate-muted); margin: 2px 0 0; }
+.gate-error {
+  margin: 14px 0 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--dd-error);
+  text-align: left;
+}
+.gate-foot {
+  margin: 20px 0 0;
+  padding-top: 18px;
+  border-top: 1px solid var(--gate-line);
+  font-size: 14px;
+  color: var(--gate-muted);
+}
+.gate-foot a { color: var(--dd-orange); font-weight: 700; }
+
+/* ---- Dark variant (Quacker Tracker) ---- */
+.gate--dark {
+  color: #F5EFDF;
+  --dd-cream: #F5EFDF;
+  --dd-orange: #FF9640;
+  --gate-panel: #16140F;
+  --gate-line: rgba(212, 175, 55, 0.22);
+  --gate-body: #CFC7B2;
+  --gate-muted: #B8AF98;
+  --dd-panel-3: #1D1A13;
+  --dd-faint: #7D765F;
+}
+.gate--dark .gate-card { box-shadow: 0 20px 48px rgba(0, 0, 0, 0.4); }
+
+/* ---- Narrower screens ---- */
+@media (max-width: 900px) {
+  .gate { grid-template-columns: 1fr; gap: 34px; padding: 36px 20px 70px; }
+  .gate-auth { position: static; }
+}
+
+/* ============================================
+   TRACKER PREVIEW
+   The taste of Quacker Tracker shown inside the gate's explainer column.
+   ============================================ */
+
+.tp { margin-top: 34px; }
+.tp-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+.tp-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 22px;
+  color: var(--dd-cream);
+  margin: 0;
+}
+.tp-note {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--gate-muted);
+  margin: 0;
+}
+
+/* ---- Map ---- */
+.tp-map {
+  position: relative;
+  border-radius: 18px;
+  overflow: hidden;
+  border: 1px solid var(--gate-line);
+  margin-bottom: 18px;
+}
+.tp-map-wait { height: 230px; background: var(--gate-panel); }
+.tp-map-tag {
+  position: absolute;
+  left: 12px;
+  bottom: 12px;
+  z-index: 500;
+  padding: 6px 12px;
+  border-radius: 100px;
+  background: rgba(22, 20, 15, 0.86);
+  color: #F5EFDF;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+/* ---- Duck cards ---- */
+.tp-ducks {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.tp-duck {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  padding: 12px;
+  border-radius: 14px;
+  background: var(--gate-panel);
+  border: 1px solid var(--gate-line);
+  min-width: 0;
+}
+.tp-duck-img {
+  flex: none;
+  width: 52px;
+  height: 52px;
+  border-radius: 12px;
+  object-fit: cover;
+  display: block;
+  background: var(--dd-panel-3);
+}
+.tp-duck-img--none { display: grid; place-items: center; font-size: 22px; }
+.tp-duck-main { min-width: 0; }
+.tp-duck-main h3 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--dd-cream);
+  margin: 0 0 3px;
+  /* Names are user-written, so keep a long one from stretching the card. */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.tp-duck-main p {
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--gate-body);
+  margin: 0;
+  /* Two lines, then fade — enough to read the voice of it, not the whole story. */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.tp-duck-nostory { font-style: italic; color: var(--gate-muted) !important; }
+.tp-more {
+  grid-column: 1 / -1;
+  margin: 4px 0 0;
+  text-align: center;
+  font-size: 13.5px;
+  color: var(--gate-muted);
+}
+
+@media (max-width: 620px) {
+  .tp-ducks { grid-template-columns: 1fr; }
+}

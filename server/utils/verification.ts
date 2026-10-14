@@ -37,9 +37,14 @@ export function normalizeIdentifier(identifier: string): string {
   return isEmail(t) ? t.toLowerCase() : normalizePhone(t)
 }
 
-// Dev bypass is driven purely by the DEVELOPER_* lists, which are intentionally
-// NOT set in production — so this is always false in prod.
+// The bypass is hard-disabled outside development. Relying on the DEVELOPER_*
+// lists simply being absent in production was one deploy mistake away from
+// letting anyone who knows a listed phone number or email sign in as that
+// person — so the environment check is the guard, and the lists only narrow it.
+const DEV_BYPASS_ENABLED = process.env.NODE_ENV !== 'production'
+
 export function isDevBypass(identifier: string): boolean {
+  if (!DEV_BYPASS_ENABLED) return false
   const id = normalizeIdentifier(identifier)
   return isEmail(id) ? DEV_EMAILS.includes(id) : DEV_PHONES.includes(id)
 }
@@ -88,16 +93,17 @@ async function storeCode(identifier: string, code: string) {
 
 /**
  * Send a verification code to an email or phone.
- * - dev-bypass identifiers: store code "000000", send nothing.
+ * - dev-bypass identifiers (development only): store code "000000", send nothing.
+ *   Deliberately indistinguishable from a real send to the caller.
  * - email: generate code, store, send via SendGrid.
  * - phone: delegate to Twilio Verify (Twilio generates + sends the code).
  */
-export async function requestCode(identifierRaw: string): Promise<{ dev: boolean }> {
+export async function requestCode(identifierRaw: string): Promise<void> {
   const id = normalizeIdentifier(identifierRaw)
 
   if (isDevBypass(id)) {
     await storeCode(id, '000000')
-    return { dev: true }
+    return
   }
 
   if (isEmail(id)) {
@@ -109,7 +115,6 @@ export async function requestCode(identifierRaw: string): Promise<{ dev: boolean
       .verify.v2.services(process.env.TWILIO_VERIFY_SERVICE_SID!)
       .verifications.create({ to: id, channel: 'sms' })
   }
-  return { dev: false }
 }
 
 /**
