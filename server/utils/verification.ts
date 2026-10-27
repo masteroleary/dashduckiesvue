@@ -57,7 +57,14 @@ function sixDigitCode(): string {
 let twilioClient: ReturnType<typeof twilio> | null = null
 function getTwilio() {
   if (!twilioClient) {
-    twilioClient = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN)
+    // Prefer an API key (SK… SID + secret), which can be revoked on its own;
+    // fall back to the account's auth token when no key is configured.
+    const accountSid = process.env.TWILIO_ACCOUNT_SID
+    const keySid = process.env.TWILIO_API_KEY_SID
+    const keySecret = process.env.TWILIO_API_KEY_SECRET
+    twilioClient = keySid && keySecret
+      ? twilio(keySid, keySecret, { accountSid })
+      : twilio(accountSid, process.env.TWILIO_AUTH_TOKEN)
   }
   return twilioClient
 }

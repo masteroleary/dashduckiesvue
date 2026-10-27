@@ -283,7 +283,7 @@ See `.env.example`. Summary (set the production values in Railway → Variables)
 | `DATABASE_URL` | Postgres. Local = public proxy URL; prod = `${{Postgres.DATABASE_URL}}` |
 | `JWT_SECRET`, `JWT_EXPIRATION_HOURS` | Session JWT signing (default 720h) |
 | `SENDGRID_API_KEY`, `SENDGRID_FROM_EMAIL`, `SENDGRID_FROM_NAME` | Email codes |
-| `TWILIO_ACCOUNT_SID`, `TWILIO_AUTH_TOKEN`, `TWILIO_VERIFY_SERVICE_SID` | SMS codes |
+| `TWILIO_ACCOUNT_SID`, `TWILIO_VERIFY_SERVICE_SID` + either `TWILIO_API_KEY_SID`/`TWILIO_API_KEY_SECRET` (preferred) or `TWILIO_AUTH_TOKEN` | SMS codes |
 | `HERE_API_KEY`, `HERE_APP_ID` | Address → coordinates geocoding |
 | `AZURE_STORAGE_CONNECTION_STRING` | Image storage (dev account locally, prod account on Railway) |
 | `ADMIN_ACCOUNT_EMAIL` | Marked admin on startup |
